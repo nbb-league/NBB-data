@@ -381,6 +381,9 @@ select, input[type="number"] {
 .sty .stg { display: inline-block; margin-right: 8px; font: 700 10px var(--body); letter-spacing: .08em; text-transform: uppercase; padding: 2px 6px; border-radius: 3px; background: var(--soft); color: var(--muted); }
 .sty .stl { display: block; margin-top: 4px; font-size: 13px; }
 
+/* Dark mode: logos are transparent PNGs, so drop the white circle behind them. */
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) img.logo, :root:not([data-theme="light"]) img.nlogo, :root:not([data-theme="light"]) .pch img, :root:not([data-theme="light"]) .pch .phw .phl, :root:not([data-theme="light"]) .pc.out img, :root:not([data-theme="light"]) .pc.in img { background: transparent !important; border-color: transparent !important; } }
+:root[data-theme="dark"] img.logo, :root[data-theme="dark"] img.nlogo, :root[data-theme="dark"] .pch img, :root[data-theme="dark"] .pch .phw .phl, :root[data-theme="dark"] .pc.out img, :root[data-theme="dark"] .pc.in img { background: transparent !important; border-color: transparent !important; }
 img.logo, img.nlogo { cursor: pointer; }
 .rpt { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 0 14px; margin: 8px 0; }
 .rpt summary { min-height: 44px; display: flex; align-items: center; gap: 8px; font: 700 15px var(--display); letter-spacing: .03em; cursor: pointer; list-style: none; }
