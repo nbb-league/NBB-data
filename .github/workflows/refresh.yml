@@ -1,0 +1,75 @@
+name: NBB refresh
+on:
+  schedule:
+    - cron: '45 15 * * *'   # morning pull (8:45 AM Pacific during daylight time)
+    - cron: '45 16 * * *'   # morning pull (8:45 AM Pacific during standard time)
+    - cron: '0 21 * * *'    # afternoon
+    - cron: '0 1 * * *'     # evening
+    - cron: '0 5 * * *'     # late night, picks up the final box scores
+  workflow_dispatch:
+  push:
+    paths:
+      - 'tools/**'
+      - '.github/workflows/refresh.yml'
+      - 'site/template.html'
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+concurrency:
+  group: nbb-refresh
+  cancel-in-progress: false
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Skip the duplicate morning slot
+        id: gate
+        run: |
+          H=$(TZ=America/Los_Angeles date +%H)
+          if [ "${{ github.event.schedule }}" = "45 15 * * *" ] || [ "${{ github.event.schedule }}" = "45 16 * * *" ]; then
+            if [ "$H" != "08" ]; then echo "skip=1" >> $GITHUB_OUTPUT; echo "Not 8 AM Pacific ($H), skipping this slot"; fi
+          fi
+      - uses: actions/setup-node@v4
+        if: steps.gate.outputs.skip != '1'
+        with: { node-version: 20 }
+      - uses: actions/setup-python@v5
+        if: steps.gate.outputs.skip != '1'
+        with: { python-version: '3.12' }
+      - name: Pull fresh data from ESPN
+        if: steps.gate.outputs.skip != '1'
+        run: node tools/extract.mjs /tmp/new_block.txt
+      - name: Build previous page, splice, log projection
+        if: steps.gate.outputs.skip != '1'
+        run: |
+          python3 tools/build.py data/block.txt /tmp/prev.html
+          python3 tools/splice.py /tmp/prev.html /tmp/new_block.txt /tmp/out.html
+          pip install -q playwright && playwright install --with-deps chromium >/dev/null 2>&1
+          python3 tools/projlog.py /tmp/out.html || echo "projlog skipped"
+          python3 - <<'PY'
+          s=open('/tmp/out.html').read()
+          a=s.index('//REFRESH-DATA-START'); b=s.index('//REFRESH-DATA-END')+len('//REFRESH-DATA-END')
+          open('data/block.txt','w').write(s[a:b])
+          PY
+          python3 tools/build.py data/block.txt site/index.html
+          rm -rf dist && mkdir dist && cp site/index.html dist/index.html && cp site/*.png dist/ && cp -r site/photos dist/photos
+      - name: Save data to the repo
+        if: steps.gate.outputs.skip != '1'
+        run: |
+          git config user.name "nbb-bot"; git config user.email "nbb-bot@users.noreply.github.com"
+          git add data/block.txt
+          git diff --cached --quiet || (git commit -m "Data refresh $(date -u +%FT%TZ)" && git pull --rebase -q && git push)
+      - uses: actions/upload-pages-artifact@v3
+        if: steps.gate.outputs.skip != '1'
+        with: { path: dist }
+  deploy:
+    needs: refresh
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    environment:
+      name: github-pages
+      url: ${{ steps.d.outputs.page_url }}
+    steps:
+      - id: d
+        uses: actions/deploy-pages@v4
