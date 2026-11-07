@@ -1355,7 +1355,8 @@ function lineupSet(tid, d) {
 }
 function lineupFor(tid, d) { return daySet(tid, d) ? lineupSet(tid, d) : lineupBest(tid, d); }
 
-function gauss() { let u = 0; while (u === 0) u = Math.random(); const v = Math.random(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); }
+let _rs = 1; function rnd() { _rs = (_rs + 0x6D2B79F5) | 0; let t = Math.imul(_rs ^ (_rs >>> 15), 1 | _rs); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }
+function gauss() { let u = 0; while (u === 0) u = rnd(); const v = rnd(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); }
 function prep(tid) {
   const pl = teamPlayers(tid).filter(p => PA[p.status] > 0).map(p => {
     const mu = muOf(p);
@@ -1386,10 +1387,10 @@ function oneWeek(T, dayAcc) {
   for (const D of T.days) {
     let dt = 0;
     if (D.set) {
-      for (let j = 0; j < D.bench.length; j++) { D.ba[j] = Math.random() < pl[D.bench[j].i].pa ? 1 : 0; D.ub[j] = 0; }
+      for (let j = 0; j < D.bench.length; j++) { D.ba[j] = rnd() < pl[D.bench[j].i].pa ? 1 : 0; D.ub[j] = 0; }
       const vac = [], emp = [];
       for (const s of D.st) {
-        if (s.play) { if (s.i >= 0 && Math.random() < pl[s.i].pa) dt += score(s.i); else vac.push(s.slot); }
+        if (s.play) { if (s.i >= 0 && rnd() < pl[s.i].pa) dt += score(s.i); else vac.push(s.slot); }
         else emp.push(s.slot);
       }
       const fillSlot = (slot, needAdded) => {
@@ -1403,7 +1404,7 @@ function oneWeek(T, dayAcc) {
       emp.forEach(sl => fillSlot(sl, true));
     } else {
       const av = D.avail;
-      for (let k = 0; k < D.idx.length; k++) av[k] = Math.random() < pl[D.idx[k]].pa ? 1 : 0;
+      for (let k = 0; k < D.idx.length; k++) av[k] = rnd() < pl[D.idx[k]].pa ? 1 : 0;
       const ms = fill(D.slotLists, av);
       for (let s = 0; s < 14; s++) { const k = ms[s]; if (k >= 0) dt += score(D.idx[k]); }
     }
@@ -1412,7 +1413,8 @@ function oneWeek(T, dayAcc) {
   return tot;
 }
 function runSim(ta, tb, N) {
-  N = N || 10000;
+  N = N || 10000; _rs = (ta * 1009 + tb * 7919 + 12345) | 0; // fixed seed per matchup: same inputs always give the same odds
+
   const A = prep(ta), B = prep(tb);
   const dA = [0, 0, 0, 0, 0, 0, 0], dB = [0, 0, 0, 0, 0, 0, 0];
   const xa = new Float64Array(N), xb = new Float64Array(N);
@@ -1461,6 +1463,7 @@ const opt = (v, l, cur) => '<option value="' + v + '"' + (v === cur ? ' selected
 const num = v => (v == null ? '' : v);
 const f1 = v => (v == null ? '-' : (Math.round(v * 100) / 100).toFixed(2).replace(/0$/, ''));
 const pctW = v => Math.round(v * 100) + '%';
+function pctPair(ph) { const v = ph * 100; if (v < 1) return ['<1%', '>99%']; if (v > 99) return ['>99%', '<1%']; const l = Math.round(v); return [l + '%', (100 - l) + '%']; }
 function pctText(x) { const v = x * 100; return v < 1 ? '<1%' : v > 99 ? '>99%' : Math.round(v) + '%'; }
 
 function weightText(p) {
@@ -1538,9 +1541,9 @@ function paintStrip() {
     const cc = colorsFor(m[0], m[1]);
     const gt = isG(m) ? '<span class="gtag">' + STAR + '<span>Game of the week</span></span>' : '';
     return '<button type="button" class="mc' + (isG(m) ? ' gotw' : '') + '" style="--home:' + cc[0] + ';--away:' + cc[1] + '" data-m="' + i + '" aria-pressed="' + (i === S.m) + '">' + gt +
-      '<span class="t l"><b><img class="logo m" alt="" src="' + LOGO[m[0]] + '">' + TEAMS[m[0]].short + crown(m[0]) + '</b><small class="pts">' + S.cur[m[0]].toFixed(1) + ' pts</small><span>' + (have ? pctText(ph) : '...') + '</span></span>' +
+      '<span class="t l"><b><img class="logo m" alt="" src="' + LOGO[m[0]] + '">' + TEAMS[m[0]].short + crown(m[0]) + '</b><small class="pts">' + S.cur[m[0]].toFixed(1) + ' pts</small><span>' + (have ? pctPair(ph)[0] : '...') + '</span></span>' +
       '<span class="mid">at<span class="mini"><i style="width:' + (have ? (ph * 100).toFixed(1) : 50) + '%"></i></span></span>' +
-      '<span class="t r"><b><img class="logo m" alt="" src="' + LOGO[m[1]] + '">' + TEAMS[m[1]].short + crown(m[1]) + '</b><small class="pts">' + S.cur[m[1]].toFixed(1) + ' pts</small><span>' + (have ? pctText(1 - ph) : '...') + '</span></span></button>';
+      '<span class="t r"><b><img class="logo m" alt="" src="' + LOGO[m[1]] + '">' + TEAMS[m[1]].short + crown(m[1]) + '</b><small class="pts">' + S.cur[m[1]].toFixed(1) + ' pts</small><span>' + (have ? pctPair(ph)[1] : '...') + '</span></span></button>';
   }).join('');
 }
 function paintNames() {
@@ -1564,10 +1567,10 @@ function paintBoard(r) {
   $('a-now').textContent = S.cur[b].toFixed(1);
   $('h-rng').textContent = '80% range ' + Math.round(r.h10) + ' to ' + Math.round(r.h90);
   $('a-rng').textContent = '80% range ' + Math.round(r.a10) + ' to ' + Math.round(r.a90);
-  $('h-pct').textContent = pctText(r.ph);
-  $('a-pct').textContent = pctText(1 - r.ph);
+  $('h-pct').textContent = pctPair(r.ph)[0];
+  $('a-pct').textContent = pctPair(r.ph)[1];
   $('bar-fill').style.width = (r.ph * 100).toFixed(1) + '%';
-  $('bar').setAttribute('aria-label', TEAMS[a].short + ' ' + pctText(r.ph) + ', ' + TEAMS[b].short + ' ' + pctText(1 - r.ph));
+  $('bar').setAttribute('aria-label', TEAMS[a].short + ' ' + pctPair(r.ph)[0] + ', ' + TEAMS[b].short + ' ' + pctPair(r.ph)[1]);
   const m = r.mh - r.ma;
   $('margin').textContent = Math.abs(m) < 0.5 ? 'Projected to finish even' : TEAMS[m > 0 ? a : b].short + ' projected to win by ' + Math.abs(m).toFixed(1);
   $('series').textContent = seriesLine(a, b);
@@ -1603,7 +1606,7 @@ function updBoard() {
   const r = runSim(a, b, 10000);
   LAST = r; R[sel] = r.ph; paintBoard(r); paintStrip(); paintDays();
   setTimeout(() => {
-    MATCHUPS.forEach((m, i) => { if (i !== sel) R[i] = runSim(m[0], m[1], 4000).ph; });
+    MATCHUPS.forEach((m, i) => { if (i !== sel) R[i] = runSim(m[0], m[1], 10000).ph; });
     paintStrip();
   }, 30);
 }
