@@ -757,7 +757,7 @@ const SCHED = {
  13:[[6,3],[4,1],[2,5]],14:[[5,6],[4,2],[3,1]],15:[[1,4],[5,3],[6,2]],16:[[2,1],[6,3],[4,5]],17:[[6,4],[3,2],[1,5]],18:[[1,4],[2,6],[5,3]]
 };
 // Final scores by week, keyed by "home-away": [homeScore, awayScore]. Added by hand once a week ends.
-const RESULTS = {};
+const RESULTS = { 1: { '5-1': [256.9, 301.05], '6-2': [256.5, 283.75], '3-4': [226.8, 256.8] } };
 
 // Draft picks. Every pick belongs to its original team unless listed here. Hand-updated by the commissioner.
 const PICK_ROUNDS = 14, PICK_YEARS = [2027, 2028, 2029];
@@ -1707,8 +1707,9 @@ function paintSchedule() {
   $('sgrid').innerHTML = list.map((m, i) => {
     const h = m[0], aw = m[1], g = gi >= 0 && i === 0, cc = colorsFor(aw, h), G = GOTW[sw];
     let mid = '<span class="sc pending">at</span>', note = '', bar = '';
-    const res = RESULTS[sw] && RESULTS[sw][h + '-' + aw];
-    if (res) { mid = '<span class="sc"><span class="' + (res[1] > res[0] ? 'win' : '') + '">' + res[1].toFixed(1) + '</span> – <span class="' + (res[0] > res[1] ? 'win' : '') + '">' + res[0].toFixed(1) + '</span></span>'; note = 'Final'; }
+    let res = RESULTS[sw] && RESULTS[sw][h + '-' + aw];
+    if (!res && typeof RESLIVE !== 'undefined' && RESLIVE[sw]) { const x = RESLIVE[sw].find(q => (q[0] === h && q[1] === aw) || (q[0] === aw && q[1] === h)); if (x) res = x[0] === h ? [x[2], x[3]] : [x[3], x[2]]; }
+    if (res) { mid = '<span class="sc"><span class="' + (res[1] > res[0] ? 'win' : '') + '">' + f1(res[1]) + '</span> – <span class="' + (res[0] > res[1] ? 'win' : '') + '">' + f1(res[0]) + '</span></span>'; note = 'Final'; }
     else if (sw === CURW) {
       const k = MATCHUPS.findIndex(x => (x[0] === h && x[1] === aw) || (x[0] === aw && x[1] === h));
       let ph = R[k]; if (ph != null && MATCHUPS[k][0] !== h) ph = 1 - ph;

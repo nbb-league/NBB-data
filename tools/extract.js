@@ -58,6 +58,7 @@ const jm=await J(L+'?view=mMatchup&view=mTeam&view=mBoxscore&scoringPeriodId='+s
 const RECS={};jm.teams.forEach(t=>{const o=t.record.overall;RECS[t.id]=o.wins+'-'+o.losses+(o.ties?'-'+o.ties:'')});
 const DP={};jm.schedule.filter(m=>m.matchupPeriodId===wk+1&&!/CONSOL|LOSERS/.test(m.playoffTierType||"")).forEach(m=>[m.home,m.away].forEach(x=>{DP[x.teamId]=[0,1,2,3,4,5,6].map(i=>{const v=(x.pointsByScoringPeriod||{})[spStart+i];return v==null?null:+(+v).toFixed(2)})}));
 const prev=j0.schedule.filter(m=>m.matchupPeriodId===wk&&!/CONSOL|LOSERS/.test(m.playoffTierType||"")).map(m=>[m.home.teamId,m.away.teamId,+(m.home.totalPoints||0).toFixed(2),+(m.away.totalPoints||0).toFixed(2)]);
+const FIN={};j0.schedule.filter(m=>m.matchupPeriodId<=wk&&m.away&&m.home&&m.winner&&m.winner!=='UNDECIDED'&&!/CONSOL|LOSERS/.test(m.playoffTierType||"")).forEach(m=>{if(m.matchupPeriodId<2)return;const nw=m.matchupPeriodId-1;(FIN[nw]=FIN[nw]||[]).push([m.home.teamId,m.away.teamId,+(m.home.totalPoints||0).toFixed(2),+(m.away.totalPoints||0).toFixed(2)])});
 const label=ptf.month.replace(/^0/,'')+'/'+ptf.day.replace(/^0/,'');
 const nowLabel=new Date().toLocaleString('en-US',{timeZone:'America/Los_Angeles',weekday:'short',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})+' PT';
 const out=`//REFRESH-DATA-START
@@ -76,6 +77,7 @@ const LEADERS = \`${lead.join('\n')}\`;
 const RECS = ${JSON.stringify(RECS)};
 const DAYPTS = ${JSON.stringify(DP)};
 const PREVWK = ${JSON.stringify(prev)};
+const RESLIVE = ${JSON.stringify(FIN)};
 const INJ = ${JSON.stringify(IJ)};
 //REFRESH-DATA-END`;
 window.__blob=out;
