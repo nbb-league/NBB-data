@@ -1,5 +1,5 @@
 {
- "at": "2026-11-07T21:40:17.463Z",
+ "at": "2026-11-07T22:40:15.139Z",
  "cur": 19,
  "sp19": [
   [
@@ -13,7 +13,7 @@
      "17": 7.9,
      "18": 46.2
     },
-    "rosterSlotsPts": 0,
+    "rosterSlotsPts": 0.5,
     "n": 26
    },
    {
@@ -26,7 +26,7 @@
      "17": 10.3,
      "18": 52.9
     },
-    "rosterSlotsPts": 0,
+    "rosterSlotsPts": 0.25,
     "n": 26
    }
   ],
@@ -41,7 +41,7 @@
      "17": 33.55,
      "18": 38.4
     },
-    "rosterSlotsPts": 0,
+    "rosterSlotsPts": 0.35,
     "n": 25
    },
    {
@@ -54,7 +54,7 @@
      "17": 15.2,
      "18": 58.95
     },
-    "rosterSlotsPts": 0,
+    "rosterSlotsPts": 0.8,
     "n": 26
    }
   ],
@@ -69,7 +69,7 @@
      "17": 4.9,
      "18": 48
     },
-    "rosterSlotsPts": 0,
+    "rosterSlotsPts": 2.3,
     "n": 25
    },
    {
@@ -82,7 +82,7 @@
      "17": 5.15,
      "18": 51.55
     },
-    "rosterSlotsPts": 0,
+    "rosterSlotsPts": 4.25,
     "n": 24
    }
   ]
