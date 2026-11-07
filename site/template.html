@@ -2660,30 +2660,38 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') $('pcov').hi
 
 // ---- Yesterday in the NBB (from PREVSNAP, written by the daily refresh)
 let YD = undefined;
+// "Yesterday" compares two morning snapshots (PREVSNAP = previous morning, MORNSNAP = this morning) so it stays fixed all day. Falls back to the live data when MORNSNAP is not there yet.
+function curSnap() {
+  if (typeof MORNSNAP !== 'undefined' && MORNSNAP && MORNSNAP.r) return MORNSNAP;
+  const r = {};
+  P.forEach(p => { if (!p.tid) return; (r[p.tid] = r[p.tid] || {})[p.name] = (p.role === 'IR' ? 'I' : '') + (p.status === 'OUT' ? 'O' : p.status === 'DTD' ? 'D' : '') + '|' + (p.season || 0) + '|' + (p.gp || 0); });
+  return { l: ASOF_LABEL, w: WEEK_LABEL, ms: ASOF_MS, c: CUR0, rc: RECS, r };
+}
 function yday() {
   if (YD !== undefined) return YD;
   YD = null; if (typeof PREVSNAP === 'undefined' || !PREVSNAP || !PREVSNAP.r) return YD;
-  const ps = PREVSNAP, old = {}, oldTeam = {};
+  const ps = PREVSNAP, B = curSnap(), old = {}, oldTeam = {}, pl = [];
   Object.keys(ps.r).forEach(tid => Object.keys(ps.r[tid]).forEach(n => { const f = ps.r[tid][n].split('|'); old[n] = { code: f[0], avg: +f[1] || 0, gp: +f[2] || 0 }; oldTeam[n] = +tid; }));
-  const gap = ps.ms ? (ASOF_MS - ps.ms) / 36e5 : 0, daily = gap > 0 && gap <= 36;
-  const teams = ps.w === WEEK_LABEL ? TIDS.map(id => ({ id, d: Math.round(((CUR0[id] || 0) - (ps.c[id] || 0)) * 20) / 20 })) : [];
+  Object.keys(B.r).forEach(tid => Object.keys(B.r[tid]).forEach(n => { const f = B.r[tid][n].split('|'); pl.push({ name: n, tid: +tid, code: f[0], avg: +f[1] || 0, gp: +f[2] || 0 }); }));
+  const gap = ps.ms && B.ms ? (B.ms - ps.ms) / 36e5 : 0, daily = gap > 0 && gap <= 36;
+  const teams = ps.w === B.w ? TIDS.map(id => ({ id, d: Math.round(((B.c[id] || 0) - (ps.c[id] || 0)) * 20) / 20 })) : [];
   const players = [];
-  P.forEach(p => { if (!p.tid || !old[p.name] || !(p.gp > old[p.name].gp)) return; const d = Math.round(((p.season || 0) * p.gp - old[p.name].avg * old[p.name].gp) * 20) / 20; if (d > 0) players.push({ name: p.name, tid: p.tid, d }); });
+  pl.forEach(p => { if (!old[p.name] || !(p.gp > old[p.name].gp)) return; const d = Math.round((p.avg * p.gp - old[p.name].avg * old[p.name].gp) * 20) / 20; if (d > 0) players.push({ name: p.name, tid: p.tid, d }); });
   players.sort((a, b) => b.d - a.d);
-  return YD = { ps, old, oldTeam, daily, label: daily ? 'Yesterday in the NBB' : 'Since ' + fmtLab(ps.l), teams, players: players.slice(0, 3) };
+  return YD = { ps, old, oldTeam, pl, rcNow: B.rc || {}, daily, label: daily ? 'Yesterday in the NBB' : 'Since ' + fmtLab(ps.l), teams, players: players.slice(0, 3) };
 }
 const f2 = x => x.toFixed(2).replace(/0$/, '');
 function paintChanged() {
   const el = $('chg'), Y = yday(); if (!Y) { el.hidden = true; return; }
   const short = id => TEAMS[id].short, ps = Y.ps, inj = [], back = [], adds = [], drops = [], rc = [];
-  const nowAll = {}; P.forEach(p => { if (p.tid) nowAll[p.name] = p.tid; });
-  P.forEach(p => { if (!p.tid) return; const o = Y.old[p.name]; const now = (p.role === 'IR' ? 'I' : '') + (p.status === 'OUT' ? 'O' : p.status === 'DTD' ? 'D' : '');
+  const nowAll = {}; Y.pl.forEach(p => { nowAll[p.name] = p.tid; });
+  Y.pl.forEach(p => { const o = Y.old[p.name]; const now = p.code;
     if (!o || Y.oldTeam[p.name] !== p.tid) { if (!o || !ps.r[p.tid] || ps.r[p.tid][p.name] === undefined) adds.push(p.name + (Y.oldTeam[p.name] ? ' (from the ' + short(Y.oldTeam[p.name]) + ')' : ' (from free agency)') + ' to the ' + short(p.tid)); return; }
     if (o.code !== now) { const oo = /[OI]/.test(o.code), nn = /[OI]/.test(now), rt = RET[p.name];
       if (!oo && (nn || now.includes('D'))) inj.push(p.name + ' (' + short(p.tid) + ') is now ' + (nn ? 'out' + (rt ? ' until ' + fmtISO(rt) : '') : 'day-to-day'));
       else if (oo && !nn) back.push(p.name + ' (' + short(p.tid) + ') is ' + (now.includes('D') ? 'day-to-day' : 'back to healthy')); } });
   Object.keys(ps.r).forEach(tid => Object.keys(ps.r[tid]).forEach(n => { if (!nowAll[n]) drops.push(n + ' dropped by the ' + short(+tid)); }));
-  TIDS.forEach(id => { if (ps.rc && ps.rc[id] && RECS[id] && ps.rc[id] !== RECS[id]) rc.push(short(id) + ' now ' + RECS[id]); });
+  TIDS.forEach(id => { if (ps.rc && ps.rc[id] && Y.rcNow[id] && ps.rc[id] !== Y.rcNow[id]) rc.push(short(id) + ' now ' + Y.rcNow[id]); });
   const sec = (t, a) => a.length ? '<h3>' + t + '</h3><ul>' + a.map(x => '<li>' + esc(x) + '</li>').join('') + '</ul>' : '';
   let body = '';
   if (Y.teams.length) {

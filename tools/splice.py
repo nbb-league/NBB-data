@@ -54,15 +54,24 @@ def _prevsnap(o):
         return {'l':lab.group(1) if lab else '','w':wk.group(1) if wk else '','ms':int(ms.group(1)) if ms else 0,'c':cur,'rc':rc,'r':R}
     except Exception as e:
         return None
-blk=re.sub(r'const PREVSNAP = .*?;\n','',blk+'\n',flags=re.S).rstrip('\n')
-_ps=_prevsnap(_o) if _o else None
-# Same Pacific-time day as the previous refresh: keep the earlier PREVSNAP so 'Yesterday in the NBB' keeps comparing against the last day's snapshot, not an hour ago.
-_oa=re.search(r"const ASOF = '(\d{4}-\d{2}-\d{2})",_o); _na=re.search(r"const ASOF = '(\d{4}-\d{2}-\d{2})",blk)
-_op=re.search(r'const PREVSNAP = (.*?);\n',_o+'\n') if _o else None
-if _oa and _na and _oa.group(1)==_na.group(1) and _op:
-    try: _ps=json.loads(_op.group(1))
-    except Exception: pass
-if _ps: blk=blk[:-len('//REFRESH-DATA-END')]+'const PREVSNAP = '+json.dumps(_ps,separators=(',',':'),ensure_ascii=False)+';\n//REFRESH-DATA-END'
+blk=re.sub(r'const (PREVSNAP|MORNSNAP) = .*?;\n','',blk+'\n',flags=re.S).rstrip('\n')
+# 'Yesterday in the NBB' compares two morning snapshots. A "day" runs 5:00 AM to 4:59 AM Pacific. At the first refresh of a new day (the 5:30 AM run):
+#   PREVSNAP <- the previous morning's snapshot (MORNSNAP), MORNSNAP <- the state right now. Every later run that day carries both unchanged.
+import datetime
+def _key(s):
+    m=re.search(r"const ASOF = '(\d{4}-\d{2}-\d{2}T\d{2}:\d{2})",s or '')
+    return (datetime.datetime.fromisoformat(m.group(1))-datetime.timedelta(hours=5)).date().isoformat() if m else None
+def _grab(s,n):
+    m=re.search(r'const '+n+r' = (.*?);\n',(s or '')+'\n')
+    try: return json.loads(m.group(1)) if m else None
+    except Exception: return None
+_oP=_grab(_o,'PREVSNAP') if _o else None; _oM=_grab(_o,'MORNSNAP') if _o else None
+if _o and _oM and _oP and _key(_o)==_key(blk): _P,_M=_oP,_oM
+else:
+    _M=_prevsnap(blk); _P=_oM or _oP or (_prevsnap(_o) if _o else None)
+tail='//REFRESH-DATA-END'
+for _n,_v in (('PREVSNAP',_P),('MORNSNAP',_M)):
+    if _v: blk=blk[:-len(tail)]+'const '+_n+' = '+json.dumps(_v,separators=(',',':'),ensure_ascii=False)+';\n'+tail
 # Carry the daily projection log (PROJLOG) forward from the old block; projlog.py adds today's entry afterwards.
 _pl=re.search(r'const PROJLOG = (.*?);\n',_o+'\n') if _o else None
 blk=re.sub(r'const PROJLOG = .*?;\n','',blk+'\n',flags=re.S).rstrip('\n')
