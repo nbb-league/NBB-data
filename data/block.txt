@@ -1,8 +1,8 @@
 //REFRESH-DATA-START
 const WEEK_LABEL = 'Week 2';
-const ASOF = '2026-11-07T05:23';
-const ASOF_LABEL = 'Sat, Nov 7, 5:23 AM PT';
-const ASOF_MS = 1794057815668;
+const ASOF = '2026-11-07T10:30';
+const ASOF_LABEL = 'Sat, Nov 7, 10:30 AM PT';
+const ASOF_MS = 1794076204793;
 const TODAY = 5;
 const DAYS = [["Mon","11/2"],["Tue","11/3"],["Wed","11/4"],["Thu","11/5"],["Fri","11/6"],["Sat","11/7"],["Sun","11/8"]];
 const SCH_RAW = 'IND:1010010 LAC:1010001 LAL:1010101 MIA:1011001 MIL:1010101 MIN:1010101 BKN:1010011 NY:1010010 ORL:1001010 PHI:1010101 PHX:1011010 POR:1010110 SAC:1010101 SA:1010110 OKC:1010110 UTA:1010101 WAS:1010110 TOR:1010100 MEM:1010100 CHA:1010100 ATL:1010110 BOS:1010101 NO:1010101 CHI:1010001 CLE:1010110 DAL:1010101 DEN:1010010 DET:1010001 GS:1001010 HOU:1010010';
@@ -13,7 +13,7 @@ const LU_RAW = `1:b601d2435c8cacbccdaccb8xx/b601d2435c8cacbccdaccb8cx/46c1d2a30c
 3:dc08b4a682d15cbda3bcccccx/dc08b4a682d15cbda3bcccccx/da08b4a682d1ccbd3ccc5ccbx/d30b6a4a8bd15cbd8c2cccccx/dcc5acb2b3c8801d4cccbc6ca/d30864ac5ca1bc8dcc2bbcccc/d85c8bb1c2cb0ccdc3ccca64a
 4:d5ad10a2dbccccb8c6cc48bc3c/d04d1532d6bca8a8bcccccbccc/d04d153cd6cbaca82bbccc8ccc/d0ad1532d6ccb8a8bcccc4bccc/dc4dc0c2d6a8acc1bc8bcc5c3b/d04dcccbd2bccba1c3c8a658cc/dbbd1032dcc84cbcac5caccc68
 5:bbc8c5ac03d16dc42ccd8bccac/1088352cb6dbadc4accdcbcccc/bb88c5ac0cd1cdc46cad2bcc3c/5088aa62b3db1dc4bccdcccccc/cb85b82c0cd1cda4ccad6bccc3/58bbb8a602dc1da4c3cdcccccc/a058bbacccd1cdcc3ccdc8b246
-6:8c23804a5a6b1bcbdcccdcdccx/8c23804a5a6b1bcbdcccdcdccx/8c23804a5a6b1bcbdcccdcdccx/c8a305ab86bc1b2cdcccdcccdx/85a6c042c3cc1ccbdcdcdabbc8/cba405ccbaccbc6cdcd8d28c31/5b23ccac0b68ccc4d8dbdccac1`;
+6:8c23804a5a6b1bcbdcccdcdccx/8c23804a5a6b1bcbdcccdcdccx/8c23804a5a6b1bcbdcccdcdccx/c8a305ab86bc1b2cdcccdcccdx/85a6c042c3cc1ccbdcdcdabbc8/cba405ccbaccbd6cdcd8c28c31/5b23ccac0c68cdc4d8dbbccac1`;
 const DATA = `#1|Golden State Lobos|Chance G
 Joel Embiid|PHI|BE|H|5.38|5.81|5.59|8|410|5.72|3.95|3
 Julius Randle|BKN|ST|H|4.39|4.87|4.33|8|36810|4.11|4.98|3
@@ -21,7 +21,7 @@ Stephen Curry|GS|ST|H|5.43|5.38|6.26|7|058|6.63|6.65|2
 James Harden|CLE|ST|H|5.25|6.15|3.96|9|0158|4.1|4.25|4
 Kon Knueppel|CHA|IR|O|4.3|4.08|0.15|1|1256810|0.15|0.15|1
 Kevin Durant|HOU|ST|H|4.88|5.08|3.92|9|236810|3.82|3.3|3
-Anthony Davis|WAS|ST|O|5.15|5.88|5.67|8|346810|5.19|6.13|2
+Anthony Davis|WAS|ST|D|5.15|5.88|5.67|8|346810|5.19|6.13|2
 Giannis Antetokounmpo|MIA|BE|H|5.99|6.23|8.39|9|346810|8.97|7.55|3
 Damian Lillard|POR|ST|H|4.91||4.14|8|058|3.82|4.46|4
 Rudy Gobert|MIN|BE|H|3.27|4.08|2.75|9|410|2.86|3.42|3
@@ -57,7 +57,7 @@ Josh Hart|NY|ST|O|3.58|3.93|3.39|7|1256810|3.42|3.35|1
 Nickeil Alexander-Walker|ATL|ST|H|4.17|4.36|4.43|10|0158|4.21|4.81|4
 Andrew Nembhard|IND|ST|H|3.2|4.36|4.24|7|0158|4.33|3.87|2
 Payton Pritchard|BOS|BE|H|3.69|3.97|3.02|9|0158|2.98|2.5|4
-Moussa Diabate|CHA|BE|O|2.34|3.2|3.5|9|346810|3.35|2.67|3
+Moussa Diabate|CHA|BE|D|2.34|3.2|3.5|9|346810|3.35|2.67|3
 Jaden McDaniels|MIN|BE|H|3.21|3.08|3.46|10|236810|3.46|3.55|4
 Jalen Smith|CHI|BE|D|2.47|2.89|3.24|8|346810|3.25|1.87|2
 Anthony Black|ORL|ST|H|3.26|3.32|4.02|5|0158|4.02|3.7|2
@@ -124,7 +124,7 @@ Luka Doncic|LAL|ST|H|7.3|8.79|8.77|9|058|8.99|10.25|4
 Kyrie Irving|DAL|ST|H|5.13||4.43|7|058|4.79|4.42|2
 Tyler Herro|MIL|ST|H|4.6|4|5.08|9|0158|5.1|5.08|4
 Kawhi Leonard|TOR|ST|O|5.21|5.84|4.9|2|236810|3.3||0
-Scottie Barnes|TOR|ST|O|4.7|5.5|5.15|8|1256810|5.24|5.25|3
+Scottie Barnes|TOR|ST|D|4.7|5.5|5.15|8|1256810|5.24|5.25|3
 Cooper Flagg|DAL|ST|H|5.16|4.76|6.18|8|236810|6.29|6|3
 Jalen Green|PHX|ST|H|4.06|3.23|2.28|7|1256810|2.33|2.82|3
 CJ McCollum|ATL|ST|H|3.88|3.7|3.1|10|0158|3.12|3.73|4
@@ -159,14 +159,14 @@ Cameron Boozer|MEM|ST|H|3.79||5.38|9|36810|5.74|3.48|4
 Caleb Wilson|CHI|BE|H|3.83||4.36|8|26810|4.76|3.48|2
 Darius Garland|LAC|BE|H|4.81|4.26|3.58|8|058|3.46|3.1|3
 Ty Jerome|MEM|ST|H|5.14|4.29|4.87|8|0158|4.43|4.7|3
-Immanuel Quickley|TOR|BE|O|4.23|4.31|4.19|8|0158|3.86|4.05|3
+Immanuel Quickley|TOR|IR|D|4.23|4.31|4.19|8|0158|3.86|4.05|3
 Miles Bridges|PHX|ST|H|3.99|3.74|4.96|7|236810|5.55|6.27|3
 Kel'el Ware|MIL|BE|H|3.45|3.7|2.88|9|410|3.14|2.45|4
 Brandon Ingram|LAC|IR|O|4.44|4.09||0|236810|||0
 Keaton Wagler|LAC|BE|H|2.84||2.83|8|0158|2.58|2.03|3
 Egor Demin|BKN|IR|O|3.61|2.6|1.79|4|0158|2.1||0
 Mikel Brown Jr.|BKN|ST|H|3.06||2.5|6|058|2.7|2.63|2
-Santi Aldama|DAL|IR|H|2.78|3.59|2.1|1|236810|2.1|2.1|1
+Santi Aldama|DAL|BE|H|2.78|3.59|2.1|1|236810|2.1|2.1|1
 Kyshawn George|WAS|ST|H|3.53|3.49|3.69|9|1256810|3.84|5.37|3
 Alex Caruso|OKC|ST|H|2.66|1.87|2.87|6|0158|2.95|2.15|2
 Zaccharie Risacher|DAL|BE|H|2.32|2.13|2.49|9|26810|2.46|0.83|3
@@ -384,7 +384,7 @@ const RECS = {"1":"1-0","2":"1-0","3":"0-1","4":"1-0","5":"0-1","6":"0-1"};
 const DAYPTS = {"1":[66.6,0,70.6,33.55,38.4,null,null],"2":[62.75,0,70.95,5.15,51.55,null,null],"3":[58.7,0,73.9,4.9,48,null,null],"4":[56.35,0,62.1,15.2,58.95,null,null],"5":[61.05,0,66.8,10.3,52.9,null,null],"6":[69.5,0,56.95,7.9,46.2,null,null]};
 const PREVWK = [[5,1,256.9,301.05],[6,2,256.5,283.75],[3,4,226.8,256.8]];
 const RESLIVE = {"1":[[5,1,256.9,301.05],[6,2,256.5,283.75],[3,4,226.8,256.8]]};
-const INJ = {"Immanuel Quickley":"2026-11-09","Ja Morant":"2026-12-01","Jalen Williams":"2027-03-02","Yves Missi":"2026-11-09","Jalen Duren":"2026-11-09","Jimmy Butler III":"2027-01-02","Moussa Diabate":"2026-11-09","Anthony Edwards":"2026-12-21","Jalen Suggs":"2026-11-10","Egor Demin":"2026-11-11","Chet Holmgren":"2027-01-02","Scottie Barnes":"2026-11-09","Josh Hart":"2026-11-10","Jalen Johnson":"2026-11-07","Kawhi Leonard":"2026-11-23","Anthony Davis":"2026-11-07","Paolo Banchero":"2026-11-22","Kon Knueppel":"2026-11-09","Draymond Green":"2026-11-07","Jarrett Allen":"2026-11-07","Day'Ron Sharpe":"2026-11-04","Tyrese Haliburton":"2026-11-13","Brandon Ingram":"2026-11-08","Jalen Smith":"2026-11-08","Jaren Jackson Jr.":"2026-12-14","Brandon Miller":"2026-11-09"};
+const INJ = {"Immanuel Quickley":"2026-11-09","Ja Morant":"2026-12-01","Jalen Williams":"2027-03-02","Yves Missi":"2026-11-09","Jalen Duren":"2026-11-09","Jimmy Butler III":"2027-01-02","Moussa Diabate":"2026-11-09","Anthony Edwards":"2026-12-21","Jalen Suggs":"2026-11-10","Egor Demin":"2026-11-11","Chet Holmgren":"2027-01-02","Scottie Barnes":"2026-11-09","Josh Hart":"2026-11-10","Jalen Johnson":"2026-11-07","Kawhi Leonard":"2026-11-23","Anthony Davis":"2026-11-07","Paolo Banchero":"2026-11-22","Kon Knueppel":"2026-11-09","Draymond Green":"2026-11-07","Jarrett Allen":"2026-11-09","Day'Ron Sharpe":"2026-11-04","Tyrese Haliburton":"2026-11-13","Brandon Ingram":"2026-11-08","Jalen Smith":"2026-11-08","Jaren Jackson Jr.":"2026-12-14","Brandon Miller":"2026-11-09"};
 const LSNAP = `MVP|1|Nikola Jokic
 MVP|2|Victor Wembanyama
 MVP|3|Domantas Sabonis
