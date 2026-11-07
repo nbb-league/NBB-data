@@ -1,8 +1,8 @@
 name: NBB refresh
 on:
   schedule:
-    - cron: '45 15 * * *'   # morning pull (8:45 AM Pacific during daylight time)
-    - cron: '45 16 * * *'   # morning pull (8:45 AM Pacific during standard time)
+    - cron: '30 12 * * *'   # morning pull (5:30 AM Pacific during daylight time)
+    - cron: '30 13 * * *'   # morning pull (5:30 AM Pacific during standard time)
     - cron: '0 21 * * *'    # afternoon
     - cron: '0 1 * * *'     # evening
     - cron: '0 5 * * *'     # late night, picks up the final box scores
@@ -28,8 +28,8 @@ jobs:
         id: gate
         run: |
           H=$(TZ=America/Los_Angeles date +%H)
-          if [ "${{ github.event.schedule }}" = "45 15 * * *" ] || [ "${{ github.event.schedule }}" = "45 16 * * *" ]; then
-            if [ "$H" != "08" ]; then echo "skip=1" >> $GITHUB_OUTPUT; echo "Not 8 AM Pacific ($H), skipping this slot"; fi
+          if [ "${{ github.event.schedule }}" = "30 12 * * *" ] || [ "${{ github.event.schedule }}" = "30 13 * * *" ]; then
+            if [ "$H" != "05" ]; then echo "skip=1" >> $GITHUB_OUTPUT; echo "Not 5 AM Pacific ($H), skipping this slot"; fi
           fi
       - uses: actions/setup-node@v4
         if: steps.gate.outputs.skip != '1'
