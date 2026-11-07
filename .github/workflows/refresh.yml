@@ -1,11 +1,10 @@
 name: NBB refresh
 on:
   schedule:
-    - cron: '30 12 * * *'   # morning pull (5:30 AM Pacific during daylight time)
-    - cron: '30 13 * * *'   # morning pull (5:30 AM Pacific during standard time)
-    - cron: '0 21 * * *'    # afternoon
-    - cron: '0 1 * * *'     # evening
-    - cron: '0 5 * * *'     # late night, picks up the final box scores
+    - cron: '30 12 * * *'            # morning pull, 5:30 AM Pacific in daylight time
+    - cron: '30 13 * * *'            # morning pull, 5:30 AM Pacific in standard time
+    - cron: '0,30 17-23 * * *'       # game-time slots; gated to Pacific windows below
+    - cron: '0,30 0-8 * * *'
   workflow_dispatch:
   push:
     paths:
@@ -24,13 +23,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Skip the duplicate morning slot
+      - name: Only run inside the Pacific-time windows
         id: gate
         run: |
-          H=$(TZ=America/Los_Angeles date +%H)
-          if [ "${{ github.event.schedule }}" = "30 12 * * *" ] || [ "${{ github.event.schedule }}" = "30 13 * * *" ]; then
-            if [ "$H" != "05" ]; then echo "skip=1" >> $GITHUB_OUTPUT; echo "Not 5 AM Pacific ($H), skipping this slot"; fi
+          EV="${{ github.event_name }}"; SC="${{ github.event.schedule }}"
+          H=$(TZ=America/Los_Angeles date +%H); H=$((10#$H)); D=$(TZ=America/Los_Angeles date +%u)
+          RUN=1
+          if [ "$EV" = "schedule" ]; then
+            RUN=0
+            if [ "$SC" = "30 12 * * *" ] || [ "$SC" = "30 13 * * *" ]; then
+              [ "$H" = "5" ] && RUN=1
+            else
+              # weekdays 4 PM-midnight, weekends 10 AM-midnight, plus the 12 AM slot
+              if [ "$H" -eq 0 ]; then RUN=1
+              elif [ "$D" -ge 6 ] && [ "$H" -ge 10 ]; then RUN=1
+              elif [ "$D" -le 5 ] && [ "$H" -ge 16 ]; then RUN=1; fi
+            fi
           fi
+          if [ "$RUN" = "0" ]; then echo "skip=1" >> $GITHUB_OUTPUT; echo "Outside window (Pacific hour $H, day $D); skipping"; fi
       - uses: actions/setup-node@v4
         if: steps.gate.outputs.skip != '1'
         with: { node-version: 20 }
