@@ -2,7 +2,10 @@ import fs from 'node:fs';
 const L='https://lm-api-reads.fantasy.espn.com/apis/v3/games/fba/seasons/2027/segments/0/leagues/948';
 const J=async u=>(await fetch(u)).json();
 const out={};
-for (const sp of [17,18,19]) {
+out.at=new Date().toISOString();
+const d0=Date.UTC(2026,9,26);const now=new Date(new Date().toLocaleString('en-US',{timeZone:'America/Los_Angeles'}));const days=Math.round((Date.UTC(now.getFullYear(),now.getMonth(),now.getDate())-d0)/864e5);
+const cur=14+(days-7);out.cur=cur;
+for (const sp of [cur]) {
   const j=await J(L+'?view=mMatchup&view=mBoxscore&view=mRoster&scoringPeriodId='+sp);
   out['sp'+sp]=(j.schedule||[]).filter(m=>m.matchupPeriodId===3).map(m=>[m.home,m.away].map(x=>{
     const pb=x.pointsByScoringPeriod||{};
