@@ -1,0 +1,7 @@
+200 19450 https://lm-api-reads.fantasy.espn.com/apis/v3/games/fba/seasons/2027/segments/0/leagues/948?view=mTeam
+{"draftDetail":{"drafted":true,"inProgress":false},"gameId":3,"id":948,"members":[{"displayName":"JedKizziar","firstName":"Jed","id":"{7545008E-3F31-45B7-8500-8E3F31B5B770}","lastName":"Kizziar","noti
+200 1747818 https://lm-api-reads.fantasy.espn.com/apis/v3/games/fba/seasons/2027/segments/0/leagues/948?view=mMatchup&view=mRoster&scoringPeriodId=5
+{"draftDetail":{"drafted":true,"inProgress":false},"gameId":3,"id":948,"schedule":[{"away":{"cumulativeScore":{"losses":0,"scoreByStat":null,"statBySlot":null,"ties":0,"wins":0},"gamesPlayed":0,"teamI
+200 285526 https://lm-api-reads.fantasy.espn.com/apis/v3/games/fba/seasons/2027/segments/0/leagues/948?view=kona_player_info
+{"players":[{"draftAuctionValue":0,"droppedByEliminatedTeam":false,"id":4431679,"keeperValue":0,"keeperValueFuture":0,"lineupLocked":true,"onTeamId":4,"player":{"active":true,"defaultPositionId":4,"dr
+Sat Nov  7 04:34:40 UTC 2026
