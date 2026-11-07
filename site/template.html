@@ -3011,4 +3011,14 @@ window.addEventListener('hashchange', applyHash);
 </script>
 
 
+<script>
+/* Auto-refresh: when the page comes back to the foreground (or sits open) and is older than 5 minutes, reload to pick up the newest data. */
+(function(){var t0=Date.now(),MAX=5*60*1000;
+function stale(){return Date.now()-t0>MAX;}
+function go(){try{location.reload();}catch(e){}}
+document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible'&&stale())go();});
+window.addEventListener('pageshow',function(e){if(e.persisted&&stale())go();});
+setInterval(function(){if(document.visibilityState==='visible'&&stale())go();},60*1000);
+})();
+</script>
 </body></html>
