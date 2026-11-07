@@ -1,4 +1,4 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html><html><head><meta charset=utf8><meta http-equiv="Cache-Control" content="no-cache, must-revalidate"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <title>Nice Boys Basketball</title>
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
@@ -3026,7 +3026,7 @@ window.addEventListener('hashchange', applyHash);
 /* Auto-refresh: when the page comes back to the foreground (or sits open) and is older than 5 minutes, reload to pick up the newest data. */
 (function(){var t0=Date.now(),MAX=5*60*1000;
 function stale(){return Date.now()-t0>MAX;}
-function go(){try{location.reload();}catch(e){}}
+function go(){try{var u=location.pathname+'?t='+Date.now()+location.hash;location.replace(u);}catch(e){try{location.reload();}catch(_){}}}
 document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible'&&stale())go();});
 window.addEventListener('pageshow',function(e){if(e.persisted&&stale())go();});
 setInterval(function(){if(document.visibilityState==='visible'&&stale())go();},60*1000);
