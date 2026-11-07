@@ -1,0 +1,18 @@
+name: ESPN diagnostic
+on:
+  workflow_dispatch:
+  push:
+    paths: ['tools/diag.mjs', '.github/workflows/diag.yml']
+permissions:
+  contents: write
+jobs:
+  d:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: node tools/diag.mjs
+      - run: |
+          git config user.name "nbb-bot"; git config user.email "nbb-bot@users.noreply.github.com"
+          git add out/diag.json; git commit -m "diag $(date -u +%FT%TZ)" && git pull --rebase -q && git push
