@@ -1,8 +1,8 @@
 //REFRESH-DATA-START
 const WEEK_LABEL = 'Week 2';
-const ASOF = '2026-11-07T18:45';
-const ASOF_LABEL = 'Sat, Nov 7, 6:45 PM PT';
-const ASOF_MS = 1794105950534;
+const ASOF = '2026-11-07T19:45';
+const ASOF_LABEL = 'Sat, Nov 7, 7:45 PM PT';
+const ASOF_MS = 1794109540243;
 const TODAY = 5;
 const DAYS = [["Mon","11/2"],["Tue","11/3"],["Wed","11/4"],["Thu","11/5"],["Fri","11/6"],["Sat","11/7"],["Sun","11/8"]];
 const SCH_RAW = 'IND:1010010 LAC:1010001 LAL:1010101 MIA:1011001 MIL:1010101 MIN:1010101 BKN:1010011 NY:1010010 ORL:1001010 PHI:1010101 PHX:1011010 POR:1010110 SAC:1010101 SA:1010110 OKC:1010110 UTA:1010101 WAS:1010110 TOR:1010100 MEM:1010100 CHA:1010100 ATL:1010110 BOS:1010101 NO:1010101 CHI:1010001 CLE:1010110 DAL:1010101 DEN:1010010 DET:1010001 GS:1001010 HOU:1010010';
@@ -16,125 +16,125 @@ const LU_RAW = `1:b601d2435c8cacbccdaccb8xx/b601d2435c8cacbccdaccb8cx/46c1d2a30c
 6:8c23804a5a6b1bcbdcccdcdccx/8c23804a5a6b1bcbdcccdcdccx/8c23804a5a6b1bcbdcccdcdccx/c8a305ab86bc1b2cdcccdcccdx/85a6c042c3cc1ccbdcdcdabbc8/cba405ccbaccbd6cdcd8c28c31/5b23ccac0c68cdc4d8dbbccac1`;
 const DATA = `#1|Golden State Lobos|Chance G
 Joel Embiid|PHI|BE|D|5.38|5.81|5.59|8|410|5.72|3.95|3
-Julius Randle|BKN|ST|H|4.39|4.87|4.23|9|36810|4.03|4.6|4
-Stephen Curry|GS|ST|H|5.43|5.38|5.89|8|058|6.16|5.55|3
-James Harden|CLE|ST|H|5.25|6.15|3.76|10|0158|3.86|3.78|5
+Julius Randle|BKN|ST|H|4.39|4.87|4.32|9|36810|4.13|4.8|4
+Stephen Curry|GS|ST|H|5.43|5.38|6.08|8|058|6.36|6.03|3
+James Harden|CLE|ST|H|5.25|6.15|3.8|10|0158|3.91|3.87|5
 Kon Knueppel|CHA|IR|O|4.3|4.08|0.15|1|1256810|0.15|0.15|1
-Kevin Durant|HOU|ST|H|4.88|5.08|3.6|10|236810|3.47|2.65|4
+Kevin Durant|HOU|ST|H|4.88|5.08|3.93|10|236810|3.84|3.48|4
 Anthony Davis|WAS|ST|O|5.15|5.88|5.67|8|346810|5.19|6.13|2
 Giannis Antetokounmpo|MIA|BE|H|5.99|6.23|8.39|9|346810|8.97|7.55|3
-Damian Lillard|POR|ST|H|4.91||4.14|8|058|3.82|4.46|4
+Damian Lillard|POR|ST|H|4.91||3.71|9|058|3.37|3.61|5
 Rudy Gobert|MIN|BE|H|3.27|4.08|2.75|9|410|2.86|3.42|3
-Jabari Smith Jr.|HOU|ST|H|3.23|3.8|4.15|10|346810|3.99|4.14|4
+Jabari Smith Jr.|HOU|ST|H|3.23|3.8|4.46|10|346810|4.35|4.94|4
 Derik Queen|NO|BE|H|3.32|3.45|3.3|9|346810|3.06|3.06|4
 RJ Barrett|TOR|BE|H|3.8|3.54|4.06|9|1256810|4.24|4.71|4
 Zach LaVine|SAC|BE|H|3.88|3.29|3.82|9|1256810|3.8|2.75|4
 Davion Mitchell|MIA|ST|H|2.76|2.86|5.02|9|058|5.06|4.87|3
-Toumani Camara|POR|ST|H|2.73|3.16|2.71|8|236810|2.6|2.11|4
-Dillon Brooks|PHX|ST|H|3.38|3.21|2.87|8|1256810|3.11|2.66|4
+Toumani Camara|POR|ST|H|2.73|3.16|2.48|9|236810|2.36|1.82|5
+Dillon Brooks|PHX|ST|H|3.38|3.21|3.01|8|1256810|3.27|2.94|4
 Jimmy Butler III|GS|IR|O|4.56|4.85||0|1256810|||0
 Jonathan Kuminga|MIN|BE|H|3.07|2.59|3.64|10|236810|3.62|3.77|4
 Jaime Jaquez Jr.|MIL|BE|H|3.07|3.33|3.48|9|1256810|3.48|3.1|4
-Wendell Carter Jr.|ORL|ST|H|2.52|3.08|3.11|9|410|2.98|2.85|4
+Wendell Carter Jr.|ORL|ST|H|2.52|3.08|3.34|9|410|3.24|3.38|4
 Ayo Dosunmu|MIN|BE|H|3.4|3.28|4.12|10|0158|4.24|5.34|4
-Brandin Podziemski|GS|ST|H|3.63|3.42|3.57|8|0158|3.57|3.16|4
+Brandin Podziemski|GS|ST|H|3.63|3.42|3.71|8|0158|3.71|3.44|4
 Saddiq Bey|NO|ST|H|3.18|4|3.38|9|236810|3.54|4.18|4
 Quenton Jackson|IND|ST|H||1.99|2.42|10|0158|2.38|2.98|4
 #2|Atlanta Firebirds|Ethan Wetzel
 Tyrese Maxey|PHI|ST|H|5.4|6.2|5.48|10|0158|5.33|5.73|4
-Trae Young|WAS|ST|H|5.63|4.42|5.21|10|058|4.98|3.95|4
-Evan Mobley|CLE|ST|H|4.41|4.97|5.06|10|346810|5.29|4.48|5
+Trae Young|WAS|ST|H|5.63|4.42|5.22|10|058|4.99|3.98|4
+Evan Mobley|CLE|ST|H|4.41|4.97|5.1|10|346810|5.33|4.56|5
 Trey Murphy III|NO|BE|H|4.38|4.8|3.27|8|1256810|3.45|3.93|3
 Anthony Edwards|MIN|IR|O|5.79|5.41|6.39|4|1256810|4.95||0
-Donovan Mitchell|CLE|ST|H|5.63|5.59|4.82|10|0158|4.51|4.39|5
+Donovan Mitchell|CLE|ST|H|5.63|5.59|5.14|10|0158|4.87|5.03|5
 Nikola Jokic|DEN|ST|H|7.11|11.97|9.86|8|410|10.82|10.4|3
-Jalen Johnson|ATL|ST|H|5.58|7.81|5.13|8|36810|5|2.88|2
-Donovan Clingan|POR|ST|H|3.45|4.76|4.31|8|410|4.57|5.55|4
+Jalen Johnson|ATL|ST|H|5.58|7.81|5.33|8|36810|5.23|3.67|2
+Donovan Clingan|POR|ST|H|3.45|4.76|3.84|9|410|4.01|4.46|5
 Keyonte George|UTA|BE|H|4.69|4.9|4.38|9|0158|4.38|3.4|4
-Michael Porter Jr.|BKN|ST|H|4.69|5.16|4.6|9|236810|4.55|4.49|4
+Michael Porter Jr.|BKN|ST|H|4.69|5.16|4.61|9|236810|4.56|4.51|4
 Norman Powell|CHI|BE|H|4.51|3.94|3.54|8|1256810|3.6|2.15|2
 Josh Hart|NY|ST|O|3.58|3.93|3.39|7|1256810|3.42|3.35|1
-Nickeil Alexander-Walker|ATL|ST|H|4.17|4.36|4.2|11|0158|3.98|4.23|5
+Nickeil Alexander-Walker|ATL|ST|H|4.17|4.36|4.27|11|0158|4.05|4.38|5
 Andrew Nembhard|IND|ST|H|3.2|4.36|4.07|8|0158|4.11|3.53|3
 Payton Pritchard|BOS|BE|H|3.69|3.97|3.02|9|0158|2.98|2.5|4
 Moussa Diabate|CHA|BE|D|2.34|3.2|3.5|9|346810|3.35|2.67|3
 Jaden McDaniels|MIN|BE|H|3.21|3.08|3.46|10|236810|3.46|3.55|4
 Jalen Smith|CHI|BE|D|2.47|2.89|3.24|8|346810|3.25|1.87|2
-Anthony Black|ORL|ST|H|3.26|3.32|3.62|6|0158|3.62|3|3
-Collin Gillespie|PHX|ST|H|3.42|3.6|2.49|8|058|2.76|1.26|4
+Anthony Black|ORL|ST|H|3.26|3.32|4.23|6|0158|4.23|4.23|3
+Collin Gillespie|PHX|ST|H|3.42|3.6|2.63|8|058|2.92|1.54|4
 Christian Braun|DEN|ST|H|2.48|2.59|3.02|8|1256810|3.23|2.35|3
 Daniel Gafford|DAL|BE|H|2.72|2.76|2.42|9|410|2.58|1.97|3
 Cam Spencer|MEM|BE|H||3.27|3.05|9|0158|3.24|3.73|4
 #3|Milwaukee Elks|Jed Kizziar
 Jalen Duren|DET|IR|O|4.22|5.15|3.3|2|410|2.2||0
 Pascal Siakam|IND|ST|H|4.56|4.73|4.11|9|36810|4.14|3.63|3
-Jalen Brunson|NY|ST|H|5.31|5.25|4.94|9|058|5.09|5.33|3
-Stephon Castle|SA|ST|H|4.32|4.85|3.74|9|0158|3.74|3.35|4
-Deni Avdija|POR|ST|H|4.93|5.8|5.43|8|236810|5.25|5.4|4
-Karl-Anthony Towns|NY|ST|H|5|6.05|6.04|9|410|6.01|5.25|3
-Alperen Sengun|HOU|ST|H|4.57|5.86|6.6|8|410|6.63|6.66|4
+Jalen Brunson|NY|ST|H|5.31|5.25|5.02|9|058|5.18|5.57|3
+Stephon Castle|SA|ST|H|4.32|4.85|3.47|10|0158|3.44|2.88|5
+Deni Avdija|POR|ST|H|4.93|5.8|4.98|9|236810|4.77|4.6|5
+Karl-Anthony Towns|NY|ST|H|5|6.05|6.53|9|410|6.56|6.72|3
+Alperen Sengun|HOU|ST|H|4.57|5.86|6.66|8|410|6.7|6.79|4
 Jaylen Brown|PHI|BE|H|4.52|5.68|4.83|9|1256810|5.05|5.2|4
-De'Aaron Fox|SA|ST|H|4.41|4.17|3.41|9|0158|3.44|2.71|4
+De'Aaron Fox|SA|ST|H|4.41|4.17|3.07|10|0158|3.05|2.16|5
 Lauri Markkanen|UTA|BE|D|4.76|5.36|4.28|8|236810|4.36|5.17|4
 Ivica Zubac|IND|ST|H|3.38|4.18|2.74|5|410|2.08|2.8|2
-Dyson Daniels|ATL|ST|H|3.61|4.23|4.08|11|0158|4.05|4.62|5
+Dyson Daniels|ATL|ST|H|3.61|4.23|4.12|11|0158|4.09|4.7|5
 Derrick White|BOS|ST|H|4.39|4.37|3.33|9|0158|3.29|3.56|4
 Coby White|CHA|BE|H|4.11|3.23|0.7|3|0158|0.7|0.7|3
-Fred VanVleet|HOU|ST|H|4.03||3.31|8|0158|3.14|2.15|3
+Fred VanVleet|HOU|ST|H|4.03||3.6|8|0158|3.47|2.93|3
 Yves Missi|NO|IR|O|2.36|2.09|4.45|2|410|1.1||0
 Naz Reid|CHA|BE|H|3.98|3.3|3.78|10|346810|3.43|3|4
 Ausar Thompson|DET|BE|H|3.1|3.01|3.38|7|236810|3.07|4.3|2
-Yaxel Lendeborg|GS|ST|H|3.71||4.46|10|236810|4.74|4.42|4
+Yaxel Lendeborg|GS|ST|H|3.71||4.53|10|236810|4.82|4.59|4
 Reed Sheppard|HOU|ST|H|3.51|3.37|2.48|7|0158|2.65|1.83|3
-Jrue Holiday|POR|ST|H|3.2|4.22|3.7|8|0158|3.86|4.2|4
+Jrue Holiday|POR|ST|H|3.2|4.22|3.37|9|0158|3.48|3.51|5
 Brook Lopez|LAC|BE|H|2.79|2.13|2.81|8|410|2.41|2.4|3
 P.J. Washington|DAL|BE|H|3.04|3.44|3.96|9|236810|4.28|5.38|3
 Paul Reed|DET|BE|H|1.97|2.11|3.12|8|346810|3.32|2.63|2
 Naji Marshall|DAL|BE|H|2.5|3.08|2.88|6|236810|2.83|2.75|3
 #4|Portland Pioneers|Andrew Stengel
 Chet Holmgren|OKC|IR|O|3.96|4.61|4.73|3|346810|2.6||0
-Devin Booker|PHX|ST|H|5.28|4.91|4.03|8|0158|4.01|4.01|4
-Victor Wembanyama|SA|ST|H|6.51|7.33|8.49|9|410|8.68|9.36|4
+Devin Booker|PHX|ST|H|5.28|4.91|4.16|8|0158|4.17|4.29|4
+Victor Wembanyama|SA|ST|H|6.51|7.33|7.8|10|410|7.89|7.81|5
 Paolo Banchero|ORL|IR|O|4.73|5.48|5.78|2|236810|2.6||0
 Josh Giddey|CHI|BE|H|5.26|7.24|3.33|8|0158|3.73|3.95|2
 LaMelo Ball|MIN|BE|H|5.77|5.09|3.8|10|058|3.68|4.31|4
 Bam Adebayo|MIA|BE|H|4.69|5.64|4.75|9|346810|4.86|6.22|3
 Jayson Tatum|BOS|ST|H|5.81|6.76|5.99|8|236810|6.12|6.28|3
 Tyrese Haliburton|IND|IR|O|5.47||6.59|4|0158|6.32||0
-AJ Dybantsa|WAS|ST|H|3.84||3.08|6|26810|3.08|3.26|4
-Alex Sarr|WAS|ST|H|3.89|4.3|3.05|9|346810|3.16|4.22|3
+AJ Dybantsa|WAS|ST|H|3.84||3.23|6|26810|3.23|3.48|4
+Alex Sarr|WAS|ST|H|3.89|4.3|3.06|9|346810|3.18|4.25|3
 Darryn Peterson|UTA|BE|H|3.58||3.38|9|0158|3.6|3.9|4
 Walker Kessler|LAL|BE|H|3.5|4.9|4.57|10|410|4.63|5.7|4
 Ja Morant|POR|ST|O|4.54|4.85|3.3|4|058|2.78||0
 Jarrett Allen|CLE|ST|O|3.58|4.11|3.44|8|410|3.55|3.22|3
-Dylan Harper|SA|ST|H|3.51|2.56|3.72|9|0158|3.8|3.93|4
+Dylan Harper|SA|ST|H|3.51|2.56|3.38|10|0158|3.42|3.21|5
 Paul George|BOS|BE|H|4.59|4.16|4.58|8|236810|4.06|4.27|3
-OG Anunoby|NY|ST|H|3.83|3.85|3.53|9|236810|3.77|3.53|3
+OG Anunoby|NY|ST|H|3.83|3.85|3.67|9|236810|3.93|3.95|3
 Ryan Rollins|MIL|BE|H|3.63|4.13|2.51|9|0158|2.56|2.26|4
-Scoot Henderson|POR|ST|H|3.18|2.79|1.01|8|0158|0.93|1.3|4
-Day'Ron Sharpe|BKN|ST|D|2.71|2.52|2.87|9|410|2.87|4.21|4
-Draymond Green|GS|ST|H|3.09|2.65|1.85|8|346810|1.86|1.65|3
+Scoot Henderson|POR|ST|H|3.18|2.79|0.93|9|0158|0.85|1.1|5
+Day'Ron Sharpe|BKN|ST|D|2.71|2.52|3.57|9|410|3.66|5.79|4
+Draymond Green|GS|ST|H|3.09|2.65|2.1|8|346810|2.15|2.32|3
 Ajay Mitchell|OKC|ST|H|3.7|3.04|3.5|10|0158|3.84|3.25|5
 Trevon Brazile|DEN|ST|H|||1.93|8|236810|1.99|1.52|3
 Precious Achiuwa|SAC|BE|H|2.43|2.82|2.93|9|346810|2.83|2.35|4
 Jeremiah Fears|NO|BE|H|3.23|2.99|3.29|9|0158|3.55|3.56|4
 #5|Los Angeles Shoobies|Ethan Wetzel
-Amen Thompson|HOU|ST|H|4.21|4.85|3.75|10|1256810|3.44|1.88|4
+Amen Thompson|HOU|ST|H|4.21|4.85|3.92|10|1256810|3.64|2.32|4
 Luka Doncic|LAL|ST|D|7.3|8.79|8.77|9|058|8.99|10.25|4
 Kyrie Irving|DAL|ST|H|5.13||4.43|7|058|4.79|4.42|2
 Tyler Herro|MIL|ST|H|4.6|4|5.08|9|0158|5.1|5.08|4
 Kawhi Leonard|TOR|ST|O|5.21|5.84|4.9|2|236810|3.3||0
 Scottie Barnes|TOR|ST|D|4.7|5.5|5.15|8|1256810|5.24|5.25|3
 Cooper Flagg|DAL|ST|H|5.16|4.76|6.18|8|236810|6.29|6|3
-Jalen Green|PHX|ST|H|4.06|3.23|2.17|8|1256810|2.19|2.46|4
-CJ McCollum|ATL|ST|H|3.88|3.7|3.09|11|0158|3.1|3.57|5
-Franz Wagner|ORL|ST|H|4.5|3.95|4.72|9|236810|4.86|4.89|4
+Jalen Green|PHX|ST|H|4.06|3.23|2.21|8|1256810|2.24|2.55|4
+CJ McCollum|ATL|ST|H|3.88|3.7|3.08|11|0158|3.09|3.55|5
+Franz Wagner|ORL|ST|H|4.5|3.95|5.02|9|236810|5.19|5.56|4
 Jalen Williams|OKC|IR|O|4.53|3.77|2.83|3|236810|2.35||0
 VJ Edgecombe|PHI|BE|H|3.87|3.99|3.44|9|158|3.64|3.57|4
 Desmond Bane|ORL|ST|O|4.47|4.01|3.29|8|1256810|3.25|3|3
 Jaren Jackson Jr.|UTA|IR|O|4.39|3.77|3.14|4|346810|3.42||0
 Isaiah Hartenstein|OKC|ST|H|2.95|3.55|3.38|10|410|3.88|3.04|5
-Onyeka Okongwu|ATL|ST|H|3.82|4.17|4.12|11|410|4.31|4.9|5
+Onyeka Okongwu|ATL|ST|H|3.82|4.17|4.25|11|410|4.45|5.18|5
 Matas Buzelis|CHI|BE|H|3.69|3.55|2.26|8|236810|2.15|1.25|2
 Aaron Gordon|DEN|ST|H|3.33|3.63|2.99|8|36810|2.74|1.83|3
 Zach Edey|MEM|BE|H|3.17|4.16|2.43|8|410|2.47|2.7|4
@@ -160,18 +160,18 @@ Caleb Wilson|CHI|BE|H|3.83||4.36|8|26810|4.76|3.48|2
 Darius Garland|LAC|BE|H|4.81|4.26|3.58|8|058|3.46|3.1|3
 Ty Jerome|MEM|ST|H|5.14|4.29|4.87|8|0158|4.43|4.7|3
 Immanuel Quickley|TOR|IR|D|4.23|4.31|4.19|8|0158|3.86|4.05|3
-Miles Bridges|PHX|ST|H|3.99|3.74|4.51|8|236810|4.94|5.03|4
+Miles Bridges|PHX|ST|H|3.99|3.74|4.67|8|236810|5.14|5.36|4
 Kel'el Ware|MIL|BE|H|3.45|3.7|2.88|9|410|3.14|2.45|4
 Brandon Ingram|LAC|IR|O|4.44|4.09||0|236810|||0
 Keaton Wagler|LAC|BE|H|2.84||2.83|8|0158|2.58|2.03|3
 Egor Demin|BKN|IR|O|3.61|2.6|1.79|4|0158|2.1||0
 Mikel Brown Jr.|BKN|ST|H|3.06||2.58|7|058|2.76|2.77|3
 Santi Aldama|DAL|BE|H|2.78|3.59|2.1|1|236810|2.1|2.1|1
-Kyshawn George|WAS|ST|H|3.53|3.49|3.65|10|1256810|3.77|4.84|4
-Alex Caruso|OKC|ST|H|2.66|1.87|2.58|7|0158|2.53|1.72|3
+Kyshawn George|WAS|ST|H|3.53|3.49|3.75|10|1256810|3.89|5.1|4
+Alex Caruso|OKC|ST|H|2.66|1.87|2.61|7|0158|2.58|1.8|3
 Zaccharie Risacher|DAL|BE|H|2.32|2.13|2.49|9|26810|2.46|0.83|3
-Peyton Watson|CLE|ST|H|3.25|3.14|2.66|8|236810|2.83|2.62|3
-Devin Vassell|SA|ST|H|3.17|3.16|3.14|9|1256810|3.39|3.06|4
+Peyton Watson|CLE|ST|H|3.25|3.14|2.78|8|236810|2.97|2.95|3
+Devin Vassell|SA|ST|H|3.17|3.16|2.92|10|1256810|3.11|2.63|5
 #0|Free agents|
 Nolan Traore|BKN|FA|H|2.55|1.96|2.81|9|058|3.11|4.03|4
 Jakob Poeltl|TOR|FA|H|2.94|2.77|2.31|7|410|2.52|3.95|2
@@ -179,6 +179,7 @@ Morez Johnson Jr.|DAL|FA|H|2.53||1.81|9|346810|1.98|3.6|3
 Klay Thompson|MIA|FA|H|2.57|2.36|2.45|9|1256810|2.61|3.48|3
 Brayden Burries|MIL|FA|H|2.59||2.47|9|158|2.51|3.48|4
 Myles Turner|MIL|FA|H|3.22|3.08|2.56|9|410|2.61|3.45|4
+Tristan da Silva|ORL|FA|H|2|2.31|2.94|9|236810|2.9|3.45|4
 Jamal Shead|TOR|FA|H|2.43|2.23|2.53|9|058|2.73|3.39|4
 Grayson Allen|CHA|FA|H|3.36|3.71|3.01|10|0158|2.88|3.31|4
 Luka Garza|BOS|FA|H||1.88|1.96|9|410|2.22|3.24|4
@@ -186,45 +187,44 @@ Walter Clayton Jr.|DAL|FA|H|2.82|2.03|1.91|8|0158|1.91|3.13|3
 Leaky Black|SAC|FA|H||2.09|2.04|5|26810|2.04|3.07|3
 Malik Monk|SAC|FA|H|3.3|2.52|1.88|8|0158|1.88|3.06|4
 Karlo Matkovic|NO|FA|H||1.56|2.27|8|36810|2.27|3.01|4
+Aaron Wiggins|ATL|FA|H|2.18|2.12|3.17|11|1256810|3.17|3|5
 Max Strus|LAC|FA|H|2.64|2.43|3|2|26810|3|3|2
 Quenton Jackson|IND|FA|H||1.99|2.42|10|0158|2.38|2.98|4
-Aaron Wiggins|ATL|FA|H|2.18|2.12|3.13|11|1256810|3.13|2.92|5
-Tristan da Silva|ORL|FA|H|2|2.31|2.69|9|236810|2.61|2.88|4
 Collin Murray-Boyles|TOR|FA|H|2.42|2.39|2.26|9|36810|2.17|2.79|4
-Mario Hezonja|CLE|FA|H|||2.37|10|26810|2.34|2.78|5
+Mario Hezonja|CLE|FA|H|||2.36|10|26810|2.34|2.77|5
+Bennett Stirtz|OKC|FA|H|||1.69|10|058|2.12|2.77|5
 Luguentz Dort|ATL|FA|H|2.53|1.99|2.23|11|1256810|2.28|2.74|5
+Aday Mara|OKC|FA|H|||2.17|10|410|2.41|2.7|5
 Kobe Sanders|LAC|FA|H||1.52|2.33|8|158|2.46|2.68|3
 Derrick Jones Jr.|LAC|FA|H|2.28|2.41|3.01|7|236810|3.03|2.67|2
 Cameron Johnson|DEN|FA|H|3.1|2.82|2.33|5|236810|2.66|2.62|3
 Braden Smith|IND|FA|H|||1.61|7|058|1.61|2.61|4
-De'Anthony Melton|GS|FA|H|2.88|2.76|2.7|10|0158|2.95|2.55|4
+De'Anthony Melton|GS|FA|H|2.88|2.76|2.7|10|0158|2.94|2.54|4
 Tre Jones|CHI|FA|H|2.77|3.46|2.69|8|058|2.83|2.5|2
 Jared McCain|OKC|FA|H|3.09|1.67|2.32|10|0158|2.36|2.44|5
+Kingston Flemings|ATL|FA|H|2.56||1.95|10|1580|2.07|2.41|4
 Ziaire Williams|LAL|FA|H|2.41|2.24|2.6|7|1256810|2.71|2.4|3
-Aday Mara|OKC|FA|H|||2.01|10|410|2.21|2.38|5
 Jarace Walker|IND|FA|H|1.95|2.73|2.07|10|236810|2.21|2.38|4
 Baylor Scheierman|BOS|FA|H|2.24|1.68|1.61|9|158|1.59|2.38|4
-Bennett Stirtz|OKC|FA|H|||1.46|10|058|1.83|2.31|5
-Meleek Thomas|CLE|FA|H|||2.32|7|158|2.32|2.29|5
-Marcus Smart|HOU|FA|H|2.47|2.4|2.01|7|0158|1.98|2.29|4
-Neemias Queta|BOS|FA|H|2.56|3.26|2.16|9|410|2.23|2.26|4
-Kingston Flemings|ATL|FA|H|2.56||1.89|10|1580|2.01|2.26|4
-Jake LaRavia|LAL|FA|H|2.67|2.21|2.08|9|236810|2.08|2.25|4
-Bones Hyland|MIN|FA|H|2.04|1.96|1.89|10|058|2.04|2.25|4
-Kevin Huerter|DET|FA|H|2.55|2.41|1.75|8|1256810|1.86|2.25|2
-Tyrese Proctor|CLE|FA|H||1.21|1.69|9|158|1.92|2.24|5`;
+Mikal Bridges|NY|FA|H|3.58|3.52|1.91|9|1256810|2.01|2.37|3
+Ryan Dunn|PHX|FA|H|2.07|1.77|1.82|8|236810|2.01|2.36|4
+Tari Eason|HOU|FA|H|2.66|2.86|2.7|10|236810|2.94|2.31|4
+Brandon Williams|GS|FA|H||2.72|2.4|9|0158|2.18|2.3|3
+Meleek Thomas|CLE|FA|H|||2.31|7|158|2.31|2.28|5
+Marcus Smart|HOU|FA|H|2.47|2.4|2.01|7|0158|1.98|2.28|4
+Kenrich Williams|OKC|FA|H|1.59|1.61|1.61|10|26810|1.84|2.27|5`;
 const LEADERS = `AVG|Nikola Jokic|DEN|2|8|9.86|78.85|
 AVG|Luka Doncic|LAL|5|9|8.77|78.9|
-AVG|Victor Wembanyama|SA|4|9|8.49|76.4|
 AVG|Giannis Antetokounmpo|MIA|1|9|8.39|75.55|
-AVG|Alperen Sengun|HOU|3|8|6.6|52.8|
+AVG|Victor Wembanyama|SA|4|10|7.8|78|
+AVG|Alperen Sengun|HOU|3|8|6.66|53.3|
 AVG|Tyrese Haliburton|IND|4|4|6.59|26.35|
+AVG|Karl-Anthony Towns|NY|3|9|6.53|58.8|
 AVG|Domantas Sabonis|SAC|6|9|6.41|57.7|
 AVG|Anthony Edwards|MIN|2|4|6.39|25.55|
 AVG|Cooper Flagg|DAL|5|8|6.18|49.45|
-AVG|Karl-Anthony Towns|NY|3|9|6.04|54.4|
+AVG|Stephen Curry|GS|1|8|6.08|48.6|
 AVG|Jayson Tatum|BOS|4|8|5.99|47.9|
-AVG|Stephen Curry|GS|1|8|5.89|47.15|
 AVG|Paolo Banchero|ORL|4|2|5.78|11.55|
 AVG|Anthony Davis|WAS|1|8|5.67|45.35|
 AVG|Shai Gilgeous-Alexander|OKC|6|10|5.6|56|
@@ -232,118 +232,119 @@ AVG|Joel Embiid|PHI|1|8|5.59|44.75|
 AVG|Cade Cunningham|DET|6|8|5.59|44.75|
 AVG|Jamal Murray|DEN|6|8|5.53|44.2|
 AVG|Tyrese Maxey|PHI|2|10|5.48|54.8|
-AVG|Deni Avdija|POR|3|8|5.43|43.45|
+AVG|Cameron Boozer|MEM|6|9|5.38|48.45|
 TOT|Luka Doncic|LAL|5|9|8.77|78.9|
 TOT|Nikola Jokic|DEN|2|8|9.86|78.85|
-TOT|Victor Wembanyama|SA|4|9|8.49|76.4|
+TOT|Victor Wembanyama|SA|4|10|7.8|78|
 TOT|Giannis Antetokounmpo|MIA|1|9|8.39|75.55|
+TOT|Karl-Anthony Towns|NY|3|9|6.53|58.8|
 TOT|Domantas Sabonis|SAC|6|9|6.41|57.7|
 TOT|Shai Gilgeous-Alexander|OKC|6|10|5.6|56|
 TOT|Tyrese Maxey|PHI|2|10|5.48|54.8|
-TOT|Karl-Anthony Towns|NY|3|9|6.04|54.4|
-TOT|Alperen Sengun|HOU|3|8|6.6|52.8|
-TOT|Trae Young|WAS|2|10|5.21|52.15|
-TOT|Evan Mobley|CLE|2|10|5.06|50.55|
+TOT|Alperen Sengun|HOU|3|8|6.66|53.3|
+TOT|Trae Young|WAS|2|10|5.22|52.25|
+TOT|Donovan Mitchell|CLE|2|10|5.14|51.4|
+TOT|Evan Mobley|CLE|2|10|5.1|50.95|
 TOT|Cooper Flagg|DAL|5|8|6.18|49.45|
+TOT|Stephen Curry|GS|1|8|6.08|48.6|
 TOT|Cameron Boozer|MEM|6|9|5.38|48.45|
-TOT|Donovan Mitchell|CLE|2|10|4.82|48.2|
 TOT|Jayson Tatum|BOS|4|8|5.99|47.9|
-TOT|Stephen Curry|GS|1|8|5.89|47.15|
-TOT|Nickeil Alexander-Walker|ATL|2|11|4.2|46.2|
+TOT|Nickeil Alexander-Walker|ATL|2|11|4.27|46.95|
+TOT|Onyeka Okongwu|ATL|5|11|4.25|46.7|
 TOT|Tyler Herro|MIL|5|9|5.08|45.75|
 TOT|Walker Kessler|LAL|4|10|4.57|45.7|
-TOT|Onyeka Okongwu|ATL|5|11|4.15|45.6|
-FAAVG|Aaron Wiggins|ATL|0|11|3.14|34.55|
+FAAVG|Aaron Wiggins|ATL|0|11|3.17|34.85|
 FAAVG|Derrick Jones Jr.|LAC|0|7|3.01|21.05|
 FAAVG|Grayson Allen|CHA|0|10|3.01|30.05|
 FAAVG|Max Strus|LAC|0|2|3|6|
 FAAVG|Spencer Jones|DEN|0|1|3|3|
+FAAVG|Tristan da Silva|ORL|0|9|2.94|26.5|
 FAAVG|Obi Toppin|IND|0|7|2.81|19.65|
 FAAVG|Nolan Traore|BKN|0|9|2.81|25.25|
 FAAVG|Ja'Kobe Walter|TOR|0|9|2.8|25.2|
 FAAVG|Robert Williams III|POR|0|7|2.74|19.2|
 FAAVG|Justin Champagnie|WAS|0|4|2.74|10.95|
 FAAVG|Pelle Larsson|MIA|0|9|2.72|24.45|
-FAAVG|De'Anthony Melton|GS|0|10|2.7|27.05|
+FAAVG|De'Anthony Melton|GS|0|10|2.7|27|
+FAAVG|Tari Eason|HOU|0|10|2.7|27|
 FAAVG|Tre Jones|CHI|0|8|2.69|21.55|
-FAAVG|Tristan da Silva|ORL|0|9|2.69|24.2|
-FAAVG|Kyle Kuzma|MIL|0|9|2.64|23.75|
-FATOT|Aaron Wiggins|ATL|0|11|3.14|34.55|
+FATOT|Aaron Wiggins|ATL|0|11|3.17|34.85|
 FATOT|Grayson Allen|CHA|0|10|3.01|30.05|
-FATOT|De'Anthony Melton|GS|0|10|2.7|27.05|
-FATOT|Tari Eason|HOU|0|10|2.59|25.9|
+FATOT|De'Anthony Melton|GS|0|10|2.7|27|
+FATOT|Tari Eason|HOU|0|10|2.7|27|
+FATOT|Tristan da Silva|ORL|0|9|2.94|26.5|
 FATOT|Nolan Traore|BKN|0|9|2.81|25.25|
 FATOT|Ja'Kobe Walter|TOR|0|9|2.8|25.2|
 FATOT|Luguentz Dort|ATL|0|11|2.23|24.5|
 FATOT|Pelle Larsson|MIA|0|9|2.72|24.45|
-FATOT|Tristan da Silva|ORL|0|9|2.69|24.2|
 FATOT|Quenton Jackson|IND|0|10|2.42|24.15|
+FATOT|Julian Champagnie|SA|0|10|2.4|23.95|
 FATOT|Kyle Kuzma|MIL|0|9|2.64|23.75|
-FATOT|Mario Hezonja|CLE|0|10|2.37|23.65|
-FATOT|Julian Champagnie|SA|0|9|2.61|23.5|
+FATOT|Mario Hezonja|CLE|0|10|2.36|23.6|
 FATOT|Jared McCain|OKC|0|10|2.32|23.2|
 FATOT|Myles Turner|MIL|0|9|2.56|23|
-DD|Karl-Anthony Towns|NY|3|9|6.04|54.4|8
-DD|Victor Wembanyama|SA|4|9|8.49|76.4|7
+DD|Karl-Anthony Towns|NY|3|9|6.53|58.8|9
+DD|Victor Wembanyama|SA|4|10|7.8|78|7
 DD|Giannis Antetokounmpo|MIA|1|9|8.39|75.55|7
 DD|Domantas Sabonis|SAC|6|9|6.41|57.7|7
 DD|Nikola Jokic|DEN|2|8|9.86|78.85|6
 DD|Davion Mitchell|MIA|1|9|5.02|45.15|5
-DD|Alperen Sengun|HOU|3|8|6.6|52.8|4
-DD|Trae Young|WAS|2|10|5.21|52.15|4
-DD|Evan Mobley|CLE|2|10|5.06|50.55|4
-DD|Walker Kessler|LAL|4|10|4.57|45.7|4
+DD|Alperen Sengun|HOU|3|8|6.66|53.3|4
+DD|Trae Young|WAS|2|10|5.22|52.25|4
+DD|Evan Mobley|CLE|2|10|5.1|50.95|4
+DD|Onyeka Okongwu|ATL|5|11|4.25|46.7|4
 TD|Nikola Jokic|DEN|2|8|9.86|78.85|3
 TD|Giannis Antetokounmpo|MIA|1|9|8.39|75.55|2
 TD|Domantas Sabonis|SAC|6|9|6.41|57.7|1
-TD|Alperen Sengun|HOU|3|8|6.6|52.8|1
+TD|Alperen Sengun|HOU|3|8|6.66|53.3|1
 TD|Cameron Boozer|MEM|6|9|5.38|48.45|1
 TD|Joel Embiid|PHI|1|8|5.59|44.75|1
-AST|Trae Young|WAS|2|10|5.21|52.15|89
+TD|Day'Ron Sharpe|BKN|4|9|3.57|32.15|1
+AST|Trae Young|WAS|2|10|5.22|52.25|89
+AST|Franz Wagner|ORL|5|9|5.02|45.15|76
 AST|Davion Mitchell|MIA|1|9|5.02|45.15|74
 AST|Nikola Jokic|DEN|2|8|9.86|78.85|73
-AST|Franz Wagner|ORL|5|9|4.72|42.45|72
 AST|Luka Doncic|LAL|5|9|8.77|78.9|69
 AST|Jayson Tatum|BOS|4|8|5.99|47.9|64
 AST|Darius Acuff Jr.|SAC|5|9|5.02|45.2|64
+AST|Dyson Daniels|ATL|3|11|4.12|45.3|61
 AST|Cade Cunningham|DET|6|8|5.59|44.75|61
-AST|LaMelo Ball|MIN|4|10|3.8|38.05|61
-AST|Josh Giddey|CHI|4|8|3.33|26.6|61
+AST|Jalen Johnson|ATL|2|8|5.33|42.6|61
 REB|Domantas Sabonis|SAC|6|9|6.41|57.7|131
-REB|Karl-Anthony Towns|NY|3|9|6.04|54.4|118
+REB|Karl-Anthony Towns|NY|3|9|6.53|58.8|122
+REB|Victor Wembanyama|SA|4|10|7.8|78|115
 REB|Giannis Antetokounmpo|MIA|1|9|8.39|75.55|114
-REB|Victor Wembanyama|SA|4|9|8.49|76.4|113
 REB|Rudy Gobert|MIN|1|9|2.75|24.75|106
 REB|Walker Kessler|LAL|4|10|4.57|45.7|104
 REB|Isaiah Hartenstein|OKC|5|10|3.38|33.8|101
 REB|Cameron Boozer|MEM|6|9|5.38|48.45|90
-REB|Onyeka Okongwu|ATL|5|11|4.15|45.6|88
-REB|Donovan Clingan|POR|2|8|4.31|34.5|85
+REB|Onyeka Okongwu|ATL|5|11|4.25|46.7|88
+REB|Donovan Clingan|POR|2|9|3.84|34.6|87
 TPM|Luka Doncic|LAL|5|9|8.77|78.9|52
-TPM|Nickeil Alexander-Walker|ATL|2|11|4.2|46.2|43
-TPM|Stephen Curry|GS|1|8|5.89|47.15|35
+TPM|Nickeil Alexander-Walker|ATL|2|11|4.27|46.95|43
+TPM|Stephen Curry|GS|1|8|6.08|48.6|36
 TPM|Duncan Robinson|DET|5|8|4.26|34.1|35
 TPM|LaMelo Ball|MIN|4|10|3.8|38.05|33
 TPM|Klay Thompson|MIA|0|9|2.45|22.05|33
-TPM|Aaron Wiggins|ATL|0|11|3.14|34.55|32
+TPM|Aaron Wiggins|ATL|0|11|3.17|34.85|32
 TPM|Grayson Allen|CHA|0|10|3.01|30.05|32
 TPM|Jamal Murray|DEN|6|8|5.53|44.2|31
-TPM|Michael Porter Jr.|BKN|2|9|4.6|41.4|31
-BLK|Victor Wembanyama|SA|4|9|8.49|76.4|38
+TPM|Michael Porter Jr.|BKN|2|9|4.61|41.5|31
+BLK|Victor Wembanyama|SA|4|10|7.8|78|38
 BLK|Walker Kessler|LAL|4|10|4.57|45.7|24
 BLK|Myles Turner|MIL|0|9|2.56|23|24
-BLK|Donovan Clingan|POR|2|8|4.31|34.5|19
-BLK|Aday Mara|OKC|0|10|2.01|20.1|18
+BLK|Donovan Clingan|POR|2|9|3.84|34.6|19
+BLK|Aday Mara|OKC|0|10|2.17|21.7|19
 BLK|Daniel Gafford|DAL|2|9|2.42|21.8|17
-BLK|Kevin Durant|HOU|1|10|3.6|35.95|14
+BLK|Kevin Durant|HOU|1|10|3.93|39.25|14
+BLK|Kyshawn George|WAS|6|10|3.75|37.55|14
 BLK|Jaxson Hayes|UTA|0|8|2.34|18.75|14
-BLK|Kyshawn George|WAS|6|10|3.65|36.5|13
 BLK|Ace Bailey|UTA|5|9|3.11|28|13
-STL|Dyson Daniels|ATL|3|11|4.08|44.9|31
+STL|Dyson Daniels|ATL|3|11|4.12|45.3|32
 STL|Zion Williamson|NO|6|9|4.42|39.8|22
 STL|Kris Dunn|LAC|5|8|3.16|25.25|22
 STL|Paul George|BOS|4|8|4.58|36.65|19
-STL|Collin Gillespie|PHX|2|8|2.49|19.95|19
+STL|Collin Gillespie|PHX|2|8|2.63|21.05|19
 STL|Cooper Flagg|DAL|5|8|6.18|49.45|18
 STL|Bam Adebayo|MIA|4|9|4.75|42.75|18
 STL|Scottie Barnes|TOR|5|8|5.15|41.2|18
@@ -351,35 +352,35 @@ STL|Matisse Thybulle|LAL|0|10|2.23|22.25|18
 STL|LaMelo Ball|MIN|4|10|3.8|38.05|17
 MVP|Nikola Jokic|DEN|2|8|9.86|78.85|99.96
 MVP|Luka Doncic|LAL|5|9|8.77|78.9|95.58
-MVP|Victor Wembanyama|SA|4|9|8.49|76.4|92.55
 MVP|Giannis Antetokounmpo|MIA|1|9|8.39|75.55|91.52
+MVP|Victor Wembanyama|SA|4|10|7.8|78|90.97
+MVP|Karl-Anthony Towns|NY|3|9|6.53|58.8|71.23
 MVP|Domantas Sabonis|SAC|6|9|6.41|57.7|69.9
-MVP|Alperen Sengun|HOU|3|8|6.6|52.8|66.94
-MVP|Karl-Anthony Towns|NY|3|9|6.04|54.4|65.9
+MVP|Alperen Sengun|HOU|3|8|6.66|53.3|67.57
 MVP|Shai Gilgeous-Alexander|OKC|6|10|5.6|56|65.31
 MVP|Tyrese Maxey|PHI|2|10|5.48|54.8|63.91
 MVP|Cooper Flagg|DAL|5|8|6.18|49.45|62.69
 ROY|Cameron Boozer|MEM|6|9|5.38|48.45|100
 ROY|Darius Acuff Jr.|SAC|5|9|5.02|45.2|93.29
-ROY|Yaxel Lendeborg|GS|3|10|4.46|44.65|88.47
+ROY|Yaxel Lendeborg|GS|3|10|4.53|45.3|89.76
 ROY|Caleb Wilson|CHI|6|8|4.36|34.9|75.63
 ROY|Darryn Peterson|UTA|4|9|3.38|30.45|62.85
 ROY|Keaton Wagler|LAC|6|8|2.83|22.6|48.98
+ROY|AJ Dybantsa|WAS|4|6|3.23|19.35|47.93
 ROY|Brayden Burries|MIL|0|9|2.47|22.25|45.92
-ROY|AJ Dybantsa|WAS|4|6|3.08|18.5|45.82
+ROY|Aday Mara|OKC|0|10|2.17|21.7|43
 ROY|Mikel Brown Jr.|BKN|6|7|2.58|18.05|41.51
-ROY|Aday Mara|OKC|0|10|2.01|20.1|39.83
 PUP|Ayo Dosunmu|MIN|1|10|4.12|41.15|98.62
+PUP|Kyshawn George|WAS|6|10|3.75|37.55|89.99
 PUP|Duncan Robinson|DET|5|8|4.26|34.1|89.72
 PUP|P.J. Washington|DAL|3|9|3.96|35.6|89.03
-PUP|Kyshawn George|WAS|6|10|3.65|36.5|87.47
 PUP|Ajay Mitchell|OKC|4|10|3.5|35|83.88
-PUP|Aaron Wiggins|ATL|0|11|3.14|34.55|79.85
+PUP|Aaron Wiggins|ATL|0|11|3.17|34.85|80.54
 PUP|Jaime Jaquez Jr.|MIL|1|9|3.48|31.35|78.4
+PUP|Brandin Podziemski|GS|1|8|3.71|29.65|78.01
+PUP|Anthony Black|ORL|2|6|4.23|25.4|76.76
 PUP|Saddiq Bey|NO|1|9|3.38|30.45|76.15
-PUP|Brandin Podziemski|GS|1|8|3.57|28.55|75.12
-PUP|Jeremiah Fears|NO|4|9|3.29|29.6|74.02
-SUM|208|9|443`;
+SUM|210|10|444`;
 const RECS = {"1":"1-0","2":"1-0","3":"0-1","4":"1-0","5":"0-1","6":"0-1"};
 const DAYPTS = {"1":[66.6,0,70.6,33.55,38.4,null,null],"2":[62.75,0,70.95,5.15,51.55,null,null],"3":[58.7,0,73.9,4.9,48,null,null],"4":[56.35,0,62.1,15.2,58.95,null,null],"5":[61.05,0,66.8,10.3,52.9,null,null],"6":[69.5,0,56.95,7.9,46.2,null,null]};
 const PREVWK = [[5,1,256.9,301.05],[6,2,256.5,283.75],[3,4,226.8,256.8]];
