@@ -1,8 +1,8 @@
 //REFRESH-DATA-START
 const WEEK_LABEL = 'Week 2';
-const ASOF = '2026-11-08T10:28';
-const ASOF_LABEL = 'Sun, Nov 8, 10:28 AM PT';
-const ASOF_MS = 1794162487806;
+const ASOF = '2026-11-08T11:15';
+const ASOF_LABEL = 'Sun, Nov 8, 11:15 AM PT';
+const ASOF_MS = 1794165335629;
 const TODAY = 6;
 const DAYS = [["Mon","11/2"],["Tue","11/3"],["Wed","11/4"],["Thu","11/5"],["Fri","11/6"],["Sat","11/7"],["Sun","11/8"]];
 const SCH_RAW = 'IND:1010010 LAC:1010001 LAL:1010101 MIA:1011001 MIL:1010101 MIN:1010101 BKN:1010011 NY:1010010 ORL:1001010 PHI:1010101 PHX:1011010 POR:1010110 SAC:1010101 SA:1010110 OKC:1010110 UTA:1010101 WAS:1010110 TOR:1010100 MEM:1010100 CHA:1010100 ATL:1010110 BOS:1010101 NO:1010101 CHI:1010001 CLE:1010110 DAL:1010101 DEN:1010010 DET:1010001 GS:1001010 HOU:1010010';
@@ -52,7 +52,7 @@ Jalen Johnson|ATL|BE|H|5.58|7.81|5.33|8|36810|5.27|4.95|1
 Donovan Clingan|POR|BE|H|3.45|4.76|3.92|9|410|4.19|5.34|4
 Keyonte George|UTA|ST|D|4.69|4.9|4.38|9|0158|4.16|4|3
 Michael Porter Jr.|BKN|ST|H|4.69|5.16|4.61|9|236810|4.56|4.51|4
-Norman Powell|CHI|ST|D|4.51|3.94|3.54|8|1256810|3.55|2.15|2
+Norman Powell|CHI|ST|O|4.51|3.94|3.54|8|1256810|3.55|2.15|2
 Josh Hart|NY|BE|D|3.58|3.93|3.39|7|1256810|2.71|3.35|1
 Nickeil Alexander-Walker|ATL|BE|H|4.17|4.36|4.27|11|0158|4.11|5.04|4
 Andrew Nembhard|IND|BE|H|3.2|4.36|4.07|8|0158|4.19|3.53|3
@@ -385,7 +385,7 @@ const RECS = {"1":"1-0","2":"1-0","3":"0-1","4":"1-0","5":"0-1","6":"0-1"};
 const DAYPTS = {"1":[66.6,0,70.6,33.55,38.2,40.3,null],"2":[62.75,0,70.95,5.15,51.35,43.2,null],"3":[58.7,0,73.9,4.9,48.1,52.3,null],"4":[56.35,0,62.1,15.2,58.95,44.85,null],"5":[61.05,0,66.8,10.3,52.9,27.6,null],"6":[69.5,0,56.95,7.9,46.1,32.05,null]};
 const PREVWK = [[5,1,256.9,301.05],[6,2,256.5,283.75],[3,4,226.8,256.8]];
 const RESLIVE = {"1":[[5,1,256.9,301.05],[6,2,256.5,283.75],[3,4,226.8,256.8]]};
-const INJ = {"Immanuel Quickley":"2026-11-09","Ja Morant":"2026-12-01","Joel Embiid":"2026-11-08","Jalen Williams":"2027-03-02","Yves Missi":"2026-11-09","Jalen Duren":"2026-11-24","Jimmy Butler III":"2027-01-02","Luka Doncic":"2026-11-09","Keyonte George":"2026-11-08","Moussa Diabate":"2026-11-09","Norman Powell":"2026-11-08","Anthony Edwards":"2026-12-21","Jalen Suggs":"2026-11-10","Egor Demin":"2026-11-11","Chet Holmgren":"2027-01-02","Scottie Barnes":"2026-11-09","Josh Hart":"2026-11-10","Kawhi Leonard":"2026-11-23","Lauri Markkanen":"2026-11-08","Anthony Davis":"2026-11-09","Paolo Banchero":"2026-11-22","Kon Knueppel":"2026-11-09","Jarrett Allen":"2026-11-09","Tyrese Haliburton":"2026-11-13","Brandon Ingram":"2026-11-10","Desmond Bane":"2026-11-10","Mikel Brown Jr.":"2026-11-11","Jaren Jackson Jr.":"2026-12-14","Brandon Miller":"2026-11-09"};
+const INJ = {"Immanuel Quickley":"2026-11-09","Ja Morant":"2026-12-01","Joel Embiid":"2026-11-08","Jalen Williams":"2027-03-02","Yves Missi":"2026-11-09","Jalen Duren":"2026-11-24","Jimmy Butler III":"2027-01-02","Luka Doncic":"2026-11-09","Keyonte George":"2026-11-08","Moussa Diabate":"2026-11-09","Norman Powell":"2026-11-11","Anthony Edwards":"2026-12-21","Jalen Suggs":"2026-11-10","Egor Demin":"2026-11-11","Chet Holmgren":"2027-01-02","Scottie Barnes":"2026-11-09","Josh Hart":"2026-11-10","Kawhi Leonard":"2026-11-23","Lauri Markkanen":"2026-11-08","Anthony Davis":"2026-11-09","Paolo Banchero":"2026-11-22","Kon Knueppel":"2026-11-09","Jarrett Allen":"2026-11-09","Tyrese Haliburton":"2026-11-13","Brandon Ingram":"2026-11-10","Desmond Bane":"2026-11-10","Mikel Brown Jr.":"2026-11-11","Jaren Jackson Jr.":"2026-12-14","Brandon Miller":"2026-11-09"};
 const LSNAP = `MVP|1|Nikola Jokic
 MVP|2|Victor Wembanyama
 MVP|3|Domantas Sabonis
