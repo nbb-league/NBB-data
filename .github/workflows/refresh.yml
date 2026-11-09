@@ -65,7 +65,7 @@ jobs:
           open('data/block.txt','w').write(s[a:b])
           PY
           python3 tools/build.py data/block.txt site/index.html
-          rm -rf dist && mkdir dist && cp site/index.html dist/index.html && cp site/*.png dist/ && cp -r site/photos dist/photos
+          rm -rf dist && mkdir dist && cp data/block.txt dist/block.txt && cp site/index.html dist/index.html && cp site/*.png dist/ && cp -r site/photos dist/photos
       - name: Save data to the repo
         if: steps.gate.outputs.skip != '1'
         run: |
