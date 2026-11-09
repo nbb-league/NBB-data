@@ -35,6 +35,40 @@ j0.teams.forEach((t,ti)=>{LUr.push(t.id+':'+[0,1,2,3,4,5,6].map(i=>(i!==today&&p
 const left=[1,6];
 const mu=j0.schedule.filter(m=>m.matchupPeriodId===wk+1&&!/CONSOL|LOSERS/.test(m.playoffTierType||"")).map(m=>{let a=m.home.teamId,b=m.away.teamId;if(left.includes(b)&&!left.includes(a)){[a,b]=[b,a]}return {a,b,pa:m.home.teamId===a?m.home.totalPoints:m.away.totalPoints,pb:m.home.teamId===a?m.away.totalPoints:m.home.totalPoints}}).sort((x,y)=>(left.includes(y.a)?1:0)-(left.includes(x.a)?1:0));
 const cur={};mu.forEach(m=>{cur[m.a]=+(m.pa||0).toFixed(2);cur[m.b]=+(m.pb||0).toFixed(2)});
+// LIVE SCORES: ESPN only rolls a day's points into the matchup totals after the day's games end, but each roster shows live points for the current scoring period. Add those (only for a scoring period whose points are not in the totals yet) so scores move during games.
+const livePts={};
+try{
+ const sps=[];const spT=spStart+today; if(today>0)sps.push(spT-1); sps.push(spT);
+ for(const sp of sps){
+  const jj=await J(L+'?view=mMatchup&view=mBoxscore&scoringPeriodId='+sp);
+  (jj.schedule||[]).filter(m=>m.matchupPeriodId===wk+1).forEach(m=>{[m.home,m.away].forEach(x=>{
+   if(!x||x.teamId==null)return;
+   const pb=x.pointsByScoringPeriod||{};
+   if(pb[sp]!=null)return;
+   const ent=(x.rosterForCurrentScoringPeriod&&x.rosterForCurrentScoringPeriod.entries)||[];
+   const v=ent.filter(e=>e.lineupSlotId<12).reduce((a,e)=>a+((e.playerPoolEntry&&e.playerPoolEntry.appliedStatTotal)||0),0);
+   livePts[x.teamId]=(livePts[x.teamId]||0)+v;
+  })});
+ }
+}catch(e){}
+mu.forEach(m=>{[m.a,m.b].forEach(id=>{if(livePts[id])cur[id]=+((+cur[id]||0)+livePts[id]).toFixed(2)})});
+// How much of each NBA game is already played today (0 = not started, 1 = final) so the projection only counts what is left.
+const LIVEFRAC={};
+try{
+ const AL={UTAH:'UTA',WSH:'WAS'};
+ const dd=''+ptf.year+ptf.month+ptf.day;
+ const sj=await (await fetch('https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates='+dd)).json();
+ (sj.events||[]).forEach(ev=>{
+  const st=ev.status||{},ty=st.type||{};let f=0;
+  if(ty.state==='post')f=1;
+  else if(ty.state==='in'){
+   const per=st.period||1,mm=String(st.displayClock||'0:00').split(':'),mins=(+mm[0]||0)+((+mm[1]||0)/60);
+   const el=per<=4?(per-1)*12+(12-mins):48+(per-5)*5+(5-mins), tot=per<=4?48:48+(per-4)*5;
+   f=Math.max(0.01,Math.min(0.99,el/tot));
+  }
+  ((ev.competitions||[])[0]||{competitors:[]}).competitors.forEach(c=>{const a=c.team&&c.team.abbreviation;if(a)LIVEFRAC[AL[a]||a]=+f.toFixed(3)});
+ });
+}catch(e){}
 const LJ=await J(L+'?view=kona_player_info',{'x-fantasy-filter':JSON.stringify({players:{filterSlotIds:{value:[0,1,2,3,4,5,6,8,10,11]},limit:800,sortAppliedStatTotal:{sortAsc:false,sortPriority:1,value:'002027'}}})});
 const AP=LJ.players.map(x=>{const c=(x.player.stats||[]).find(s=>s.id==='002027'),s=c&&c.stats||{},ls=(x.player.stats||[]).find(s=>s.id==='002026');return {id:x.player.id,lgp:ls&&ls.stats?(ls.stats['42']||0):0,n:x.player.fullName,pt:T[x.player.proTeamId]||'',tid:x.status==='ONTEAM'?x.onTeamId:0,gp:s['42']||0,avg:c&&c.appliedAverage||0,tot:c&&c.appliedTotal||0,s}}).filter(a=>a.gp>0);
 const r2=v=>+(+v).toFixed(2);
@@ -71,6 +105,7 @@ const DAYS = ${JSON.stringify(DAYS)};
 const SCH_RAW = '${SCH}';
 const MATCHUPS = ${JSON.stringify(mu.map(m=>[m.a,m.b]))};
 const CUR0 = ${JSON.stringify(cur)};
+const LIVEFRAC = ${JSON.stringify(LIVEFRAC)};
 const LU_RAW = \`${LUr.join('\n')}\`;
 const DATA = \`${data.trimEnd()}\`;
 const LEADERS = \`${lead.join('\n')}\`;

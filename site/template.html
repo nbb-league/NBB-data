@@ -1360,7 +1360,7 @@ function gauss() { let u = 0; while (u === 0) u = rnd(); const v = rnd(); return
 function prep(tid) {
   const pl = teamPlayers(tid).filter(p => PA[p.status] > 0).map(p => {
     const mu = muOf(p);
-    return { p, mu, pa: PA[p.status], sd: 1.2 + 0.38 * Math.abs(mu), sdT: 0.12 * Math.abs(mu) + 0.25, slots: p.slots };
+    return { p, mu, pa: PA[p.status], rem: (typeof LIVEFRAC !== 'undefined' && LIVEFRAC && LIVEFRAC[p.team] != null) ? Math.max(0, 1 - LIVEFRAC[p.team]) : 1, sd: 1.2 + 0.38 * Math.abs(mu), sdT: 0.12 * Math.abs(mu) + 0.25, slots: p.slots };
   }).sort((a, b) => b.mu - a.mu);
   const ix = new Map(pl.map((o, i) => [o.p, i]));
   const days = [];
@@ -1383,14 +1383,16 @@ function oneWeek(T, dayAcc) {
   const pl = T.pl, tal = new Float64Array(pl.length);
   for (let i = 0; i < pl.length; i++) tal[i] = Math.max(0, pl[i].mu + gauss() * pl[i].sdT);
   let tot = gauss() * TEAM_SD;
-  const score = i => Math.max(0, tal[i] + gauss() * pl[i].sd);
+  // Today only: a game already underway or finished has its points in the banked score, so only the part still to play is projected.
+  let live = false;
+  const score = i => live && pl[i].rem < 1 ? (pl[i].rem <= 0 ? 0 : Math.max(0, tal[i] * pl[i].rem + gauss() * pl[i].sd * Math.sqrt(pl[i].rem))) : Math.max(0, tal[i] + gauss() * pl[i].sd);
   for (const D of T.days) {
-    let dt = 0;
+    let dt = 0; live = D.d === TODAY;
     if (D.set) {
       for (let j = 0; j < D.bench.length; j++) { D.ba[j] = rnd() < pl[D.bench[j].i].pa ? 1 : 0; D.ub[j] = 0; }
       const vac = [], emp = [];
       for (const s of D.st) {
-        if (s.play) { if (s.i >= 0 && rnd() < pl[s.i].pa) dt += score(s.i); else vac.push(s.slot); }
+        if (s.play) { if (s.i >= 0 && rnd() < pl[s.i].pa) dt += score(s.i); else if (!(live && s.i >= 0 && pl[s.i].rem < 1)) vac.push(s.slot); }
         else emp.push(s.slot);
       }
       const fillSlot = (slot, needAdded) => {
@@ -2196,6 +2198,7 @@ function projDayNow(K) {
   S.K = keepK; return { iso: dayISO(S.first), p, m };
 }
 window.__projDay = projDayNow;
+window.__sim = (a, b, n) => runSim(a, b, n); window.__today = () => TODAY;
 function paintCheck() {
   const el = $('chk-wrap'), L = (typeof PROJLOG !== 'undefined' && PROJLOG) || {};
   const keys = Object.keys(L).sort().reverse();
