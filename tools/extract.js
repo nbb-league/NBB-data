@@ -53,11 +53,14 @@ try{
 }catch(e){}
 mu.forEach(m=>{[m.a,m.b].forEach(id=>{if(livePts[id])cur[id]=+((+cur[id]||0)+livePts[id]).toFixed(2)})});
 // How much of each NBA game is already played today (0 = not started, 1 = final) so the projection only counts what is left.
-const LIVEFRAC={};
+const LIVEFRAC={};const TIPS=[];
 try{
  const AL={UTAH:'UTA',WSH:'WAS'};
  const dd=''+ptf.year+ptf.month+ptf.day;
+ const nd=new Date(Date.UTC(+ptf.year,+ptf.month-1,+ptf.day+1)),dd2=''+nd.getUTCFullYear()+String(nd.getUTCMonth()+1).padStart(2,'0')+String(nd.getUTCDate()).padStart(2,'0');
+ try{const sj2=await (await fetch('https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates='+dd2)).json();(sj2.events||[]).forEach(ev=>{const cs=((ev.competitions||[])[0]||{competitors:[]}).competitors;const hm=cs.find(c=>c.homeAway==='home'),aw=cs.find(c=>c.homeAway==='away');if(hm&&aw)TIPS.push({t:ev.date,h:AL[hm.team.abbreviation]||hm.team.abbreviation,a:AL[aw.team.abbreviation]||aw.team.abbreviation,s:'pre'})})}catch(e){}
  const sj=await (await fetch('https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates='+dd)).json();
+ (sj.events||[]).forEach(ev=>{const cs=((ev.competitions||[])[0]||{competitors:[]}).competitors;const hm=cs.find(c=>c.homeAway==='home'),aw=cs.find(c=>c.homeAway==='away');if(hm&&aw)TIPS.push({t:ev.date,h:AL[hm.team.abbreviation]||hm.team.abbreviation,a:AL[aw.team.abbreviation]||aw.team.abbreviation,s:(ev.status&&ev.status.type&&ev.status.type.state)||'pre'})});
  (sj.events||[]).forEach(ev=>{
   const st=ev.status||{},ty=st.type||{};let f=0;
   if(ty.state==='post')f=1;
@@ -106,6 +109,8 @@ const SCH_RAW = '${SCH}';
 const MATCHUPS = ${JSON.stringify(mu.map(m=>[m.a,m.b]))};
 const CUR0 = ${JSON.stringify(cur)};
 const LIVEFRAC = ${JSON.stringify(LIVEFRAC)};
+// NBA tip times (UTC ISO) for today and tomorrow, Pacific dates: t = tip-off, h = home team, a = away team, s = pre/in/post
+const TIPS = ${JSON.stringify(TIPS.sort((x,y)=>x.t<y.t?-1:1))};
 const LU_RAW = \`${LUr.join('\n')}\`;
 const DATA = \`${data.trimEnd()}\`;
 const LEADERS = \`${lead.join('\n')}\`;
