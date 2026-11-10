@@ -1255,12 +1255,14 @@ const RET = Object.assign({}, typeof INJ !== 'undefined' ? INJ : {}, OUT_UNTIL);
 P.forEach(p => { if (p.role === 'A' && p.status === 'OUT' && RET[p.name] && RET[p.name] <= dayISO(6)) p.status = 'DTD'; });
 const byId = {}; P.forEach(p => { byId[p.id] = p; });
 // Lineups as set in ESPN for each day of the week (hex slot id per player, in roster order; 'c' bench, 'd' IR).
-// A day counts as "set" for a team if it is today's lineup or differs from today's, otherwise it is just carried over.
+// A day counts as "set" for a team if it is today's lineup, or a lineup that differs from today's and is not repeated on other future days; otherwise it is just carried over.
 const LU = {}, LUSET = {};
 LU_RAW.split('\n').forEach(l => {
   const kv = l.split(':'), tid = +kv[0], parts = kv[1].split('/');
   const base = parts[TODAY], days = parts.map(s => s === '=' ? base : s);
-  LU[tid] = days; LUSET[tid] = days.map((s, d) => d === TODAY || s !== base);
+  // A lineup that shows up on two or more future days is ESPN copying an old lineup forward, not a manager setting those days, so those days count as not set.
+  const rep = {}; days.forEach((s, d) => { if (d > TODAY && s !== base) rep[s] = (rep[s] || 0) + 1; });
+  LU[tid] = days; LUSET[tid] = days.map((s, d) => d === TODAY || (s !== base && rep[s] < 2));
   P.filter(p => p.otid === tid).forEach((p, i) => { p.lu = days.map(s => { const c = s[i]; return (c === 'x' || c == null) ? -1 : parseInt(c, 16); }); });
 });
 const SLOT_BY_ID = { 0: 'PG', 1: 'SG', 2: 'SF', 3: 'PF', 4: 'C', 5: 'G', 6: 'F', 8: 'G/F', 10: 'F/C', 11: 'UTIL' };
