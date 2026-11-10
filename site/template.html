@@ -438,6 +438,10 @@ img.logo, img.nlogo { cursor: pointer; }
 .pcb table { width: 100%; border-collapse: collapse; font: 14px var(--body); }
 .pcb td, .pcb th { padding: 4px 6px; text-align: right; border-top: 1px solid var(--line); }
 .pcb th:first-child, .pcb td:first-child { text-align: left; }
+.mtog { display: flex; gap: 6px; margin: 10px 0 0; }
+.mtog button { flex: 1; min-height: 40px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 10px; font: 700 14px var(--display); letter-spacing: .04em; text-transform: uppercase; cursor: pointer; }
+.mtog button[aria-pressed="true"] { border-color: var(--ink); box-shadow: 0 0 0 1px var(--ink) inset; background: var(--soft); }
+.mtogh { margin: 6px 0 0; font-size: 12.5px; color: var(--muted); }
 .sbrow { display: flex; gap: 8px; align-items: center; margin: 10px 0 0; }
 .sbrow .sbar { margin: 0; flex: 1; width: auto; min-width: 0; }
 .hbtn { position: relative; flex: none; width: 44px; height: 44px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); color: var(--ink); font: 700 20px var(--display); cursor: pointer; }
@@ -589,6 +593,7 @@ img.logo, img.nlogo { cursor: pointer; }
   <div class="view" id="view-m">
   <div class="title"><h1>League matchups</h1><p>Win probability for every game this week</p></div>
   <div class="eyebrow" id="eyebrow"></div>
+  <div class="mtog" id="mtog" role="group" aria-label="Lineup assumption"><button type="button" data-m="best" aria-pressed="true">Best lineups</button><button type="button" data-m="set" aria-pressed="false">As set in ESPN</button></div><p class="mtogh" id="mtogh"></p>
   <section id="newsteaser" hidden></section>
   <div class="stale" id="stale" hidden></div>
 
@@ -628,7 +633,7 @@ img.logo, img.nlogo { cursor: pointer; }
     <h2>Day by day</h2>
     <div class="dayrow" id="dayrow"></div>
     <div class="lineups" id="lineups"></div>
-    <p class="hint">Where a manager has set a day's lineup in ESPN, that lineup is used. Days not set yet assume the best lineup the roster allows. Expected totals include the chance a player sits, and a scratched starter is replaced by the best eligible bench player.</p>
+    <p class="hint">By default the odds assume every manager sets their best lineup all week. Switch to "As set in ESPN" at the top of the page to use lineups as managers have set them; days not set yet still assume the best lineup the roster allows. Expected totals include the chance a player sits, and a scratched starter is replaced by the best eligible bench player.</p>
   </section>
 
   <section aria-label="Model settings">
@@ -660,7 +665,7 @@ img.logo, img.nlogo { cursor: pointer; }
     <h2>How the odds work</h2>
     <ul>
       <li>Rosters, positions, injuries, stats and the NBA schedule come from your ESPN league, pulled at the time shown at the top. Each daily refresh brings in the scores so far and counts only the games left in the week.</li>
-      <li>Where a manager has already set a day's lineup in ESPN, the model uses it. For days not set yet, it assumes the best lineup the roster allows across PG, SG, SF, PF, C, G, F, two G/F, two F/C and three UTIL. A slate with fewer players than slots leaves empty slots.</li>
+      <li>By default the model assumes every manager sets their best lineup all week. The toggle at the top of Matchups switches to "As set in ESPN", which uses lineups managers have already set. Either way, a lineup that is not set uses the best lineup the roster allows across PG, SG, SF, PF, C, G, F, two G/F, two F/C and three UTIL. A slate with fewer players than slots leaves empty slots.</li>
       <li>Starting projection is 60% last season's average and 40% ESPN's projection (ESPN's runs low for big double-double players). The preseason number now counts for only about one game, so a player's projection is essentially his average this season (a one-game blip is still tempered), and it leans toward his last 15 games once he has played more than 5.</li>
       <li>Healthy players play 94% of their games, day-to-day players 60%. Injured reserve counts as out. Lineup protection is assumed, so a starter who sits is replaced by the best eligible bench player who plays that day.</li>
       <li>Each simulated week draws every player's true level (uncertain), then each game around it. Bigger projections swing more.</li>
@@ -1268,7 +1273,7 @@ LU_RAW.split('\n').forEach(l => {
 const SLOT_BY_ID = { 0: 'PG', 1: 'SG', 2: 'SF', 3: 'PF', 4: 'C', 5: 'G', 6: 'F', 8: 'G/F', 10: 'F/C', 11: 'UTIL' };
 const DEF = {}; P.forEach(p => { DEF[p.id] = { tid: p.tid, role: p.role, status: p.status, prior: p.prior, season: p.season, gp: p.gp }; });
 
-const S = { first: TODAY, last: 6, day: TODAY, m: 0, K: 1, mode: 'set', cur: Object.assign({}, CUR0) };
+const S = { first: TODAY, last: 6, day: TODAY, m: 0, K: 1, mode: 'best', cur: Object.assign({}, CUR0) };
 const PA = { H: 0.94, DTD: 0.6, OUT: 0 }, TEAM_SD = 4;
 
 function weightsOf(p) {
@@ -1447,7 +1452,7 @@ function load() {
     if (!o || o.asof !== ASOF) return;
     if (o.cur) Object.keys(o.cur).forEach(k => { if (k in S.cur) S.cur[k] = Number(o.cur[k]) || 0; });
     if (o.K > 0 && o.Kv === 2) S.K = o.K;
-    if (o.mode === 'set' || o.mode === 'best') S.mode = o.mode;
+    if (o.mv === 1 && (o.mode === 'set' || o.mode === 'best')) S.mode = o.mode;
     for (const id in (o.ed || {})) { if (byId[id]) Object.assign(byId[id], o.ed[id]); }
   } catch (e) {}
 }
@@ -1458,7 +1463,7 @@ function save() {
       const cur = { tid: p.tid, role: p.role, status: p.status, prior: p.prior, season: p.season, gp: p.gp };
       if (JSON.stringify(cur) !== JSON.stringify(DEF[p.id])) ed[p.id] = cur;
     });
-    localStorage.setItem(KEY, JSON.stringify({ asof: ASOF, cur: S.cur, K: S.K, Kv: 2, mode: S.mode, ed }));
+    localStorage.setItem(KEY, JSON.stringify({ asof: ASOF, cur: S.cur, K: S.K, Kv: 2, mv: 1, mode: S.mode, ed }));
   } catch (e) {}
 }
 
@@ -1666,14 +1671,16 @@ $('dayrow').addEventListener('click', e => {
 });
 $('tab-H').addEventListener('click', () => { tab = 'H'; renderRoster(); });
 $('tab-A').addEventListener('click', () => { tab = 'A'; renderRoster(); });
-$('lmode').addEventListener('change', e => { S.mode = e.target.value; refresh(); paintDays(); });
+$('lmode').addEventListener('change', e => { S.mode = e.target.value; paintMTog(); refresh(); paintDays(); });
+function paintMTog() { const el = $('mtog'); if (!el) return; el.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.m === S.mode))); $('mtogh').textContent = S.mode === 'best' ? 'Odds assume every manager sets their best lineup all week.' : 'Odds use each lineup as set in ESPN; days not set use the best lineup.'; }
+if ($('mtog')) $('mtog').addEventListener('click', e => { const b = e.target.closest('button[data-m]'); if (!b || b.dataset.m === S.mode) return; $('lmode').value = b.dataset.m; $('lmode').dispatchEvent(new Event('change')); });
 $('kw').addEventListener('input', e => {
   const v = parseFloat(e.target.value);
   if (v > 0) { S.K = v; refresh(); }
 });
 $('reset').addEventListener('click', () => {
   P.forEach(p => Object.assign(p, DEF[p.id]));
-  S.cur = Object.assign({}, CUR0); S.K = 1; S.mode = 'set'; $('kw').value = 1; $('lmode').value = 'set';
+  S.cur = Object.assign({}, CUR0); S.K = 1; S.mode = 'best'; $('kw').value = 1; $('lmode').value = 'best'; paintMTog();
   paintNames(); fullRefresh();
 });
 
@@ -3019,7 +3026,8 @@ $('pyrs').addEventListener('click', e => { const b = e.target.closest('.pyr'); i
 $('wkpick').addEventListener('click', e => { const b = e.target.closest('.wkb'); if (!b) return; sw = +b.dataset.w; paintSchedule(); });
 load();
 $('kw').value = S.K;
-$('lmode').innerHTML = opt('set', 'As set in ESPN', S.mode) + opt('best', 'Best possible', S.mode);
+$('lmode').innerHTML = opt('best', 'Best lineups all week', S.mode) + opt('set', 'As set in ESPN', S.mode);
+paintMTog();
 paintNames();
 paintStrip();
 renderRoster();
