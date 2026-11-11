@@ -1587,26 +1587,28 @@ function paintBoard(r) {
 function paintDays() {
   const r = LAST;
   const [a, b] = pair();
+  const remP = p => (typeof LIVEFRAC !== 'undefined' && LIVEFRAC && p && LIVEFRAC[p.team] != null) ? Math.max(0, 1 - LIVEFRAC[p.team]) : 1;
+  const soFar = tid => { let t = 0; for (let i = 0; i < S.first; i++) { const v = (typeof DAYPTS !== 'undefined' && DAYPTS[tid]) ? DAYPTS[tid][i] : null; if (v != null) t += v; } return Math.max(0, S.cur[tid] - t); };
   const dpv = (tid, i) => (i < S.first && typeof DAYPTS !== 'undefined' && DAYPTS[tid] && DAYPTS[tid][i] != null) ? DAYPTS[tid][i] : null;
   const dp = (tid, i) => { const v = dpv(tid, i); return v == null ? '-' : v.toFixed(0); };
   $('dayrow').innerHTML = DAYS.map((d, i) => {
     const gone = i < S.first || i > S.last;
     return '<button type="button" class="dy' + (gone ? ' gone' : '') + '" data-day="' + i + '" aria-pressed="' + (i === S.day) + '">' +
       '<b>' + d[0] + '</b><small>' + d[1].replace(/^\d+\//, '') + '</small>' +
-      '<span class="n h">' + (r && !gone ? r.dayA[i].toFixed(0) : dp(a, i)) + '</span>' +
-      '<span class="n a">' + (r && !gone ? r.dayB[i].toFixed(0) : dp(b, i)) + '</span></button>';
+      '<span class="n h">' + (r && !gone ? (r.dayA[i] + (i === S.first ? soFar(a) : 0)).toFixed(0) : dp(a, i)) + '</span>' +
+      '<span class="n a">' + (r && !gone ? (r.dayB[i] + (i === S.first ? soFar(b) : 0)).toFixed(0) : dp(b, i)) + '</span></button>';
   }).join('');
   const side = (tid, cls, exp) => {
     const L = lineupFor(tid, S.day);
     const rows = L.rows.map(x => x.p
-      ? '<div class="lr"><span class="sl">' + x.slot + '</span><span class="nn">' + pl(x.p.name) + (x.added ? ' <span class="chip dtd">ADDED</span>' : '') + (x.p.status === 'DTD' ? ' <span class="chip dtd">DTD</span>' : '') + '</span><span class="vv">' + x.mu.toFixed(1) + '</span></div>'
+      ? '<div class="lr"><span class="sl">' + x.slot + '</span><span class="nn">' + pl(x.p.name) + (x.added ? ' <span class="chip dtd">ADDED</span>' : '') + (x.p.status === 'DTD' ? ' <span class="chip dtd">DTD</span>' : '') + '</span><span class="vv">' + (S.day === S.first && remP(x.p) < 1 ? (remP(x.p) <= 0 ? '<small style="opacity:.55;font-weight:500">done</small>' : (x.mu * remP(x.p)).toFixed(1) + '<small style="opacity:.55;font-weight:500"> left</small>') : x.mu.toFixed(1)) + '</span></div>'
       : '<div class="lr empty"><span class="sl">' + x.slot + '</span><span class="nn">' + (x.idle ? esc(x.idle) : 'empty') + '</span><span class="vv">0</span></div>').join('');
     const bn = L.sit.map(p => ({ p, mu: muOf(p) })).sort((x, z) => z.mu - x.mu);
     const sit = bn.length ? '<div class="bnh">Bench · playing this day</div>' + bn.map(o => '<div class="lr bn"><span class="sl">BN</span><span class="nn">' + pl(o.p.name) + (o.p.status === 'DTD' ? ' <span class="chip dtd">DTD</span>' : '') + '</span><span class="vv">' + o.mu.toFixed(1) + '</span></div>').join('') : '<p class="sit">No bench players have a game this day.</p>';
     const gone = S.day < S.first || S.day > S.last;
     return '<div class="lu ' + cls + '"><h3><img class="logo s" alt="" src="' + LOGO[tid] + '">' + TEAMS[tid].short + '</h3><div class="tot">' +
-      (gone ? (dpv(tid, S.day) != null ? 'Final: ' + dpv(tid, S.day).toFixed(1) + ' pts' : 'Not counted') : (exp != null ? 'Expected ' + exp.toFixed(1) + ' · ' : '') + L.count + ' of 14 slots') +
-      '<br>' + (gone && dpv(tid, S.day) != null ? 'Played' : L.set ? 'Lineup as set in ESPN' : 'Not set yet, best lineup assumed') + '</div>' + rows + sit + '</div>';
+      (gone ? (dpv(tid, S.day) != null ? 'Final: ' + dpv(tid, S.day).toFixed(1) + ' pts' : 'Not counted') : (S.day === S.first && soFar(tid) > 0 ? 'Scored ' + soFar(tid).toFixed(1) + ' so far · ' + (exp != null ? exp.toFixed(1) + ' more expected · ' : '') : (exp != null ? 'Expected ' + exp.toFixed(1) + ' · ' : '')) + L.count + ' of 14 slots') +
+      '<br>' + (gone && dpv(tid, S.day) != null ? 'Played' : L.set ? 'Lineup as set in ESPN' : (S.day === S.first && soFar(tid) > 0 ? 'Remaining games only' : 'Not set yet, best lineup assumed')) + '</div>' + rows + sit + '</div>';
   };
   $('lineups').innerHTML = side(a, 'h', r ? r.dayA[S.day] : null) + side(b, 'a', r ? r.dayB[S.day] : null);
 }
