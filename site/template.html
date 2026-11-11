@@ -626,12 +626,14 @@ img.logo, img.nlogo { cursor: pointer; }
       <span class="pct away" id="a-pct">50%</span>
     </div>
     <p class="margin" id="margin"></p>
+    <p class="margin" id="tonight" style="margin-top:-6px"></p>
     <p class="margin" id="series" style="margin-top:2px;font-size:13px;color:var(--muted)"></p>
   </section>
 
   <section aria-label="Day by day">
     <h2>Day by day</h2>
     <div class="dayrow" id="dayrow"></div>
+    <div id="daychk"></div>
     <div class="lineups" id="lineups"></div>
     <p class="hint">By default the odds assume every manager sets their best lineup all week. Switch to "As set in ESPN" at the top of the page to use lineups as managers have set them; days not set yet still assume the best lineup the roster allows. Expected totals include the chance a player sits, and a scratched starter is replaced by the best eligible bench player.</p>
   </section>
@@ -1584,6 +1586,35 @@ function paintBoard(r) {
   $('margin').textContent = Math.abs(m) < 0.5 ? 'Projected to finish even' : TEAMS[m > 0 ? a : b].short + ' projected to win by ' + Math.abs(m).toFixed(1);
   $('series').textContent = seriesLine(a, b);
 }
+
+// Projected vs actual for one day of the selected matchup (projection = that morning's PROJLOG entry; actual = DAYPTS, or live points for today)
+function dayCheck(i, a, b) {
+  const L = (typeof PROJLOG !== 'undefined' && PROJLOG) || {}, e = L[dayISO(i)];
+  if (!e || e.p[a] == null || e.p[b] == null || i > S.first) return null;
+  let aa = null, ab = null, live = false;
+  if (i < S.first && typeof DAYPTS !== 'undefined') { aa = DAYPTS[a] && DAYPTS[a][i]; ab = DAYPTS[b] && DAYPTS[b][i]; if (aa == null || ab == null) { aa = e.a && e.a[a]; ab = e.a && e.a[b]; } }
+  else if (i === S.first) { aa = soFarT(a); ab = soFarT(b); live = true; if (!(aa > 0 || ab > 0)) return null; }
+  if (aa == null || ab == null) return null;
+  const pm = e.p[a] - e.p[b], am = aa - ab;
+  return { pa: e.p[a], pb: e.p[b], aa, ab, pm, am, live };
+}
+function soFarT(tid) { let t = 0; for (let i = 0; i < S.first; i++) { const v = (typeof DAYPTS !== 'undefined' && DAYPTS[tid]) ? DAYPTS[tid][i] : null; if (v != null) t += v; } return Math.max(0, S.cur[tid] - t); }
+function paintDayCheck() {
+  const [a, b] = pair(), sg = v => (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v).toFixed(1);
+  const lead = (m) => Math.abs(m) < 0.05 ? 'even' : TEAMS[m > 0 ? a : b].short + ' ' + sg(Math.abs(m)).replace('−', '');
+  const mk = (c, when) => when + ': projected ' + lead(c.pm) + ', ' + (c.live ? 'so far ' : 'actual ') + lead(c.am);
+  const t = dayCheck(S.first, a, b);
+  $('tonight').textContent = t ? mk(t, 'Today') + (t.live ? '' : '') : '';
+  const c = dayCheck(S.day, a, b), el = $('daychk');
+  if (!c) { el.innerHTML = ''; return; }
+  const sw = c.am - c.pm, f = v => v.toFixed(1);
+  const nm = id => '<b>' + esc(TEAMS[id].short) + '</b>';
+  el.innerHTML = '<div class="tot" style="margin:0 0 12px;padding:12px 14px;border:1px solid var(--line,#2a3550);border-radius:14px;line-height:1.5">' +
+    '<div style="font-size:12px;letter-spacing:.08em;text-transform:uppercase;opacity:.7">' + (c.live ? 'Today so far vs projection' : 'Projected vs actual') + '</div>' +
+    '<div>Projected: ' + nm(a) + ' ' + f(c.pa) + ', ' + nm(b) + ' ' + f(c.pb) + ' (' + lead(c.pm) + ')</div>' +
+    '<div>' + (c.live ? 'So far' : 'Actual') + ': ' + nm(a) + ' ' + f(c.aa) + ', ' + nm(b) + ' ' + f(c.ab) + ' (' + lead(c.am) + ')</div>' +
+    '<div style="opacity:.85">' + (Math.abs(sw) < 0.05 ? 'Right on the projection.' : TEAMS[sw > 0 ? a : b].short + ' ' + (c.live ? 'is beating' : 'beat') + ' the projected margin by ' + Math.abs(sw).toFixed(1) + '.') + (c.live ? ' Remaining games are still to come.' : '') + '</div></div>';
+}
 function paintDays() {
   const r = LAST;
   const [a, b] = pair();
@@ -1611,6 +1642,7 @@ function paintDays() {
       '<br>' + (gone && dpv(tid, S.day) != null ? 'Played' : L.set ? 'Lineup as set in ESPN' : (S.day === S.first && soFar(tid) > 0 ? 'Remaining games only' : 'Not set yet, best lineup assumed')) + '</div>' + rows + sit + '</div>';
   };
   $('lineups').innerHTML = side(a, 'h', r ? r.dayA[S.day] : null) + side(b, 'a', r ? r.dayB[S.day] : null);
+  paintDayCheck();
 }
 function updBoard() {
   const sel = S.m, [a, b] = pair();
