@@ -97,6 +97,26 @@ const DP={};jm.schedule.filter(m=>m.matchupPeriodId===wk+1&&!/CONSOL|LOSERS/.tes
 const prev=j0.schedule.filter(m=>m.matchupPeriodId===wk&&!/CONSOL|LOSERS/.test(m.playoffTierType||"")).map(m=>[m.home.teamId,m.away.teamId,+(m.home.totalPoints||0).toFixed(2),+(m.away.totalPoints||0).toFixed(2)]);
 const FIN={};j0.schedule.filter(m=>m.matchupPeriodId<=wk&&m.away&&m.home&&m.winner&&m.winner!=='UNDECIDED'&&!/CONSOL|LOSERS/.test(m.playoffTierType||"")).forEach(m=>{if(m.matchupPeriodId<2)return;const nw=m.matchupPeriodId-1;(FIN[nw]=FIN[nw]||[]).push([m.home.teamId,m.away.teamId,+(m.home.totalPoints||0).toFixed(2),+(m.away.totalPoints||0).toFixed(2)])});
 const label=ptf.month.replace(/^0/,'')+'/'+ptf.day.replace(/^0/,'');
+// GAME LOG: each player's fantasy points per scoring period for roughly the last 10 days (rostered players only), read from the same boxscore rosters used for live scores. Best effort: any failure leaves GLOG empty and nothing else changes.
+const GLOG={};
+try{
+ const spT2=spStart+today, spFrom=Math.max(7,spT2-9), sl=[];
+ for(let q=spFrom;q<=spT2;q++)sl.push(q);
+ for(let i=0;i<sl.length;i+=5){
+  await Promise.all(sl.slice(i,i+5).map(async sp=>{
+   try{
+    const jj=await J(L+'?view=mMatchup&view=mBoxscore&scoringPeriodId='+sp), mpid=Math.floor((sp-7)/7)+2;
+    (jj.schedule||[]).filter(m=>m.matchupPeriodId===mpid).forEach(m=>{[m.home,m.away].forEach(x=>{
+     if(!x)return;
+     const ent=(x.rosterForCurrentScoringPeriod&&x.rosterForCurrentScoringPeriod.entries)||[];
+     ent.forEach(e=>{const pe=e.playerPoolEntry,v=pe&&pe.appliedStatTotal,nm=pe&&pe.player&&pe.player.fullName;
+      if(nm&&v!=null&&v!==0&&isFinite(v))(GLOG[nm]=GLOG[nm]||[]).push([sp,+(+v).toFixed(2)])})
+    })});
+   }catch(e){}
+  }));
+ }
+ Object.keys(GLOG).forEach(k=>GLOG[k].sort((x,y)=>x[0]-y[0]));
+}catch(e){}
 const nowLabel=new Date().toLocaleString('en-US',{timeZone:'America/Los_Angeles',weekday:'short',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})+' PT';
 const out=`//REFRESH-DATA-START
 const WEEK_LABEL = 'Week ${wk}';
@@ -119,6 +139,8 @@ const DAYPTS = ${JSON.stringify(DP)};
 const PREVWK = ${JSON.stringify(prev)};
 const RESLIVE = ${JSON.stringify(FIN)};
 const INJ = ${JSON.stringify(IJ)};
+// Fantasy points per scoring period by player (sp 7 = Mon Oct 26 2026), rostered players, last ~10 days
+const GLOG = ${JSON.stringify(GLOG)};
 //REFRESH-DATA-END`;
 window.__blob=out;
 let h=5381;for(const c of out)h=((h<<5)+h+c.charCodeAt(0))>>>0;window.__sum=h;return JSON.stringify({len:out.length,sum:h,wk,today,spStart,matchups:mu.length,nowLabel})
