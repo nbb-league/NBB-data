@@ -1,229 +1,229 @@
 //REFRESH-DATA-START
 const WEEK_LABEL = 'Week 3';
-const ASOF = '2026-11-11T23:03';
-const ASOF_LABEL = 'Wed, Nov 11, 11:03 PM PT';
-const ASOF_MS = 1794467037697;
-const TODAY = 2;
+const ASOF = '2026-11-12T05:44';
+const ASOF_LABEL = 'Thu, Nov 12, 5:44 AM PT';
+const ASOF_MS = 1794491067774;
+const TODAY = 3;
 const DAYS = [["Mon","11/9"],["Tue","11/10"],["Wed","11/11"],["Thu","11/12"],["Fri","11/13"],["Sat","11/14"],["Sun","11/15"]];
 const SCH_RAW = 'IND:1010101 LAC:0100101 LAL:1010001 MIA:0100110 MIL:0110101 MIN:0001010 BKN:0010010 NY:0110101 ORL:0110100 PHI:0101001 PHX:1101001 POR:0110100 SAC:0100101 SA:1010101 OKC:0110101 UTA:0110101 WAS:1011001 TOR:1011001 MEM:1010110 CHA:1001001 ATL:1000101 BOS:0110001 NO:1010110 CHI:0010110 CLE:1010110 DAL:1001011 DEN:1010010 DET:1001010 GS:1010100 HOU:1010101';
 const MATCHUPS = [[6,3],[1,2],[4,5]];
-const CUR0 = {"1":139.9,"2":119.5,"3":160.3,"4":134.05,"5":128.7,"6":92.85};
-const LIVEFRAC = {"IND":1,"WAS":1,"NY":1,"CLE":1,"TOR":1,"BOS":1,"CHI":1,"SA":1,"MEM":1,"DEN":1,"MIL":1,"LAL":1,"NO":1,"BKN":1,"UTA":1,"ORL":1,"HOU":1,"GS":1,"POR":1,"OKC":1};
+const CUR0 = {"1":139.9,"2":119.5,"3":160,"4":133.85,"5":128.7,"6":93.25};
+const LIVEFRAC = {"PHI":0,"TOR":0,"WAS":0,"DET":0,"MIN":0,"DAL":0,"PHX":0,"CHA":0};
 // NBA tip times (UTC ISO) for today and tomorrow, Pacific dates: t = tip-off, h = home team, a = away team, s = pre/in/post
-const TIPS = [{"t":"2026-11-12T00:00Z","h":"IND","a":"WAS","s":"post"},{"t":"2026-11-12T00:00Z","h":"NY","a":"CLE","s":"post"},{"t":"2026-11-12T00:00Z","h":"TOR","a":"BOS","s":"post"},{"t":"2026-11-12T01:00Z","h":"CHI","a":"SA","s":"post"},{"t":"2026-11-12T01:00Z","h":"MEM","a":"DEN","s":"post"},{"t":"2026-11-12T01:00Z","h":"MIL","a":"LAL","s":"post"},{"t":"2026-11-12T01:00Z","h":"NO","a":"BKN","s":"post"},{"t":"2026-11-12T02:00Z","h":"UTA","a":"ORL","s":"post"},{"t":"2026-11-12T02:30Z","h":"HOU","a":"GS","s":"post"},{"t":"2026-11-12T03:00Z","h":"POR","a":"OKC","s":"post"},{"t":"2026-11-13T00:00Z","h":"PHI","a":"TOR","s":"pre"},{"t":"2026-11-13T00:00Z","h":"WAS","a":"DET","s":"pre"},{"t":"2026-11-13T01:00Z","h":"MIN","a":"DAL","s":"pre"},{"t":"2026-11-13T02:00Z","h":"PHX","a":"CHA","s":"pre"}];
-const LU_RAW = `1:cc01d34ccc6a2ccdbccc88bbx/4cccdcc30bccc15db2acb8xxx/cb01d34c5c6abccdc2ac88cbc/4cccdc3ccbcc1ccd2ba0b85a8/4c01d2c35c6acbbdcbac88ccc/c8c1d6c4bacacb0d2bc5c3ccc/4ccbd23cba6a81bdc5c0cccc8
-2:cb6dd143ccaccb0cdcc2c5c8xx/0bcddcc34dac2bc1cc8c6c5b8a/cb3dd04cadac2cb1cc86cc5b8c/05cddcbcacadccbc32c6c1xb8x/05cddcbcacadccbc32c6c1xb8x/05cddcbcacadccbc32c6c1xb8x/05cddcbcacadccbc32c6c1xb8x
+const TIPS = [{"t":"2026-11-13T00:00Z","h":"PHI","a":"TOR","s":"pre"},{"t":"2026-11-13T00:00Z","h":"WAS","a":"DET","s":"pre"},{"t":"2026-11-13T01:00Z","h":"MIN","a":"DAL","s":"pre"},{"t":"2026-11-13T02:00Z","h":"PHX","a":"CHA","s":"pre"},{"t":"2026-11-14T00:00Z","h":"IND","a":"NY","s":"pre"},{"t":"2026-11-14T00:00Z","h":"ORL","a":"MIL","s":"pre"},{"t":"2026-11-14T01:00Z","h":"MIA","a":"CLE","s":"pre"},{"t":"2026-11-14T01:00Z","h":"CHI","a":"ATL","s":"pre"},{"t":"2026-11-14T01:00Z","h":"NO","a":"MEM","s":"pre"},{"t":"2026-11-14T01:30Z","h":"HOU","a":"UTA","s":"pre"},{"t":"2026-11-14T02:30Z","h":"SA","a":"GS","s":"pre"},{"t":"2026-11-14T03:00Z","h":"SAC","a":"POR","s":"pre"},{"t":"2026-11-14T03:30Z","h":"LAC","a":"OKC","s":"pre"}];
+const LU_RAW = `1:cc01d34ccc6a2ccdbccc88bbx/4cccdcc30bccc15db2acb8xxx/cb01d34c5c6abccdc2ac88cbc/4cccdc36cbcc1ccd2ba0b85a8/4c01d2c35c6acbbdcbac88ccc/c8c1d6c4bacacb0d2bc5c3ccc/4ccbd23cba6a81bdc5c0cccc8
+2:cb6dd143ccaccb0cdcc2c58xxx/0bcddcc34dac2bc1cc8c6cb8xx/cb3dd04cadac2cb1cc86ccb8xx/05cddcbcacadccbc32c6c1b884/=/=/=
 3:d8cbccbc8c40c5d6abcca3cxxx/db0ca4b2cdcc1cd6c85accc38b/d601aa4c8dbcb5dcc38cccc2bc/db0b8aa1cdc5ccd368cc24cccb/d605ba4c8dc1c8dcc3bbccc2ca/d85c6aa1cdcbccdb38cc240ccb/d308ca41bdc5b8d6ccccaccbcc
 4:d0adbb88d23c4ca1bcccc6cc5x/d0bdccaadcc5bbcc6318cc84c2/dcbd0cc2dbb8ac41c65ca3cc8c/d14d50a6d23caccb88ccbcbccc/dcad0c3cdcc8cc4bc21bcb568a/d8ad1532dcccbc4b68ccacbc0c/d0adccc2da884cc136bccc5bcb
 5:50bc28b81cdccdc4cbad6cca3c/c8b1bba2cad56d4ccccdc80cc3/5bc021bccbdc8dac3a4d6cccc8/b80ba2a6c8d1cdc4cccdcbc53c/5bc1cccc02dcada43cbd688ccb/c80bbb2ccadccdcc634d18c5ac/6b85c8a2bcd1cda4cccdcb0cc3
 6:08cc8c415accbdbcdcdc26ca3b/bc3685acbac0bd24d1dccc8ccc/88cc5b4cc3ac1dcadcd0c6bc2b/bc3488b50accbdacdcdc21c6cc/c0cab8acc6251dc4d8dcccbc3b/c1cb0b4c5aac8dbcdcd83cc26c/1c2bc8cbccc5cd64d0dc3a8acb`;
 const DATA = `#1|Golden State Lobos|Chance G
-Joel Embiid|PHI|BE|D|5.38|5.81|5.5|10|410|4.34|4.86|4
-Julius Randle|BKN|ST|H|4.39|4.87|3.92|11|36810|3.7|3.11|4
-Stephen Curry|GS|ST|D|5.43|5.38|5.66|10|058|6.15|4.71|4
-James Harden|CLE|ST|H|5.25|6.15|3.92|12|0158|3.96|4.09|5
-Kon Knueppel|CHA|IR|O|4.3|4.08|0.15|1|1256810|0.15|0.15|1
-Kevin Durant|HOU|ST|H|4.88|5.08|4.33|12|236810|4.31|5.08|4
-Anthony Davis|WAS|ST|H|5.15|5.88|6.16|10|346810|6.7|7.9|3
-Giannis Antetokounmpo|MIA|BE|H|5.99|6.23|8.12|11|346810|8.49|7.28|4
-Damian Lillard|POR|ST|H|4.91||4|11|058|3.78|3.87|5
-Rudy Gobert|MIN|BE|H|3.27|4.08|2.91|10|410|3.18|3.37|3
-Jabari Smith Jr.|HOU|ST|H|3.23|3.8|4.28|12|346810|4.21|3.51|4
-Derik Queen|NO|ST|H|3.32|3.45|3.07|12|346810|2.76|2.37|5
-RJ Barrett|TOR|ST|H|3.8|3.54|3.93|11|1256810|4.09|3.71|4
-Zach LaVine|SAC|BE|H|3.88|3.29|3.82|11|1256810|3.41|3.52|4
-Davion Mitchell|MIA|BE|H|2.76|2.86|5.14|11|058|5.4|5.5|4
+Joel Embiid|PHI|ST|D|5.38|5.81|5.5|10|410|4.34|4.1|3
+Julius Randle|BKN|BE|H|4.39|4.87|3.92|11|36810|3.76|2.82|3
+Stephen Curry|GS|BE|D|5.43|5.38|5.66|10|058|6.15|4.71|4
+James Harden|CLE|BE|H|5.25|6.15|3.92|12|0158|3.96|3.7|4
+Kon Knueppel|CHA|IR|O|4.3|4.08|0.15|1|1256810|0.15||0
+Kevin Durant|HOU|BE|H|4.88|5.08|4.33|12|236810|4.31|5.58|3
+Anthony Davis|WAS|ST|H|5.15|5.88|6.16|10|346810|6.7|8.13|2
+Giannis Antetokounmpo|MIA|ST|H|5.99|6.23|8.12|11|346810|8.49|6.57|3
+Damian Lillard|POR|BE|H|4.91||4|11|058|3.74|3.79|4
+Rudy Gobert|MIN|ST|H|3.27|4.08|2.91|10|410|3.18|3.1|2
+Jabari Smith Jr.|HOU|BE|H|3.23|3.8|4.28|12|346810|4.21|3.57|3
+Derik Queen|NO|BE|H|3.32|3.45|3.07|12|346810|2.76|1.86|4
+RJ Barrett|TOR|ST|H|3.8|3.54|3.93|11|1256810|4.09|3.62|3
+Zach LaVine|SAC|BE|H|3.88|3.29|3.82|11|1256810|3.39|3.6|3
+Davion Mitchell|MIA|BE|H|2.76|2.86|5.14|11|058|5.4|5.12|3
 Jimmy Butler III|GS|IR|O|4.56|4.85||0|1256810|||0
-Jonathan Kuminga|MIN|BE|H|3.07|2.59|3.24|11|236810|2.88|2.4|3
-Jaime Jaquez Jr.|MIL|ST|H|3.07|3.33|3.44|12|1256810|3.28|3.31|5
+Jonathan Kuminga|MIN|ST|H|3.07|2.59|3.24|11|236810|2.88|1.23|2
+Jaime Jaquez Jr.|MIL|ST|H|3.07|3.33|3.44|12|1256810|3.28|3.29|4
 Wendell Carter Jr.|ORL|ST|H|2.52|3.08|3.52|11|410|3.53|4.59|4
-Ayo Dosunmu|MIN|BE|H|3.4|3.28|4.15|11|0158|4.81|4.37|3
+Ayo Dosunmu|MIN|ST|H|3.4|3.28|4.15|11|0158|4.81|4.67|2
 Brandin Podziemski|GS|ST|H|3.63|3.42|4.12|10|0158|4.1|4.42|4
-Saddiq Bey|NO|ST|H|3.18|4|3.17|12|236810|3.27|3.17|5
-Jamal Shead|TOR|BE|H|2.43|2.23|2.88|11|058|3.52|4.36|4
-Jakob Poeltl|TOR|ST|H|2.94|2.77|2.4|9|410|3.07|3.33|4
-Daniss Jenkins|DET|BE|H||2.4|3.16|10|058|3.21|4.67|3
+Saddiq Bey|NO|ST|H|3.18|4|3.17|12|236810|3.27|2.96|4
+Jamal Shead|TOR|ST|H|2.43|2.23|2.9|11|058|3.55|5.3|3
+Jakob Poeltl|TOR|ST|H|2.94|2.77|2.38|9|410|3.03|3.97|3
+Daniss Jenkins|DET|ST|H||2.4|3.16|10|058|3.41|6.68|2
 #2|Atlanta Firebirds|Ethan Wetzel
-Tyrese Maxey|PHI|BE|H|5.4|6.2|5.35|12|0158|5.23|4.33|4
-Trae Young|WAS|ST|H|5.63|4.42|4.98|12|058|4.1|3.9|5
-Evan Mobley|CLE|ST|H|4.41|4.97|4.66|12|346810|4.24|3.71|5
+Tyrese Maxey|PHI|ST|H|5.4|6.2|5.35|12|0158|5.23|4.37|3
+Trae Young|WAS|ST|H|5.63|4.42|4.98|12|058|4.1|3.9|4
+Evan Mobley|CLE|BE|H|4.41|4.97|4.66|12|346810|4.24|3.26|4
 Trey Murphy III|NO|IR|O|4.38|4.8|3.45|9|1256810|3.69|4.08|2
-Anthony Edwards|MIN|IR|O|5.79|5.41|6.39|4|1256810|||1
-Donovan Mitchell|CLE|ST|H|5.63|5.59|4.95|12|0158|4.61|4.89|5
-Nikola Jokic|DEN|ST|H|7.11|11.97|9.57|10|410|9.66|10.21|4
+Anthony Edwards|MIN|IR|O|5.79|5.41|6.39|4|1256810|||0
+Donovan Mitchell|CLE|BE|H|5.63|5.59|4.95|12|0158|4.61|4.83|4
+Nikola Jokic|DEN|ST|H|7.11|11.97|9.57|10|410|9.66|8.4|3
 Jalen Johnson|ATL|BE|H|5.58|7.81|5.08|9|36810|4.05|4.05|2
-Donovan Clingan|POR|ST|H|3.45|4.76|3.83|11|410|4.01|4.11|5
-Keyonte George|UTA|IR|H|4.69|4.9|4.32|11|0158|3.74|4.79|4
-Michael Porter Jr.|BKN|ST|H|4.69|5.16|4.58|11|236810|4.73|4.72|4
-Norman Powell|CHI|BE|O|4.51|3.94|3.54|8|1256810|2.86|1.15|1
-Josh Hart|NY|ST|H|3.58|3.93|3.09|8|1256810|2.32|0.95|1
-Nickeil Alexander-Walker|ATL|BE|H|4.17|4.36|4.36|12|0158|4.47|4.44|4
-Andrew Nembhard|IND|ST|H|3.2|4.36|4.45|10|0158|4.9|4.66|4
-Payton Pritchard|BOS|ST|H|3.69|3.97|3.04|12|0158|2.87|3.1|5
-Moussa Diabate|CHA|BE|D|2.34|3.2|3.5|9|346810|3.06|1.3|1
-Jaden McDaniels|MIN|BE|H|3.21|3.08|3.45|11|236810|3.61|3.8|3
-Anthony Black|ORL|ST|H|3.26|3.32|4.66|8|0158|4.66|5.02|4
-Christian Braun|DEN|ST|H|2.48|2.59|2.98|10|1256810|3.29|2.35|4
-Klay Thompson|MIA|BE|H|2.57|2.36|2.76|11|1256810|3.49|4|4
-Coby White|CHA|BE|H|4.11|3.23|1.07|4|0158|1.07|1.3|3
-Brayden Burries|MIL|ST|H|2.59||2.44|12|158|2.89|3.18|5
-Quenton Jackson|IND|ST|H||1.99|2.39|12|0158|2.76|2.24|4
-Bennett Stirtz|OKC|ST|H|||1.77|12|058|2.46|2.89|5
-Leaky Black|SAC|BE|H||2.09|1.95|7|26810|2.27|2.11|4
+Donovan Clingan|POR|ST|H|3.45|4.76|3.83|11|410|4.19|3.4|4
+Keyonte George|UTA|BE|H|4.69|4.9|4.32|11|0158|3.74|3.83|3
+Michael Porter Jr.|BKN|ST|H|4.69|5.16|4.58|11|236810|4.25|4.28|3
+Norman Powell|CHI|IR|O|4.51|3.94|3.54|8|1256810|2.86||0
+Josh Hart|NY|BE|H|3.58|3.93|3.09|8|1256810|2.02|0.95|1
+Nickeil Alexander-Walker|ATL|BE|H|4.17|4.36|4.36|12|0158|4.47|4.52|3
+Andrew Nembhard|IND|ST|H|3.2|4.36|4.45|10|0158|4.9|4.93|3
+Payton Pritchard|BOS|BE|H|3.69|3.97|3.04|12|0158|3.06|3.33|4
+Moussa Diabate|CHA|ST|D|2.34|3.2|3.5|9|346810|3.06||0
+Jaden McDaniels|MIN|ST|H|3.21|3.08|3.45|11|236810|3.61|4.3|2
+Anthony Black|ORL|BE|H|3.26|3.32|4.66|8|0158|4.66|5.02|4
+Christian Braun|DEN|ST|H|2.48|2.59|2.98|10|1256810|3.29|2.27|3
+Klay Thompson|MIA|BE|H|2.57|2.36|2.76|11|1256810|3.49|3.45|3
+Coby White|CHA|ST|H|4.11|3.23|1.07|4|0158|1.07|1.52|2
+Quenton Jackson|IND|ST|H||1.99|2.39|12|0158|2.76|1.72|3
+Bennett Stirtz|OKC|ST|H|||1.77|12|058|2.46|2.7|4
+Grayson Allen|CHA|ST|H|3.36|3.71|3.3|11|0158|3.27|3.7|2
+Morez Johnson Jr.|DAL|ST|D|2.53||1.78|10|346810|2.53|4.1|2
 #3|Milwaukee Elks|Jed Kizziar
-Jalen Duren|DET|IR|O|4.22|5.15|3.3|2|410|||1
-Pascal Siakam|IND|ST|H|4.56|4.73|4.64|11|36810|4.79|5.42|4
-Jalen Brunson|NY|ST|H|5.31|5.25|4.87|11|058|5.29|5.28|4
-Stephon Castle|SA|ST|H|4.32|4.85|3.5|12|0158|3.31|3.49|5
-Deni Avdija|POR|ST|H|4.93|5.8|5.22|11|236810|5.09|5.53|5
-Karl-Anthony Towns|NY|ST|H|5|6.05|6.71|11|410|6.89|7.55|4
-Alperen Sengun|HOU|ST|H|4.57|5.86|7.08|10|410|7.43|7.91|4
-Jaylen Brown|PHI|BE|H|4.52|5.68|4.67|11|1256810|4.95|4.33|4
-De'Aaron Fox|SA|ST|H|4.41|4.17|3.63|12|0158|3.29|3.48|5
-Lauri Markkanen|UTA|IR|O|4.76|5.36|4.28|8|236810|5.17|6.15|2
-Ivica Zubac|IND|ST|H|3.38|4.18|3.13|7|410|3.45|3.45|4
-Dyson Daniels|ATL|BE|H|3.61|4.23|4.19|12|0158|4.34|5.51|4
-Derrick White|BOS|ST|H|4.39|4.37|3.33|12|0158|3.39|3.97|5
-Fred VanVleet|HOU|ST|H|4.03||3.68|10|0158|3.77|3.45|4
+Jalen Duren|DET|IR|O|4.22|5.15|3.3|2|410|||0
+Pascal Siakam|IND|ST|H|4.56|4.73|4.64|11|36810|4.79|5.85|3
+Jalen Brunson|NY|ST|H|5.31|5.25|4.87|11|058|5.43|4.98|3
+Stephon Castle|SA|ST|H|4.32|4.85|3.48|12|0158|3.24|2.98|4
+Deni Avdija|POR|ST|H|4.93|5.8|5.22|11|236810|5.1|5.19|4
+Karl-Anthony Towns|NY|ST|H|5|6.05|6.71|11|410|6.94|7.97|3
+Alperen Sengun|HOU|ST|H|4.57|5.86|7.07|10|410|7.42|6.1|3
+Jaylen Brown|PHI|ST|H|4.52|5.68|4.67|11|1256810|4.95|3.87|3
+De'Aaron Fox|SA|BE|H|4.41|4.17|3.63|12|0158|3.38|3.73|4
+Lauri Markkanen|UTA|IR|O|4.76|5.36|4.28|8|236810|5.17|4.85|1
+Ivica Zubac|IND|BE|H|3.38|4.18|3.13|7|410|3.45|4.4|3
+Dyson Daniels|ATL|ST|H|3.61|4.23|4.19|12|0158|4.34|6.08|3
+Derrick White|BOS|BE|H|4.39|4.37|3.33|12|0158|3.37|3.61|4
+Fred VanVleet|HOU|BE|H|4.03||3.68|10|0158|3.77|3.58|3
 Yves Missi|NO|IR|O|2.36|2.09|4.45|2|410|||0
-Naz Reid|CHA|BE|H|3.98|3.3|4.12|11|346810|3.76|5.05|3
-Ausar Thompson|DET|BE|H|3.1|3.01|3.12|9|236810|3.06|3.4|3
+Naz Reid|CHA|ST|H|3.98|3.3|4.12|11|346810|3.76|5.25|2
+Ausar Thompson|DET|ST|H|3.1|3.01|3.12|9|236810|3.28|2.2|2
 Yaxel Lendeborg|GS|ST|H|3.71||4.87|12|236810|4.28|4.96|4
-Jrue Holiday|POR|ST|H|3.2|4.22|3.4|11|0158|3.43|2.74|5
-Brook Lopez|LAC|BE|H|2.79|2.13|2.71|10|410|2.09|2.72|3
-P.J. Washington|DAL|BE|H|3.04|3.44|3.52|11|236810|3.44|4.05|4
-Paul Reed|DET|BE|H|1.97|2.11|2.97|10|346810|2.84|2.18|3
-Nolan Traore|BKN|BE|O|2.55|1.96|2.75|10|058|3.23|3.38|3
-Kyle Kuzma|MIL|ST|H|2.65|2.69|2.72|12|236810|2.31|2.63|5
-Jared McCain|OKC|ST|H|3.09|1.67|2.45|12|0158|2.49|3.13|5
-Aday Mara|OKC|BE|H|||2.43|12|410|2.74|3.18|5
+Jrue Holiday|POR|BE|H|3.2|4.22|3.4|11|0158|3.39|2.72|4
+Brook Lopez|LAC|BE|H|2.79|2.13|2.71|10|410|2.09|2.35|2
+P.J. Washington|DAL|ST|H|3.04|3.44|3.52|11|236810|3.44|3.78|3
+Paul Reed|DET|ST|H|1.97|2.11|2.97|10|346810|2.52|2.35|2
+Nolan Traore|BKN|BE|O|2.55|1.96|2.75|10|058|3.31|3.25|2
+Kyle Kuzma|MIL|BE|H|2.65|2.69|2.72|12|236810|2.31|2.79|4
+Jared McCain|OKC|BE|H|3.09|1.67|2.45|12|0158|2.49|3.65|4
+Aday Mara|OKC|ST|H|||2.43|12|410|2.74|3.33|4
 #4|Portland Pioneers|Andrew Stengel
 Chet Holmgren|OKC|IR|O|3.96|4.61|4.73|3|346810|||0
-Devin Booker|PHX|BE|H|5.28|4.91|4.4|10|0158|4.49|4.73|5
-Victor Wembanyama|SA|ST|H|6.51|7.33|8.37|12|410|9.02|9.53|5
+Devin Booker|PHX|ST|H|5.28|4.91|4.4|10|0158|4.49|4.81|4
+Victor Wembanyama|SA|ST|H|6.51|7.33|8.37|12|410|9.04|8.13|4
 Paolo Banchero|ORL|IR|O|4.73|5.48|5.78|2|236810|||0
-Josh Giddey|CHI|ST|H|5.26|7.24|3.52|10|0158|4.22|3.43|3
-LaMelo Ball|MIN|BE|H|5.77|5.09|3.84|11|058|4.14|4.3|3
-Bam Adebayo|MIA|BE|H|4.69|5.64|4.79|11|346810|5.61|5.95|4
-Jayson Tatum|BOS|ST|H|5.81|6.76|5.82|11|236810|5.85|6.15|4
+Josh Giddey|CHI|ST|H|5.26|7.24|3.52|10|0158|4.22|4.28|2
+LaMelo Ball|MIN|ST|H|5.77|5.09|3.84|11|058|4.14|4.23|2
+Bam Adebayo|MIA|ST|H|4.69|5.64|4.75|11|346810|5.56|5.07|3
+Jayson Tatum|BOS|ST|H|5.81|6.76|5.82|11|236810|5.56|6.15|4
 Tyrese Haliburton|IND|IR|O|5.47||6.59|4|0158|||0
-AJ Dybantsa|WAS|ST|H|3.84||2.98|8|26810|2.98|2.76|5
-Alex Sarr|WAS|ST|H|3.89|4.3|2.73|11|346810|2.91|3.05|5
-Darryn Peterson|UTA|ST|H|3.58||3.61|12|0158|4.09|4.05|5
-Walker Kessler|LAL|ST|H|3.5|4.9|4.91|13|410|5.28|5.62|5
-Ja Morant|POR|BE|O|4.54|4.85|3.3|4|058|2.73||0
-Jarrett Allen|CLE|ST|H|3.58|4.11|3.63|10|410|3.71|2.97|3
-Dylan Harper|SA|ST|H|3.51|2.56|3.99|12|0158|4.19|4.02|5
-Paul George|BOS|BE|D|4.59|4.16|4.72|10|236810|4.71|4.54|4
-OG Anunoby|NY|ST|H|3.83|3.85|3.73|11|236810|3.63|3.95|4
-Ryan Rollins|MIL|ST|D|3.63|4.13|2.6|12|0158|2.44|2.74|5
-Scoot Henderson|POR|BE|H|3.18|2.79|1.22|11|0158|1.27|1.14|5
-Day'Ron Sharpe|BKN|ST|H|2.71|2.52|3.69|11|410|4.35|6.06|4
-Draymond Green|GS|ST|H|3.09|2.65|2.23|10|346810|2.59|2.81|4
-Ajay Mitchell|OKC|BE|O|3.7|3.04|3.36|11|0158|3.35|3.27|4
-Precious Achiuwa|SAC|BE|D|2.43|2.82|2.75|11|346810|2.26|2.04|4
-Jeremiah Fears|NO|ST|H|3.23|2.99|3.23|12|0158|3.88|3.59|5
-Mikal Bridges|NY|BE|H|3.58|3.52|1.84|11|1256810|2.17|2.1|4
+AJ Dybantsa|WAS|ST|H|3.84||2.98|8|26810|2.98|2.99|4
+Alex Sarr|WAS|ST|H|3.89|4.3|2.73|11|346810|2.91|2.91|4
+Darryn Peterson|UTA|BE|H|3.58||3.61|12|0158|4.09|4.6|4
+Walker Kessler|LAL|ST|H|3.5|4.9|4.91|13|410|5.66|5.88|4
+Ja Morant|POR|BE|O|4.54|4.85|3.3|4|058|2.45||0
+Jarrett Allen|CLE|BE|H|3.58|4.11|3.63|10|410|3.71|4.4|2
+Dylan Harper|SA|ST|H|3.51|2.56|3.99|12|0158|4.25|4.41|4
+Paul George|BOS|ST|D|4.59|4.16|4.72|10|236810|4.78|4.28|3
+OG Anunoby|NY|ST|H|3.83|3.85|3.73|11|236810|3.64|3.85|3
+Ryan Rollins|MIL|BE|D|3.63|4.13|2.6|12|0158|2.44|2.56|4
+Scoot Henderson|POR|BE|H|3.18|2.79|1.22|11|0158|1.46|1.05|4
+Day'Ron Sharpe|BKN|ST|H|2.71|2.52|3.69|11|410|4.79|7.03|3
+Draymond Green|GS|BE|H|3.09|2.65|2.23|10|346810|2.59|2.81|4
+Ajay Mitchell|OKC|ST|O|3.7|3.04|3.38|11|0158|3.38|3|3
+Precious Achiuwa|SAC|BE|D|2.43|2.82|2.75|11|346810|2.55|2.07|3
+Jeremiah Fears|NO|BE|H|3.23|2.99|3.23|12|0158|3.88|3.53|4
+Mikal Bridges|NY|BE|H|3.58|3.52|1.84|11|1256810|1.99|2.1|3
 #5|Los Angeles Shoobies|Ethan Wetzel
-Amen Thompson|HOU|ST|H|4.21|4.85|3.98|12|1256810|3.15|3.39|4
-Luka Doncic|LAL|ST|D|7.3|8.79|8.64|11|058|9.1|8.15|4
-Kyrie Irving|DAL|BE|H|5.13||4.52|9|058|4.93|4.64|4
-Tyler Herro|MIL|ST|H|4.6|4|4.75|11|0158|4.38|4.59|4
+Amen Thompson|HOU|ST|H|4.21|4.85|3.98|12|1256810|3.15|3.88|3
+Luka Doncic|LAL|ST|D|7.3|8.79|8.64|11|058|9.22|8.12|3
+Kyrie Irving|DAL|ST|H|5.13||4.52|9|058|4.93|4.13|3
+Tyler Herro|MIL|ST|H|4.6|4|4.75|11|0158|4.38|4.52|3
 Kawhi Leonard|TOR|ST|O|5.21|5.84|4.9|2|236810|||0
-Scottie Barnes|TOR|ST|O|4.7|5.5|5.15|8|1256810|5.44|3.75|1
-Cooper Flagg|DAL|ST|H|5.16|4.76|6.82|10|236810|6.85|8.29|4
-Jalen Green|PHX|BE|H|4.06|3.23|2.21|10|1256810|2.13|2.2|5
-CJ McCollum|ATL|BE|H|3.88|3.7|3.09|12|0158|3.09|2.86|4
+Scottie Barnes|TOR|ST|O|4.7|5.5|5.15|8|1256810|5.44||0
+Cooper Flagg|DAL|ST|H|5.16|4.76|6.82|10|236810|6.85|9.03|3
+Jalen Green|PHX|ST|H|4.06|3.23|2.21|10|1256810|2.13|1.85|4
+CJ McCollum|ATL|BE|H|3.88|3.7|3.09|12|0158|3.09|2.37|3
 Franz Wagner|ORL|ST|H|4.5|3.95|5.5|11|236810|5.96|6.93|4
 Jalen Williams|OKC|IR|O|4.53|3.77|2.83|3|236810|||0
-VJ Edgecombe|PHI|BE|H|3.87|3.99|3.43|11|158|3.08|3.36|4
-Desmond Bane|ORL|ST|H|4.47|4.01|3.42|10|1256810|3.76|3.32|3
+VJ Edgecombe|PHI|ST|H|3.87|3.99|3.43|11|158|3.08|3.85|3
+Desmond Bane|ORL|BE|H|4.47|4.01|3.42|10|1256810|3.76|3.32|3
 Jaren Jackson Jr.|UTA|IR|O|4.39|3.77|3.14|4|346810|||0
-Isaiah Hartenstein|OKC|ST|H|2.95|3.55|3.52|12|410|3.6|3.46|5
-Onyeka Okongwu|ATL|BE|H|3.82|4.17|4.18|12|410|4.99|5.61|4
-Matas Buzelis|CHI|ST|H|3.69|3.55|2.36|10|236810|2.32|2.68|3
-Aaron Gordon|DEN|ST|H|3.33|3.63|2.66|10|36810|2.57|1.64|4
-Zach Edey|MEM|ST|H|3.17|4.16|2.19|10|410|2.17|2.57|4
+Isaiah Hartenstein|OKC|BE|H|2.95|3.55|3.52|12|410|3.6|3.58|4
+Onyeka Okongwu|ATL|ST|H|3.82|4.17|4.18|12|410|4.99|5.13|3
+Matas Buzelis|CHI|BE|H|3.69|3.55|2.36|10|236810|2.32|2.8|2
+Aaron Gordon|DEN|BE|H|3.33|3.63|2.66|10|36810|2.57|1.33|3
+Zach Edey|MEM|BE|H|3.17|4.16|2.19|10|410|2.17|1.8|3
 Jalen Suggs|ORL|IR|O|3.38|3.87|2.67|3|0158|||0
-Cedric Coward|MEM|ST|H|3.41|3.19|4.11|10|1256810|3.92|4.31|4
-Darius Acuff Jr.|SAC|BE|H|3.66||5.38|11|058|6.08|6.51|4
-Kris Dunn|LAC|BE|H|2.14|2.28|3.01|10|0158|2.63|2.43|3
-Duncan Robinson|DET|BE|H|2.67|2.6|4|10|1256810|4.04|3.8|3
-John Collins|DET|BE|H|3.4|2.77|2.77|10|346810|2.29|3.95|3
-Ace Bailey|UTA|ST|H|3.05|2.75|3.26|12|236810|2.61|2.77|5
+Cedric Coward|MEM|BE|H|3.41|3.19|4.11|10|1256810|3.92|3.62|3
+Darius Acuff Jr.|SAC|ST|H|3.66||5.38|11|058|6.5|6.22|3
+Kris Dunn|LAC|BE|H|2.14|2.28|3.01|10|0158|2.63|2.42|2
+Duncan Robinson|DET|ST|H|2.67|2.6|4|10|1256810|4.33|2.95|2
+John Collins|DET|ST|H|3.4|2.77|2.77|10|346810|2.34|5.2|2
+Ace Bailey|UTA|BE|H|3.05|2.75|3.26|12|236810|2.61|3.11|4
 #6|San Antonio Salamanders|Chance G
-Austin Reaves|LAL|ST|D|5.3|4.96|4.5|12|0158|4.19|5.28|4
-Dejounte Murray|NO|ST|H|4.53|3.93|3.25|9|0158|2.46|2.37|5
-LeBron James|PHI|BE|D|4.67|5.49|4.44|10|236810|4.43|3.79|4
-Domantas Sabonis|SAC|BE|H|4.8|4.91|5.86|10|346810|4.45|4.03|3
-Jamal Murray|DEN|ST|H|5.15|5.93|5.76|10|058|6|5.29|4
-Shai Gilgeous-Alexander|OKC|ST|H|6.42|6.34|5.45|12|058|5.67|5.61|5
-Zion Williamson|NO|ST|H|4.22|3.94|4.32|11|346810|4.51|3.92|4
-Brandon Miller|CHA|BE|O|4.65|4.15|3.91|10|1256810|3.73|1.25|2
-Cade Cunningham|DET|BE|H|5.81|7.01|5.12|10|058|5.28|4.88|3
-Cameron Boozer|MEM|ST|H|3.79||5.28|11|36810|5.42|3.61|4
-Caleb Wilson|CHI|ST|D|3.83||4.09|10|26810|3.92|2.3|3
-Darius Garland|LAC|BE|H|4.81|4.26|3.85|10|058|3.66|4.58|3
-Ty Jerome|MEM|ST|H|5.14|4.29|4.71|10|0158|4.08|3.66|4
-Immanuel Quickley|TOR|IR|H|4.23|4.31|3.99|9|0158|4.09|3.03|2
-Miles Bridges|PHX|BE|H|3.99|3.74|4.45|10|236810|5.15|4.52|5
-Kel'el Ware|MIL|ST|H|3.45|3.7|2.57|12|410|2.06|1.28|5
+Austin Reaves|LAL|ST|D|5.3|4.96|4.5|12|0158|4.03|5.68|3
+Dejounte Murray|NO|BE|H|4.53|3.93|3.25|9|0158|2.46|1.59|4
+LeBron James|PHI|ST|D|4.67|5.49|4.44|10|236810|4.43|2.9|3
+Domantas Sabonis|SAC|ST|H|4.8|4.91|5.86|10|346810|4.01|2.9|2
+Jamal Murray|DEN|ST|H|5.15|5.93|5.76|10|058|6|5.77|3
+Shai Gilgeous-Alexander|OKC|ST|H|6.42|6.34|5.45|12|058|5.67|5.04|4
+Zion Williamson|NO|ST|H|4.22|3.94|4.32|11|346810|4.51|3.77|3
+Brandon Miller|CHA|ST|O|4.65|4.15|3.91|10|1256810|3.73|1.45|1
+Cade Cunningham|DET|ST|H|5.81|7.01|5.12|10|058|5.38|3.23|2
+Cameron Boozer|MEM|ST|H|3.79||5.28|11|36810|5.42|4|3
+Caleb Wilson|CHI|BE|D|3.83||4.09|10|26810|3.92|3|2
+Darius Garland|LAC|BE|H|4.81|4.26|3.85|10|058|3.66|4.92|2
+Ty Jerome|MEM|ST|H|5.14|4.29|4.71|10|0158|4.08|3.88|3
+Immanuel Quickley|TOR|IR|H|4.23|4.31|3.99|9|0158|4.09|2.45|1
+Miles Bridges|PHX|ST|H|3.99|3.74|4.45|10|236810|5.15|4.41|4
+Kel'el Ware|MIL|BE|H|3.45|3.7|2.57|12|410|2.06|1.38|4
 Brandon Ingram|LAC|IR|O|4.44|4.09||0|236810|||0
-Keaton Wagler|LAC|BE|H|2.84||2.81|10|0158|2.64|2.7|3
-Egor Demin|BKN|IR|H|3.61|2.6|2.31|5|0158|2.5|4.4|1
-Mikel Brown Jr.|BKN|ST|O|3.06||2.58|7|058|2.81|3.27|2
-Santi Aldama|DAL|BE|H|2.78|3.59|1.7|3|236810|1.7|1.7|3
-Kyshawn George|WAS|ST|H|3.53|3.49|3.64|12|1256810|4.04|4.37|5
-Alex Caruso|OKC|ST|H|2.66|1.87|2.62|9|0158|2.13|2.13|5
-Zaccharie Risacher|DAL|BE|H|2.32|2.13|2.24|11|26810|1.76|1.05|4
-Peyton Watson|CLE|ST|H|3.25|3.14|2.71|10|236810|2.64|2.72|4
-Devin Vassell|SA|ST|O|3.17|3.16|3.21|10|1256810|3.59|3.87|3
+Keaton Wagler|LAC|BE|H|2.84||2.85|10|0158|2.7|2.98|2
+Egor Demin|BKN|IR|H|3.61|2.6|2.31|5|0158|4.4|4.4|1
+Mikel Brown Jr.|BKN|BE|O|3.06||2.58|7|058|2.55|3.05|1
+Santi Aldama|DAL|ST|H|2.78|3.59|1.7|3|236810|1.7|1.7|3
+Kyshawn George|WAS|ST|H|3.53|3.49|3.64|12|1256810|4.04|4.49|4
+Alex Caruso|OKC|BE|H|2.66|1.87|2.62|9|0158|2.13|2.13|4
+Zaccharie Risacher|DAL|ST|H|2.32|2.13|2.24|11|26810|1.76|1.23|3
+Peyton Watson|CLE|BE|H|3.25|3.14|2.71|10|236810|2.64|2.72|4
+Devin Vassell|SA|BE|O|3.17|3.16|3.21|10|1256810|3.44|4.38|2
 #0|Free agents|
-Danny Wolf|BKN|FA|H|2.78|2.23|3.07|6|346810|3.49|3.78|4
-Aaron Wiggins|ATL|FA|H|2.18|2.12|3.15|12|1256810|3.04|3.74|4
-Kevin Huerter|DET|FA|H|2.55|2.41|2.33|10|1256810|2.74|3.65|3
-Rui Hachimura|LAC|FA|H|2.67|2.22|2.97|8|236810|3.46|3.63|3
-Jalen Smith|CHI|FA|H|2.47|2.89|3.48|10|346810|3.59|3.28|3
-Brayden Burries|MIL|FA|H|2.59||2.44|12|158|2.89|3.18|5
-Cameron Johnson|DEN|FA|H|3.1|2.82|2.64|7|236810|2.91|3.14|4
-Neemias Queta|BOS|FA|H|2.56|3.26|2.51|12|410|2.56|2.98|5
-Sandro Mamukelashvili|LAL|FA|H||2.73|2.58|13|346810|2.82|2.95|5
-Pelle Larsson|MIA|FA|H||2.51|2.78|11|1256810|2.89|2.8|4
-Derrick Jones Jr.|LAC|FA|H|2.28|2.41|2.87|9|236810|2.79|2.78|3
-Sion James|CHA|FA|H||1.62|1.69|11|26810|2.14|2.78|3
-Meleek Thomas|CLE|FA|H|||2.72|9|158|2.71|2.75|5
+Kevin Huerter|DET|FA|H|2.55|2.41|2.33|10|1256810|2.94|4.63|2
+Jalen Smith|CHI|FA|H|2.47|2.89|3.48|10|346810|3.59|4.42|2
+Danny Wolf|BKN|FA|H|2.78|2.23|3.07|6|346810|3.49|4.07|3
+Aaron Wiggins|ATL|FA|H|2.18|2.12|3.15|12|1256810|3.04|3.78|3
+Brayden Burries|MIL|FA|H|2.59||2.44|12|158|2.89|3.49|4
+Sandro Mamukelashvili|LAL|FA|H||2.73|2.58|13|346810|2.72|3.37|4
+Cameron Johnson|DEN|FA|H|3.1|2.82|2.64|7|236810|2.91|3.22|3
+Alijah Martin|TOR|FA|H||0.58|1.34|10|158|1.89|3.2|3
+Meleek Thomas|CLE|FA|H|||2.72|9|158|2.71|3.16|4
+Baba Miller|LAC|FA|H|||1.27|9|36810|1.58|3.15|2
+Rui Hachimura|LAC|FA|H|2.67|2.22|2.97|8|236810|3.46|3.1|2
+Trey Lyles|MIN|FA|H|1.87||1.67|11|36810|1.93|3.05|2
+Pelle Larsson|MIA|FA|H||2.51|2.78|11|1256810|2.89|3.03|3
+Sion James|CHA|FA|H||1.62|1.69|11|26810|2.14|2.92|2
+Neemias Queta|BOS|FA|H|2.56|3.26|2.51|12|410|2.82|2.9|4
+Collin Murray-Boyles|TOR|FA|H|2.42|2.39|2.16|10|36810|2.19|2.9|2
+Julian Champagnie|SA|FA|H|2.8|3|2.71|12|236810|2.21|2.8|4
+Gradey Dick|LAC|FA|H|2.41|1.25|1.52|10|1256810|1.53|2.78|2
+Ziaire Williams|LAL|FA|H|2.41|2.24|2.69|10|1256810|2.64|2.76|4
+Luguentz Dort|ATL|FA|H|2.53|1.99|2.16|12|1256810|2.35|2.72|3
 Nic Claxton|CHI|FA|H|2.97|3.49|2.7|2|410|2.7|2.7|2
-Ziaire Williams|LAL|FA|H|2.41|2.24|2.69|10|1256810|2.69|2.7|5
-Alijah Martin|TOR|FA|H||0.58|1.34|10|158|1.89|2.6|4
-Luguentz Dort|ATL|FA|H|2.53|1.99|2.16|12|1256810|2.35|2.59|4
-Collin Murray-Boyles|TOR|FA|H|2.42|2.39|2.16|10|36810|2.19|2.58|3
-Jerami Grant|MEM|FA|H|3.47|3.42|2.27|11|36810|2.18|2.57|4
-Robert Williams III|POR|FA|H|2.43|2.43|2.5|9|410|2.66|2.52|4
+Jerami Grant|MEM|FA|H|3.47|3.42|2.27|11|36810|2.18|2.68|3
+Tidjane Salaun|CHA|FA|H||1.47|1.59|10|36810|1.55|2.68|2
+Ja'Kobe Walter|TOR|FA|H|2.12|1.88|2.83|11|158|2.49|2.67|3
+Jaylen Wells|MEM|FA|H|2.41|2.47|2.38|11|1256810|1.88|2.65|3
+De'Andre Hunter|SAC|FA|H|3.02|2.49|2.24|10|236810|2.33|2.65|2
+Ryan Kalkbrenner|CHA|FA|H|2.07|2.14|1.81|11|410|1.81|2.65|2
+Sam Hauser|BOS|FA|H|2.45|2.3|1.96|12|236810|1.91|2.55|4
+Toumani Camara|POR|FA|H|2.73|3.16|2.62|11|236810|2.36|2.51|4
 Charles Bassey|GS|FA|H|1.36|1.82|1.96|10|410|2.15|2.51|4
-Walter Clayton Jr.|DAL|FA|H|2.82|2.03|2.01|10|0158|2.16|2.46|4
 Keegan Murray|SAC|FA|H|3.29|3.43|1.89|4|236810|2.45|2.45|2
-Cam Spencer|MEM|FA|H||3.27|2.93|11|0158|3.35|2.45|4
-Trey Lyles|MIN|FA|H|1.87||1.67|11|36810|1.93|2.45|3
-Sidy Cissoko|POR|FA|H|1.22|1.22|1.94|11|158|1.85|2.44|5
-Baba Miller|LAC|FA|H|||1.27|9|36810|1.58|2.43|3
+Ryan Dunn|PHX|FA|H|2.07|1.77|1.86|10|236810|2.11|2.45|4
+Royce O'Neale|CHA|FA|H|2.53|2.81|1.44|11|236810|1.75|2.43|2
+Leaky Black|SAC|FA|H||2.09|1.95|7|26810|2.53|2.43|3
 De'Anthony Melton|GS|FA|H|2.88|2.76|2.8|12|0158|2.98|2.42|4
-Sam Hauser|BOS|FA|H|2.45|2.3|1.96|12|236810|1.92|2.41|5
-De'Andre Hunter|SAC|FA|H|3.02|2.49|2.24|10|236810|2.73|2.4|3
-Julian Champagnie|SA|FA|H|2.8|3|2.71|12|236810|2.56|2.39|5
-Ryan Kalkbrenner|CHA|FA|H|2.07|2.14|1.81|11|410|1.81|2.37|3
-Khaman Maluach|PHX|FA|H|2.16|0.87|2.07|10|410|2.06|2.35|5
-Max Strus|LAC|FA|H|2.64|2.43|2.56|4|26810|2.56|2.35|3
-Bones Hyland|MIN|FA|H|2.04|1.96|1.98|11|058|2.61|2.32|3
-Ryan Dunn|PHX|FA|H|2.07|1.77|1.86|10|236810|2.11|2.31|5
-Baylor Scheierman|BOS|FA|H|2.24|1.68|1.75|12|158|2.09|2.31|5
-Miles McBride|NY|FA|H|2.42|2.78|1.92|11|0158|1.9|2.29|4
-Ja'Kobe Walter|TOR|FA|H|2.12|1.88|2.83|11|158|2.49|2.24|4
-Toumani Camara|POR|FA|H|2.73|3.16|2.62|11|236810|2.37|2.23|5`;
+Collin Gillespie|PHX|FA|H|3.42|3.6|2.71|10|058|2.92|2.4|4
+Derrick Jones Jr.|LAC|FA|H|2.28|2.41|2.87|9|236810|2.79|2.4|2
+Khaman Maluach|PHX|FA|H|2.16|0.87|2.04|10|410|2.02|2.38|4
+Walter Clayton Jr.|DAL|FA|H|2.82|2.03|2.01|10|0158|2.16|2.37|3
+Dillon Brooks|PHX|FA|H|3.38|3.21|2.66|10|1256810|2.54|2.36|4`;
 const LEADERS = `AVG|Nikola Jokic|DEN|2|10|9.57|95.65|
 AVG|Luka Doncic|LAL|5|11|8.64|95.05|
 AVG|Victor Wembanyama|SA|4|12|8.37|100.4|
 AVG|Giannis Antetokounmpo|MIA|1|11|8.12|89.35|
-AVG|Alperen Sengun|HOU|3|10|7.08|70.75|
+AVG|Alperen Sengun|HOU|3|10|7.07|70.65|
 AVG|Cooper Flagg|DAL|5|10|6.82|68.2|
 AVG|Karl-Anthony Towns|NY|3|11|6.71|73.8|
 AVG|Tyrese Haliburton|IND|4|4|6.59|26.35|
@@ -244,7 +244,7 @@ TOT|Nikola Jokic|DEN|2|10|9.57|95.65|
 TOT|Luka Doncic|LAL|5|11|8.64|95.05|
 TOT|Giannis Antetokounmpo|MIA|1|11|8.12|89.35|
 TOT|Karl-Anthony Towns|NY|3|11|6.71|73.8|
-TOT|Alperen Sengun|HOU|3|10|7.08|70.75|
+TOT|Alperen Sengun|HOU|3|10|7.07|70.65|
 TOT|Cooper Flagg|DAL|5|10|6.82|68.2|
 TOT|Shai Gilgeous-Alexander|OKC|6|12|5.45|65.35|
 TOT|Tyrese Maxey|PHI|2|12|5.35|64.15|
@@ -295,13 +295,13 @@ DD|Victor Wembanyama|SA|4|12|8.37|100.4|8
 DD|Nikola Jokic|DEN|2|10|9.57|95.65|8
 DD|Walker Kessler|LAL|4|13|4.91|63.8|7
 DD|Domantas Sabonis|SAC|6|10|5.86|58.55|7
-DD|Alperen Sengun|HOU|3|10|7.08|70.75|6
+DD|Alperen Sengun|HOU|3|10|7.07|70.65|6
 DD|Anthony Davis|WAS|1|10|6.16|61.6|6
 DD|Davion Mitchell|MIA|1|11|5.14|56.55|6
 DD|Cooper Flagg|DAL|5|10|6.82|68.2|5
 TD|Nikola Jokic|DEN|2|10|9.57|95.65|3
 TD|Giannis Antetokounmpo|MIA|1|11|8.12|89.35|2
-TD|Alperen Sengun|HOU|3|10|7.08|70.75|1
+TD|Alperen Sengun|HOU|3|10|7.07|70.65|1
 TD|Domantas Sabonis|SAC|6|10|5.86|58.55|1
 TD|Cameron Boozer|MEM|6|11|5.28|58.05|1
 TD|Joel Embiid|PHI|1|10|5.5|55.05|1
@@ -314,7 +314,7 @@ AST|Luka Doncic|LAL|5|11|8.64|95.05|84
 AST|Josh Giddey|CHI|4|10|3.52|35.15|83
 AST|Jayson Tatum|BOS|4|11|5.82|64.05|82
 AST|Darius Acuff Jr.|SAC|5|11|5.38|59.15|80
-AST|Alperen Sengun|HOU|3|10|7.08|70.75|79
+AST|Alperen Sengun|HOU|3|10|7.07|70.65|79
 AST|Andrew Nembhard|IND|2|10|4.45|44.5|78
 REB|Karl-Anthony Towns|NY|3|11|6.71|73.8|149
 REB|Walker Kessler|LAL|4|13|4.91|63.8|141
@@ -348,7 +348,7 @@ BLK|Day'Ron Sharpe|BKN|4|11|3.69|40.55|16
 BLK|Neemias Queta|BOS|0|12|2.51|30.15|16
 STL|Dyson Daniels|ATL|3|12|4.19|50.3|36
 STL|Matisse Thybulle|LAL|0|13|2.28|29.65|28
-STL|Bam Adebayo|MIA|4|11|4.79|52.65|25
+STL|Bam Adebayo|MIA|4|11|4.75|52.25|24
 STL|Kris Dunn|LAC|5|10|3.01|30.1|23
 STL|Luka Doncic|LAL|5|11|8.64|95.05|22
 STL|Cooper Flagg|DAL|5|10|6.82|68.2|22
@@ -361,7 +361,7 @@ MVP|Victor Wembanyama|SA|4|12|8.37|100.4|94.99
 MVP|Luka Doncic|LAL|5|11|8.64|95.05|92.94
 MVP|Giannis Antetokounmpo|MIA|1|11|8.12|89.35|87.36
 MVP|Karl-Anthony Towns|NY|3|11|6.71|73.8|72.16
-MVP|Alperen Sengun|HOU|3|10|7.08|70.75|71.87
+MVP|Alperen Sengun|HOU|3|10|7.07|70.65|71.77
 MVP|Cooper Flagg|DAL|5|10|6.82|68.2|69.28
 MVP|Jayson Tatum|BOS|4|11|5.82|64.05|62.63
 MVP|Anthony Davis|WAS|1|10|6.16|61.6|62.57
@@ -371,7 +371,7 @@ ROY|Cameron Boozer|MEM|6|11|5.28|58.05|98.14
 ROY|Yaxel Lendeborg|GS|3|12|4.87|58.45|95.52
 ROY|Caleb Wilson|CHI|6|10|4.09|40.9|71.91
 ROY|Darryn Peterson|UTA|4|12|3.61|43.35|70.85
-ROY|Keaton Wagler|LAC|6|10|2.81|28.15|49.49
+ROY|Keaton Wagler|LAC|6|10|2.85|28.55|50.2
 ROY|Brayden Burries|MIL|0|12|2.44|29.3|47.88
 ROY|Aday Mara|OKC|3|12|2.43|29.1|47.56
 ROY|AJ Dybantsa|WAS|4|8|2.98|23.8|46.27
@@ -388,12 +388,12 @@ PUP|Ace Bailey|UTA|5|12|3.26|39.15|79.5
 PUP|Jeremiah Fears|NO|4|12|3.23|38.75|78.69
 SUM|255|10|449`;
 const RECS = {"1":"2-0","2":"2-0","3":"0-2","4":"1-1","5":"1-1","6":"0-2"};
-const DAYPTS = {"1":[52.45,38.5,null,null,null,null,null],"2":[43.55,24.5,null,null,null,null,null],"3":[54.35,34.35,null,null,null,null,null],"4":[37.6,38.55,null,null,null,null,null],"5":[55.5,26.85,null,null,null,null,null],"6":[26.3,17.15,null,null,null,null,null]};
+const DAYPTS = {"1":[52.45,38.5,48.95,null,null,null,null],"2":[43.55,24.5,51.45,null,null,null,null],"3":[54.05,34.35,71.6,null,null,null,null],"4":[37.6,38.35,57.9,null,null,null,null],"5":[55.5,26.85,46.35,null,null,null,null],"6":[26.3,17.55,49.4,null,null,null,null]};
 const PREVWK = [[6,5,249.6,259.7],[1,4,294.1,291],[3,2,258.7,271.45]];
 const RESLIVE = {"1":[[5,1,256.9,301.05],[6,2,256.5,283.75],[3,4,226.8,256.8]],"2":[[6,5,249.6,259.7],[1,4,294.1,291],[3,2,258.7,271.45]]};
-const INJ = {"Ja Morant":"2026-12-01","Joel Embiid":"2026-11-12","Jalen Williams":"2027-03-02","Yves Missi":"2026-11-16","Jalen Duren":"2026-11-24","Paul George":"2026-11-15","Jimmy Butler III":"2027-01-02","Luka Doncic":"2026-11-15","Moussa Diabate":"2026-11-12","Norman Powell":"2026-11-13","Anthony Edwards":"2026-12-21","Jalen Suggs":"2026-11-16","Chet Holmgren":"2027-01-02","Nolan Traore":"2026-11-14","Devin Vassell":"2026-11-13","Scottie Barnes":"2026-11-12","LeBron James":"2026-11-12","Ryan Rollins":"2026-11-13","Kawhi Leonard":"2026-11-23","Caleb Wilson":"2026-11-13","Lauri Markkanen":"2027-01-04","Trey Murphy III":"2026-11-13","Austin Reaves":"2026-11-15","Paolo Banchero":"2026-11-22","Kon Knueppel":"2026-12-12","Tyrese Haliburton":"2026-11-22","Brandon Ingram":"2026-11-13","Precious Achiuwa":"2026-11-13","Mikel Brown Jr.":"2026-11-14","Stephen Curry":"2026-11-13","Ajay Mitchell":"2026-11-13","Jaren Jackson Jr.":"2026-12-14","Brandon Miller":"2026-11-15"};
+const INJ = {"Ja Morant":"2026-12-01","Joel Embiid":"2026-11-12","Jalen Williams":"2027-03-02","Yves Missi":"2026-11-16","Jalen Duren":"2026-11-24","Paul George":"2026-11-15","Jimmy Butler III":"2027-01-02","Luka Doncic":"2026-11-15","Moussa Diabate":"2026-11-12","Norman Powell":"2026-11-13","Anthony Edwards":"2026-12-21","Jalen Suggs":"2026-11-16","Chet Holmgren":"2027-01-02","Nolan Traore":"2026-11-14","Devin Vassell":"2026-11-13","Scottie Barnes":"2026-11-12","LeBron James":"2026-11-12","Ryan Rollins":"2026-11-13","Kawhi Leonard":"2026-11-23","Caleb Wilson":"2026-11-13","Lauri Markkanen":"2027-01-04","Trey Murphy III":"2026-11-13","Austin Reaves":"2026-11-15","Paolo Banchero":"2026-11-22","Kon Knueppel":"2026-12-12","Tyrese Haliburton":"2026-11-22","Brandon Ingram":"2026-11-13","Precious Achiuwa":"2026-11-13","Mikel Brown Jr.":"2026-11-14","Stephen Curry":"2026-11-13","Morez Johnson Jr.":"2026-11-12","Ajay Mitchell":"2026-11-13","Jaren Jackson Jr.":"2026-12-14","Brandon Miller":"2026-11-15"};
 // Fantasy points per scoring period by player (sp 7 = Mon Oct 26 2026), rostered players, last ~10 days
-const GLOG = {"Miles Bridges":[[14,5.9],[16,4.95],[17,7.95],[19,6.3],[21,1.6],[22,1.8]],"Nikola Vucevic":[[14,2.1],[17,-0.05]],"Jalen Green":[[14,3.6],[16,3.6],[17,1.25],[19,2.55],[21,1.45],[22,2.15]],"Franz Wagner":[[14,3.85],[17,7.05],[19,8.3],[22,6.7],[23,5.65]],"Desmond Bane":[[14,3.2],[17,2],[22,3.05],[23,4.9]],"Stephen Curry":[[14,7.2],[17,6.1],[19,7.25],[21,5.15],[23,0.35]],"Giannis Antetokounmpo":[[14,7.35],[16,9.4],[17,5.9],[20,6.85],[22,6.95]],"Davion Mitchell":[[14,4],[16,6.65],[17,3.95],[20,6.1],[22,5.3]],"Dillon Brooks":[[14,3.2],[16,1.65],[17,4.7],[19,1.9],[21,1.25],[22,1.6]],"Wendell Carter Jr.":[[14,1.9],[17,7.6],[19,5.8],[22,3.2],[23,1.75]],"Brandin Podziemski":[[14,3.25],[17,2.7],[19,4.45],[21,5.4],[23,5.15]],"Tristan da Silva":[[17,2.6]],"Devin Booker":[[14,4.2],[16,4.4],[17,6.6],[19,3.75],[21,6.3],[22,2.6]],"Bam Adebayo":[[14,4.75],[16,8.2],[17,5.7],[20,4.9],[22,5]],"Draymond Green":[[14,1.2],[17,2.9],[19,3.55],[21,1.7],[23,3.1]],"Yaxel Lendeborg":[[14,4.3],[17,4.9],[19,3.7],[21,4.8],[23,6.45]],"Anthony Black":[[17,2.9],[19,6.3],[22,5.95],[23,4.95]],"Collin Gillespie":[[14,1.45],[16,1.1],[17,2.25],[19,2]],"Austin Reaves":[[14,3.95],[16,4.05],[18,4.75],[20,7.4],[23,4.9]],"Dejounte Murray":[[16,5.5],[18,1.95],[20,1.55],[21,1.35],[23,1.5]],"LeBron James":[[14,3.7],[16,6.45],[18,1.9],[20,3.95],[22,2.85]],"Domantas Sabonis":[[14,2.1],[16,6.3],[18,4.95],[22,0.85]],"Shai Gilgeous-Alexander":[[14,8.9],[16,7.9],[18,4.8],[19,6],[22,4.7],[23,4.65]],"Zion Williamson":[[14,6.9],[16,4.4],[18,3.6],[20,3.2],[23,4.5]],"Brandon Miller":[[14,2.8],[16,1.05],[18,1.45]],"Cameron Boozer":[[14,4.25],[16,2.45],[18,2.4],[21,3.75],[23,5.85]],"Ty Jerome":[[14,7.55],[16,3],[18,3.55],[21,4.5],[23,3.6]],"Kel'el Ware":[[14,1.45],[16,0.9],[18,0.6],[20,0.4],[22,1.6],[23,2.9]],"Santi Aldama":[[18,2.1],[20,1.6],[21,1.4]],"Kyshawn George":[[14,4.7],[16,3.9],[18,7.7],[19,4.3],[21,1.6],[23,4.35]],"Alex Caruso":[[16,2.15],[18,2.15],[19,1.1],[22,0.8],[23,4.45]],"Zaccharie Risacher":[[14,0.55],[16,0.5],[18,1.45],[20,2.1],[21,0.15]],"Peyton Watson":[[18,2.55],[19,3.5],[21,1.5],[23,3.35]],"Devin Vassell":[[18,4.85],[19,3.9]],"Luka Doncic":[[14,11.45],[16,8.25],[18,8.2],[21,10.4],[23,5.75]],"Kyrie Irving":[[16,6.15],[18,2.7],[20,3.45],[21,6.25]],"Tyler Herro":[[14,5.15],[16,4.8],[18,7],[20,1.9],[23,4.65]],"Cooper Flagg":[[14,3.6],[16,6.05],[18,8.35],[20,8.4],[21,10.35]],"CJ McCollum":[[14,7.15],[16,4.35],[18,1.05],[19,2.85],[21,3.2]],"VJ Edgecombe":[[14,4.1],[16,1.9],[18,4.8],[20,4.45],[22,2.3]],"Isaiah Hartenstein":[[14,3.8],[16,3],[18,2],[19,3.8],[22,2.8],[23,5.7]],"Onyeka Okongwu":[[14,5.25],[16,7.05],[18,7.65],[19,4],[21,3.75]],"Zach Edey":[[14,2.3],[16,4.9],[18,2.9],[21,1.9],[23,0.6]],"Cedric Coward":[[14,2.55],[16,6.4],[18,2.25],[21,2.75],[23,5.85]],"Darius Acuff Jr.":[[14,3.8],[16,7.4],[18,4.7],[20,8.3],[22,5.65]],"Ace Bailey":[[14,2],[16,1.4],[18,1.2],[20,2.55],[22,3.4],[23,5.3]],"Joel Embiid":[[14,2.7],[16,7.15],[18,2],[20,7.1],[22,3.2]],"James Harden":[[14,3.6],[16,5.65],[18,3.4],[19,2.35],[21,2.45],[23,6.6]],"Damian Lillard":[[14,4.7],[16,4.2],[18,4.3],[19,2.55],[22,5],[23,3.3]],"Rudy Gobert":[[14,4.45],[16,3.9],[18,1.9],[20,4.3]],"Derik Queen":[[14,5.05],[16,4.4],[18,0.3],[20,2.4],[21,2.85],[23,1.9]],"RJ Barrett":[[14,4.3],[16,4],[18,3.9],[21,2.75],[23,4.2]],"Zach LaVine":[[14,3.8],[16,3.3],[18,3.15],[20,2.1],[22,5.55]],"Toumani Camara":[[14,1.2],[16,1.1],[18,2.9],[19,0.25]],"Jonathan Kuminga":[[14,3.3],[16,4.75],[18,3.15],[20,-0.7]],"Jaime Jaquez Jr.":[[14,3.4],[16,3.4],[18,3.25],[20,1.5],[22,2.85],[23,5.55]],"Ayo Dosunmu":[[14,7.25],[16,3.75],[18,4.9],[20,4.45]],"Saddiq Bey":[[16,4],[18,4.25],[20,3.15],[21,1.8],[23,2.65]],"Myles Turner":[[18,0.8],[20,2.05]],"Victor Wembanyama":[[14,5.35],[16,15.15],[18,8.5],[19,5.75],[21,11.35],[23,6.9]],"LaMelo Ball":[[14,5.65],[16,4.45],[18,4.25],[20,4.2]],"Jayson Tatum":[[14,4.1],[18,8.45],[20,5.9],[22,4.5],[23,5.75]],"AJ Dybantsa":[[14,4.55],[16,1.85],[18,4.7],[19,2.8],[21,2.95],[23,1.5]],"Alex Sarr":[[16,3.6],[18,3.75],[19,5.4],[21,1.6],[23,0.9]],"Darryn Peterson":[[14,5],[16,1.85],[18,5.5],[20,4.5],[22,3.55],[23,4.85]],"Walker Kessler":[[14,6],[16,4.6],[18,5.4],[20,6.6],[21,6.3],[23,5.2]],"Dylan Harper":[[14,4.95],[16,2.45],[18,3.25],[19,2.6],[21,2.9],[23,8.9]],"Paul George":[[16,5.3],[18,2.25],[20,4.85],[22,5.75]],"Ryan Rollins":[[14,1.5],[16,3.45],[18,1.6],[20,2.55],[22,3.6],[23,2.5]],"Scoot Henderson":[[14,2],[16,1.5],[18,-1.15],[19,2.15],[22,2.5],[23,0.7]],"Ajay Mitchell":[[14,3.45],[16,4.3],[18,5.15],[19,1.7],[22,1.95]],"Precious Achiuwa":[[14,3.5],[16,1.95],[18,2.35],[20,1.6],[22,2.25]],"Jeremiah Fears":[[14,1.8],[16,3.85],[18,4.95],[20,4.9],[21,2],[23,2.25]],"Stephon Castle":[[14,3.55],[16,5.35],[18,3.8],[19,3.75],[21,2.55],[23,2]],"Deni Avdija":[[14,3.95],[16,6.9],[18,6.75],[19,2.25],[22,5.3],[23,6.45]],"Jaylen Brown":[[14,8.55],[16,5.7],[18,3.65],[20,5.3],[22,2.65]],"De'Aaron Fox":[[14,2],[16,2.5],[18,2.1],[19,3.45],[21,4.1],[23,5.25]],"Lauri Markkanen":[[14,5.35],[16,7.45],[18,4.85]],"Dyson Daniels":[[14,3.75],[16,3.8],[18,7.35],[19,5.9],[21,5]],"Derrick White":[[14,1.4],[16,5.4],[18,4.5],[20,3.7],[22,0.75],[23,5.5]],"Coby White":[[14,0.4],[16,0.85],[18,0.85],[21,2.2]],"Naz Reid":[[14,2.4],[16,4.65],[18,2.95],[21,7.55]],"Jrue Holiday":[[14,7.55],[16,2.8],[18,3.15],[19,1.4],[22,1.7],[23,4.65]],"P.J. Washington":[[14,3.1],[16,4.85],[18,6.1],[20,1.75],[21,3.5]],"Naji Marshall":[[18,2.05],[20,1.1],[21,1.6]],"Tyrese Maxey":[[14,8],[16,4.2],[18,3.75],[20,5.3],[22,4.05]],"Trae Young":[[14,3.9],[16,3.9],[18,6.25],[19,1.65],[21,4.05],[23,3.65]],"Evan Mobley":[[14,4.15],[16,5.5],[18,5.45],[19,2.6],[21,2.6],[23,2.4]],"Trey Murphy III":[[14,4.6],[18,3.3],[20,4.85]],"Donovan Mitchell":[[14,6.25],[16,5.15],[18,5.55],[19,5.8],[21,2.8],[23,5.15]],"Donovan Clingan":[[14,7.6],[16,6.95],[18,6],[19,0.8],[22,3.35],[23,3.45]],"Keyonte George":[[14,1],[16,7.65],[18,3.35],[20,4.85],[23,3.3]],"Nickeil Alexander-Walker":[[14,7.8],[16,4.2],[18,5.5],[19,2.65],[21,5.4]],"Payton Pritchard":[[14,1.45],[16,2.2],[18,4],[20,3.65],[22,4.6],[23,1.05]],"Jaden McDaniels":[[14,2.5],[16,2.8],[18,5.25],[20,3.35]],"Daniel Gafford":[[16,1.2],[18,1.4],[20,3.5],[21,1.9]],"Cam Spencer":[[18,1.55]],"Jamal Murray":[[14,7.55],[16,3.85],[19,3.9],[21,7.05],[23,6.35]],"Cade Cunningham":[[14,7.75],[16,8.2],[20,3.05],[21,3.4]],"Caleb Wilson":[[14,6.05],[16,0.9],[20,3],[23,3]],"Darius Garland":[[14,2.2],[16,3.9],[20,7.6],[22,2.25]],"Immanuel Quickley":[[14,4.35],[16,3.6],[23,2.45]],"Keaton Wagler":[[14,1.75],[16,2.55],[20,3.25],[22,2.3]],"Mikel Brown Jr.":[[14,1.75],[16,3.5],[19,3.05]],"Amen Thompson":[[14,2.3],[16,1.9],[19,4.7],[21,2.9],[23,4.05]],"Scottie Barnes":[[14,7.75],[16,3.75]],"Matas Buzelis":[[14,0.05],[16,2.45],[20,4.2],[23,1.4]],"Aaron Gordon":[[14,1.65],[16,2.55],[19,1.3],[21,0.2],[23,2.5]],"Kris Dunn":[[14,2.45],[16,2.45],[20,4.05],[22,0.8]],"Duncan Robinson":[[14,6.05],[16,5.5],[20,1.6],[21,4.3]],"John Collins":[[14,0.85],[16,1.45],[20,2.35],[21,8.05]],"Julius Randle":[[14,6.1],[16,4],[19,3.65],[20,2.05],[23,2.75]],"Kon Knueppel":[[16,0.15]],"Kevin Durant":[[14,2.3],[16,3.55],[19,6.6],[21,7],[23,3.15]],"Anthony Davis":[[14,4.8],[16,7.45],[21,9.2],[23,7.05]],"Jabari Smith Jr.":[[14,5.75],[16,3.35],[19,4.25],[21,3],[23,3.45]],"Josh Giddey":[[14,6.15],[16,1.75],[20,7.55],[23,1]],"Jarrett Allen":[[14,3.2],[16,0.1],[21,2.5],[23,6.3]],"OG Anunoby":[[14,4],[16,4.25],[19,3.6],[22,4.05],[23,3.9]],"Day'Ron Sharpe":[[14,1.3],[16,3.15],[19,12.5],[20,3.75],[23,4.85]],"Trevon Brazile":[[14,1.5],[16,1.8],[19,1.25]],"Pascal Siakam":[[16,4.15],[19,3.55],[21,7.65],[23,6.35]],"Jalen Brunson":[[14,4.05],[16,6.15],[19,6.5],[22,3.8],[23,4.65]],"Karl-Anthony Towns":[[14,4.95],[16,6.3],[19,8.9],[22,7.65],[23,7.35]],"Alperen Sengun":[[14,8.65],[16,13.25],[19,3.55],[21,7.3],[23,7.55]],"Ivica Zubac":[[16,0.6],[19,5],[21,2],[23,6.2]],"Fred VanVleet":[[14,3],[16,3.05],[19,3.15],[21,2.15],[23,5.45]],"Ausar Thompson":[[14,2.8],[16,5.8],[20,2.4],[21,2]],"Reed Sheppard":[[14,1.4],[16,3.75],[19,1.2],[21,1.05]],"Brook Lopez":[[14,2.4],[16,3.45],[20,3.15],[22,1.55]],"Kyle Kuzma":[[14,1.2],[16,2],[22,2.1],[23,1.55]],"Ja'Kobe Walter":[[14,2.75],[16,0.95]],"Paul Reed":[[14,3.4],[16,1.85],[20,1.6],[21,3.1]],"Nikola Jokic":[[14,7.15],[16,15.65],[19,8.4],[21,8.4],[23,8.4]],"Michael Porter Jr.":[[14,4.05],[16,6.05],[19,4],[20,3.85],[23,5]],"Norman Powell":[[14,3.15],[16,1.15]],"Andrew Nembhard":[[16,3.85],[19,2.85],[21,5.55],[23,6.4]],"Moussa Diabate":[[14,4.1],[16,1.3]],"Jalen Smith":[[14,2.75],[16,1]],"Jaylen Wells":[[14,3.35],[16,0.25]],"Obi Toppin":[[16,1.85]],"Christian Braun":[[14,3.25],[16,2.6],[19,1.2],[21,2],[23,3.6]],"Aaron Wiggins":[[14,1.15]],"Julian Champagnie":[[14,1.45]],"Josh Hart":[[14,3.35],[23,0.95]],"Jaxson Hayes":[[14,2.4]],"Mikal Bridges":[[22,2.8],[23,0.3]],"Jared McCain":[[22,4.05],[23,2.2]],"Aday Mara":[[22,4.8],[23,2.6]],"Klay Thompson":[[20,5.7],[22,2.6]],"Brayden Burries":[[20,3.45],[22,1.15],[23,2.45]],"Bennett Stirtz":[[22,1.95],[23,2.65]],"Leaky Black":[[22,0.85]],"Rui Hachimura":[[20,2.7],[22,3.5]],"Jamal Cain":[[22,1.35]],"Nolan Traore":[[20,1.8]],"Morez Johnson Jr.":[[20,1.45]],"Malik Monk":[[20,1.55]],"Egor Demin":[[23,4.4]],"Quenton Jackson":[[19,0.65],[21,3.15],[23,1.35]],"Jamal Shead":[[21,7.5],[23,1.4]],"Jakob Poeltl":[[21,4.1],[23,1.1]],"Jalen Johnson":[[19,4.95],[21,3.15]],"Walter Clayton Jr.":[[21,2.35]]};
+const GLOG = {"Austin Reaves":[[16,4.05],[18,4.75],[20,7.4],[23,4.9]],"Dejounte Murray":[[16,5.5],[18,1.95],[20,1.55],[21,1.35],[23,1.5]],"LeBron James":[[16,6.45],[18,1.9],[20,3.95],[22,2.85]],"Domantas Sabonis":[[16,6.3],[18,4.95],[22,0.85]],"Shai Gilgeous-Alexander":[[16,7.9],[18,4.8],[19,6],[22,4.7],[23,4.65]],"Zion Williamson":[[16,4.4],[18,3.6],[20,3.2],[23,4.5]],"Brandon Miller":[[16,1.05],[18,1.45]],"Cameron Boozer":[[16,2.45],[18,2.4],[21,3.75],[23,5.85]],"Ty Jerome":[[16,3],[18,3.55],[21,4.5],[23,3.6]],"Kel'el Ware":[[16,0.9],[18,0.6],[20,0.4],[22,1.6],[23,2.9]],"Santi Aldama":[[18,2.1],[20,1.6],[21,1.4]],"Kyshawn George":[[16,3.9],[18,7.7],[19,4.3],[21,1.6],[23,4.35]],"Alex Caruso":[[16,2.15],[18,2.15],[19,1.1],[22,0.8],[23,4.45]],"Zaccharie Risacher":[[16,0.5],[18,1.45],[20,2.1],[21,0.15]],"Peyton Watson":[[18,2.55],[19,3.5],[21,1.5],[23,3.35]],"Devin Vassell":[[18,4.85],[19,3.9]],"Luka Doncic":[[16,8.25],[18,8.2],[21,10.4],[23,5.75]],"Kyrie Irving":[[16,6.15],[18,2.7],[20,3.45],[21,6.25]],"Tyler Herro":[[16,4.8],[18,7],[20,1.9],[23,4.65]],"Cooper Flagg":[[16,6.05],[18,8.35],[20,8.4],[21,10.35]],"CJ McCollum":[[16,4.35],[18,1.05],[19,2.85],[21,3.2]],"VJ Edgecombe":[[16,1.9],[18,4.8],[20,4.45],[22,2.3]],"Isaiah Hartenstein":[[16,3],[18,2],[19,3.8],[22,2.8],[23,5.7]],"Onyeka Okongwu":[[16,7.05],[18,7.65],[19,4],[21,3.75]],"Zach Edey":[[16,4.9],[18,2.9],[21,1.9],[23,0.6]],"Cedric Coward":[[16,6.4],[18,2.25],[21,2.75],[23,5.85]],"Darius Acuff Jr.":[[16,7.4],[18,4.7],[20,8.3],[22,5.65]],"Ace Bailey":[[16,1.4],[18,1.2],[20,2.55],[22,3.4],[23,5.3]],"Joel Embiid":[[16,7.15],[18,2],[20,7.1],[22,3.2]],"James Harden":[[16,5.65],[18,3.4],[19,2.35],[21,2.45],[23,6.6]],"Damian Lillard":[[16,4.2],[18,4.3],[19,2.55],[22,5],[23,3.3]],"Rudy Gobert":[[16,3.9],[18,1.9],[20,4.3]],"Derik Queen":[[16,4.4],[18,0.3],[20,2.4],[21,2.85],[23,1.9]],"RJ Barrett":[[16,4],[18,3.9],[21,2.75],[23,4.2]],"Zach LaVine":[[16,3.3],[18,3.15],[20,2.1],[22,5.55]],"Toumani Camara":[[16,1.1],[18,2.9],[19,0.25]],"Jonathan Kuminga":[[16,4.75],[18,3.15],[20,-0.7]],"Jaime Jaquez Jr.":[[16,3.4],[18,3.25],[20,1.5],[22,2.85],[23,5.55]],"Ayo Dosunmu":[[16,3.75],[18,4.9],[20,4.45]],"Saddiq Bey":[[16,4],[18,4.25],[20,3.15],[21,1.8],[23,2.65]],"Myles Turner":[[18,0.8],[20,2.05]],"Victor Wembanyama":[[16,15.15],[18,8.5],[19,5.75],[21,11.35],[23,6.9]],"LaMelo Ball":[[16,4.45],[18,4.25],[20,4.2]],"Jayson Tatum":[[18,8.45],[20,5.9],[22,4.5],[23,5.75]],"AJ Dybantsa":[[16,1.85],[18,4.7],[19,2.8],[21,2.95],[23,1.5]],"Alex Sarr":[[16,3.6],[18,3.75],[19,5.4],[21,1.6],[23,0.9]],"Darryn Peterson":[[16,1.85],[18,5.5],[20,4.5],[22,3.55],[23,4.85]],"Walker Kessler":[[16,4.6],[18,5.4],[20,6.6],[21,6.3],[23,5.2]],"Dylan Harper":[[16,2.45],[18,3.25],[19,2.6],[21,2.9],[23,8.9]],"Paul George":[[16,5.3],[18,2.25],[20,4.85],[22,5.75]],"Ryan Rollins":[[16,3.45],[18,1.6],[20,2.55],[22,3.6],[23,2.5]],"Scoot Henderson":[[16,1.5],[18,-1.15],[19,2.15],[22,2.5],[23,0.7]],"Ajay Mitchell":[[16,4.3],[18,5.15],[19,1.7],[22,2.15]],"Precious Achiuwa":[[16,1.95],[18,2.35],[20,1.6],[22,2.25]],"Jeremiah Fears":[[16,3.85],[18,4.95],[20,4.9],[21,2],[23,2.25]],"Stephon Castle":[[16,5.35],[18,3.8],[19,3.75],[21,2.35],[23,2]],"Deni Avdija":[[16,6.9],[18,6.75],[19,2.25],[22,5.3],[23,6.45]],"Jaylen Brown":[[16,5.7],[18,3.65],[20,5.3],[22,2.65]],"De'Aaron Fox":[[16,2.5],[18,2.1],[19,3.45],[21,4.1],[23,5.25]],"Lauri Markkanen":[[16,7.45],[18,4.85]],"Dyson Daniels":[[16,3.8],[18,7.35],[19,5.9],[21,5]],"Derrick White":[[16,5.4],[18,4.5],[20,3.7],[22,0.75],[23,5.5]],"Coby White":[[16,0.85],[18,0.85],[21,2.2]],"Naz Reid":[[16,4.65],[18,2.95],[21,7.55]],"Jrue Holiday":[[16,2.8],[18,3.15],[19,1.4],[22,1.7],[23,4.65]],"P.J. Washington":[[16,4.85],[18,6.1],[20,1.75],[21,3.5]],"Naji Marshall":[[18,2.05],[20,1.1],[21,1.6]],"Tyrese Maxey":[[16,4.2],[18,3.75],[20,5.3],[22,4.05]],"Trae Young":[[16,3.9],[18,6.25],[19,1.65],[21,4.05],[23,3.65]],"Evan Mobley":[[16,5.5],[18,5.45],[19,2.6],[21,2.6],[23,2.4]],"Trey Murphy III":[[18,3.3],[20,4.85]],"Donovan Mitchell":[[16,5.15],[18,5.55],[19,5.8],[21,2.8],[23,5.15]],"Donovan Clingan":[[16,6.95],[18,6],[19,0.8],[22,3.35],[23,3.45]],"Keyonte George":[[16,7.65],[18,3.35],[20,4.85],[23,3.3]],"Nickeil Alexander-Walker":[[16,4.2],[18,5.5],[19,2.65],[21,5.4]],"Payton Pritchard":[[16,2.2],[18,4],[20,3.65],[22,4.6],[23,1.05]],"Jaden McDaniels":[[16,2.8],[18,5.25],[20,3.35]],"Daniel Gafford":[[16,1.2],[18,1.4],[20,3.5],[21,1.9]],"Cam Spencer":[[18,1.55]],"Miles Bridges":[[16,4.95],[17,7.95],[19,6.3],[21,1.6],[22,1.8]],"Nikola Vucevic":[[17,-0.05]],"Jalen Green":[[16,3.6],[17,1.25],[19,2.55],[21,1.45],[22,2.15]],"Franz Wagner":[[17,7.05],[19,8.3],[22,6.7],[23,5.65]],"Desmond Bane":[[17,2],[22,3.05],[23,4.9]],"Stephen Curry":[[17,6.1],[19,7.25],[21,5.15],[23,0.35]],"Giannis Antetokounmpo":[[16,9.4],[17,5.9],[20,6.85],[22,6.95]],"Davion Mitchell":[[16,6.65],[17,3.95],[20,6.1],[22,5.3]],"Dillon Brooks":[[16,1.65],[17,4.7],[19,1.9],[21,1.25],[22,1.6]],"Wendell Carter Jr.":[[17,7.6],[19,5.8],[22,3.2],[23,1.75]],"Brandin Podziemski":[[17,2.7],[19,4.45],[21,5.4],[23,5.15]],"Tristan da Silva":[[17,2.6]],"Devin Booker":[[16,4.4],[17,6.6],[19,3.75],[21,6.3],[22,2.6]],"Bam Adebayo":[[16,8.2],[17,5.7],[20,4.9],[22,4.6]],"Draymond Green":[[17,2.9],[19,3.55],[21,1.7],[23,3.1]],"Yaxel Lendeborg":[[17,4.9],[19,3.7],[21,4.8],[23,6.45]],"Anthony Black":[[17,2.9],[19,6.3],[22,5.95],[23,4.95]],"Collin Gillespie":[[16,1.1],[17,2.25],[19,2]],"Jamal Murray":[[16,3.85],[19,3.9],[21,7.05],[23,6.35]],"Mikel Brown Jr.":[[16,3.5],[19,3.05]],"Amen Thompson":[[16,1.9],[19,4.7],[21,2.9],[23,4.05]],"Aaron Gordon":[[16,2.55],[19,1.3],[21,0.2],[23,2.5]],"Julius Randle":[[16,4],[19,3.65],[20,2.05],[23,2.75]],"Kevin Durant":[[16,3.55],[19,6.6],[21,7],[23,3.15]],"Jabari Smith Jr.":[[16,3.35],[19,4.25],[21,3],[23,3.45]],"Quenton Jackson":[[19,0.65],[21,3.15],[23,1.35]],"OG Anunoby":[[16,4.25],[19,3.6],[22,4.05],[23,3.9]],"Day'Ron Sharpe":[[16,3.15],[19,12.5],[20,3.75],[23,4.85]],"Trevon Brazile":[[16,1.8],[19,1.25]],"Pascal Siakam":[[16,4.15],[19,3.55],[21,7.65],[23,6.35]],"Jalen Brunson":[[16,6.15],[19,6.5],[22,3.8],[23,4.65]],"Karl-Anthony Towns":[[16,6.3],[19,8.9],[22,7.65],[23,7.35]],"Alperen Sengun":[[16,13.25],[19,3.55],[21,7.2],[23,7.55]],"Ivica Zubac":[[16,0.6],[19,5],[21,2],[23,6.2]],"Fred VanVleet":[[16,3.05],[19,3.15],[21,2.15],[23,5.45]],"Reed Sheppard":[[16,3.75],[19,1.2],[21,1.05]],"Nikola Jokic":[[16,15.65],[19,8.4],[21,8.4],[23,8.4]],"Jalen Johnson":[[19,4.95],[21,3.15]],"Michael Porter Jr.":[[16,6.05],[19,4],[20,3.85],[23,5]],"Andrew Nembhard":[[16,3.85],[19,2.85],[21,5.55],[23,6.4]],"Christian Braun":[[16,2.6],[19,1.2],[21,2],[23,3.6]],"Cade Cunningham":[[16,8.2],[20,3.05],[21,3.4]],"Caleb Wilson":[[16,0.9],[20,3],[23,3]],"Darius Garland":[[16,3.9],[20,7.6],[22,2.25]],"Immanuel Quickley":[[16,3.6],[23,2.45]],"Keaton Wagler":[[16,2.55],[20,3.25],[22,2.7]],"Scottie Barnes":[[16,3.75]],"Matas Buzelis":[[16,2.45],[20,4.2],[23,1.4]],"Kris Dunn":[[16,2.45],[20,4.05],[22,0.8]],"Duncan Robinson":[[16,5.5],[20,1.6],[21,4.3]],"John Collins":[[16,1.45],[20,2.35],[21,8.05]],"Kon Knueppel":[[16,0.15]],"Anthony Davis":[[16,7.45],[21,9.2],[23,7.05]],"Josh Giddey":[[16,1.75],[20,7.55],[23,1]],"Jarrett Allen":[[16,0.1],[21,2.5],[23,6.3]],"Ausar Thompson":[[16,5.8],[20,2.4],[21,2]],"Brook Lopez":[[16,3.45],[20,3.15],[22,1.55]],"Kyle Kuzma":[[16,2],[22,2.1],[23,1.55]],"Ja'Kobe Walter":[[16,0.95]],"Paul Reed":[[16,1.85],[20,1.6],[21,3.1]],"Norman Powell":[[16,1.15]],"Moussa Diabate":[[16,1.3]],"Jalen Smith":[[16,1]],"Jaylen Wells":[[16,0.25]],"Obi Toppin":[[16,1.85]],"Mikal Bridges":[[22,2.8],[23,0.3]],"Jared McCain":[[22,4.05],[23,2.2]],"Aday Mara":[[22,4.8],[23,2.6]],"Klay Thompson":[[20,5.7],[22,2.6]],"Brayden Burries":[[20,3.45],[22,1.15],[23,2.45]],"Bennett Stirtz":[[22,1.95],[23,2.65]],"Leaky Black":[[22,0.85]],"Rui Hachimura":[[20,2.7],[22,3.5]],"Jamal Cain":[[22,1.35]],"Egor Demin":[[23,4.4]],"Josh Hart":[[23,0.95]],"Jamal Shead":[[21,7.7],[23,1.4]],"Jakob Poeltl":[[21,3.9],[23,1.1]],"Nolan Traore":[[20,1.8]],"Morez Johnson Jr.":[[20,1.45]],"Malik Monk":[[20,1.55]],"Walter Clayton Jr.":[[21,2.35]]};
 const LSNAP = `MVP|1|Nikola Jokic
 MVP|2|Giannis Antetokounmpo
 MVP|3|Victor Wembanyama
@@ -424,7 +424,7 @@ PUP|7|Jeremiah Fears
 PUP|8|Brandin Podziemski
 PUP|9|Saddiq Bey
 PUP|10|Anthony Black`;
-const PREVSNAP = {"l":"Tue, Nov 10, 5:35 AM PT","w":"Week 3","ms":1794317722752,"c":{"1":52.45,"2":43.55,"3":54.35,"4":37.6,"5":55.5,"6":26.3},"rc":{"1":"2-0","2":"2-0","3":"0-2","4":"1-1","5":"1-1","6":"0-2"},"r":{"1":{"Joel Embiid":"|5.76|9","Julius Randle":"|4.04|10","Stephen Curry":"|6.24|9","James Harden":"|3.68|11","Kon Knueppel":"IO|0.15|1","Kevin Durant":"|4.44|11","Anthony Davis":"|6.06|9","Giannis Antetokounmpo":"D|8.24|10","Damian Lillard":"|3.97|9","Rudy Gobert":"|2.91|10","Jabari Smith Jr.":"|4.36|11","Derik Queen":"|3.18|11","RJ Barrett":"|3.91|10","Zach LaVine":"|3.65|10","Davion Mitchell":"|5.13|10","Dillon Brooks":"|2.78|9","Jimmy Butler III":"IO|0|0","Jonathan Kuminga":"|3.24|11","Jaime Jaquez Jr.":"|3.29|10","Wendell Carter Jr.":"|3.76|9","Ayo Dosunmu":"|4.15|11","Brandin Podziemski":"|4.01|9","Saddiq Bey":"|3.22|11","Rui Hachimura":"|2.89|7","Tristan da Silva":"|3.1|9"},"2":{"Tyrese Maxey":"|5.46|11","Trae Young":"|5.1|11","Evan Mobley":"|4.87|11","Trey Murphy III":"ID|3.45|9","Anthony Edwards":"IO|6.39|4","Donovan Mitchell":"|4.93|11","Nikola Jokic":"|9.69|9","Jalen Johnson":"|5.08|9","Donovan Clingan":"|3.92|9","Keyonte George":"IO|4.43|10","Michael Porter Jr.":"|4.54|10","Norman Powell":"D|3.54|8","Josh Hart":"D|3.39|7","Nickeil Alexander-Walker":"|4.36|12","Andrew Nembhard":"|4.23|9","Payton Pritchard":"|3.08|10","Moussa Diabate":"D|3.5|9","Jaden McDaniels":"|3.45|11","Anthony Black":"|4.4|6","Christian Braun":"|2.91|9","Klay Thompson":"|2.77|10","Coby White":"|1.07|4","Brayden Burries":"|2.57|10","Quenton Jackson":"|2.48|11","Bennett Stirtz":"|1.67|10","Leaky Black":"|2.13|6"},"3":{"Jalen Duren":"IO|3.3|2","Pascal Siakam":"|4.47|10","Jalen Brunson":"|5.02|9","Stephon Castle":"|3.64|11","Deni Avdija":"|5.08|9","Karl-Anthony Towns":"|6.53|9","Alperen Sengun":"|7.02|9","Jaylen Brown":"|4.88|10","De'Aaron Fox":"|3.48|11","Lauri Markkanen":"D|4.28|8","Ivica Zubac":"|2.62|6","Dyson Daniels":"|4.19|12","Derrick White":"|3.38|10","Fred VanVleet":"|3.48|9","Yves Missi":"IO|4.45|2","Naz Reid":"|4.12|11","Ausar Thompson":"|3.12|9","Yaxel Lendeborg":"|4.73|11","Jrue Holiday":"|3.44|9","Brook Lopez":"|2.84|9","P.J. Washington":"|3.52|11","Paul Reed":"|2.97|10","Nolan Traore":"|2.75|10","Kyle Kuzma":"|2.9|10","Jared McCain":"|2.32|10"},"4":{"Chet Holmgren":"IO|4.73|3","Devin Booker":"|4.6|9","Victor Wembanyama":"|8.5|11","Paolo Banchero":"IO|5.78|2","Josh Giddey":"|3.79|9","LaMelo Ball":"|3.84|11","Bam Adebayo":"|4.76|10","Jayson Tatum":"|5.98|9","Tyrese Haliburton":"IO|6.59|4","AJ Dybantsa":"|3.19|7","Alex Sarr":"|2.92|10","Darryn Peterson":"|3.5|10","Walker Kessler":"|4.88|12","Ja Morant":"O|3.3|4","Jarrett Allen":"|3.34|9","Dylan Harper":"|3.55|11","Paul George":"|4.61|9","OG Anunoby":"|3.67|9","Ryan Rollins":"|2.51|10","Scoot Henderson":"|1.13|9","Day'Ron Sharpe":"|3.57|10","Draymond Green":"|2.13|9","Ajay Mitchell":"|3.5|10","Precious Achiuwa":"|2.8|10","Jeremiah Fears":"|3.32|11","Myles Turner":"|2.51|10"},"5":{"Amen Thompson":"|3.98|11","Luka Doncic":"|8.93|10","Kyrie Irving":"|4.52|9","Tyler Herro":"D|4.76|10","Kawhi Leonard":"O|4.9|2","Scottie Barnes":"D|5.15|8","Cooper Flagg":"|6.82|10","Jalen Green":"|2.22|9","CJ McCollum":"|3.09|12","Franz Wagner":"|5.35|9","Jalen Williams":"IO|2.83|3","VJ Edgecombe":"|3.54|10","Desmond Bane":"|3.29|8","Jaren Jackson Jr.":"IO|3.14|4","Isaiah Hartenstein":"|3.38|10","Onyeka Okongwu":"|4.18|12","Matas Buzelis":"|2.47|9","Aaron Gordon":"|2.68|9","Zach Edey":"|2.37|9","Jalen Suggs":"IO|2.67|3","Cedric Coward":"|3.92|9","Darius Acuff Jr.":"|5.35|10","Kris Dunn":"|3.26|9","Duncan Robinson":"|4|10","John Collins":"|2.77|10","Ace Bailey":"|3.05|10"},"6":{"Austin Reaves":"D|4.46|11","Dejounte Murray":"|3.47|8","LeBron James":"|4.61|9","Domantas Sabonis":"D|6.41|9","Jamal Murray":"|5.69|9","Shai Gilgeous-Alexander":"|5.6|10","Zion Williamson":"D|4.3|10","Brandon Miller":"D|3.91|10","Cade Cunningham":"|5.12|10","Cameron Boozer":"|5.22|10","Caleb Wilson":"|4.21|9","Darius Garland":"|4.03|9","Ty Jerome":"|4.83|9","Immanuel Quickley":"ID|4.19|8","Miles Bridges":"|4.74|9","Kel'el Ware":"|2.63|10","Brandon Ingram":"IO|0|0","Keaton Wagler":"|2.87|9","Egor Demin":"IO|1.79|4","Mikel Brown Jr.":"D|2.58|7","Santi Aldama":"|1.7|3","Kyshawn George":"|3.58|11","Alex Caruso":"|2.61|7","Zaccharie Risacher":"|2.24|11","Peyton Watson":"|2.64|9","Devin Vassell":"D|3.21|10"}}};
-const MORNSNAP = {"l":"Wed, Nov 11, 5:42 AM PT","w":"Week 3","ms":1794404543539,"c":{"1":90.95,"2":68.05,"3":88.7,"4":76.15,"5":82.35,"6":43.45},"rc":{"1":"2-0","2":"2-0","3":"0-2","4":"1-1","5":"1-1","6":"0-2"},"r":{"1":{"Joel Embiid":"|5.5|10","Julius Randle":"|4.04|10","Stephen Curry":"|6.24|9","James Harden":"|3.68|11","Kon Knueppel":"IO|0.15|1","Kevin Durant":"|4.44|11","Anthony Davis":"|6.06|9","Giannis Antetokounmpo":"|8.12|11","Damian Lillard":"|4.07|10","Rudy Gobert":"|2.91|10","Jabari Smith Jr.":"|4.36|11","Derik Queen":"|3.18|11","RJ Barrett":"|3.91|10","Zach LaVine":"|3.82|11","Davion Mitchell":"|5.14|11","Jimmy Butler III":"IO|0|0","Jonathan Kuminga":"|3.24|11","Jaime Jaquez Jr.":"|3.25|11","Wendell Carter Jr.":"|3.7|10","Ayo Dosunmu":"|4.15|11","Brandin Podziemski":"|4.01|9","Saddiq Bey":"|3.22|11","Jamal Cain":"|1.39|10","Jamal Shead":"|3.03|10","Jakob Poeltl":"|2.56|8"},"2":{"Tyrese Maxey":"|5.35|12","Trae Young":"|5.1|11","Evan Mobley":"|4.87|11","Trey Murphy III":"ID|3.45|9","Anthony Edwards":"IO|6.39|4","Donovan Mitchell":"|4.93|11","Nikola Jokic":"|9.69|9","Jalen Johnson":"|5.08|9","Donovan Clingan":"|3.86|10","Keyonte George":"IO|4.43|10","Michael Porter Jr.":"|4.54|10","Norman Powell":"D|3.54|8","Josh Hart":"O|3.39|7","Nickeil Alexander-Walker":"|4.36|12","Andrew Nembhard":"|4.23|9","Payton Pritchard":"|3.22|11","Moussa Diabate":"D|3.5|9","Jaden McDaniels":"|3.45|11","Anthony Black":"|4.62|7","Christian Braun":"|2.91|9","Klay Thompson":"|2.76|11","Coby White":"|1.07|4","Brayden Burries":"|2.44|11","Quenton Jackson":"|2.48|11","Bennett Stirtz":"|1.7|11","Leaky Black":"|1.95|7"},"3":{"Jalen Duren":"IO|3.3|2","Pascal Siakam":"|4.47|10","Jalen Brunson":"|4.89|10","Stephon Castle":"|3.64|11","Deni Avdija":"|5.1|10","Karl-Anthony Towns":"|6.65|10","Alperen Sengun":"|7.02|9","Jaylen Brown":"|4.67|11","De'Aaron Fox":"|3.48|11","Lauri Markkanen":"IO|4.28|8","Ivica Zubac":"|2.62|6","Dyson Daniels":"|4.19|12","Derrick White":"|3.14|11","Fred VanVleet":"|3.48|9","Yves Missi":"IO|4.45|2","Naz Reid":"|4.12|11","Ausar Thompson":"|3.12|9","Yaxel Lendeborg":"|4.73|11","Jrue Holiday":"|3.27|10","Brook Lopez":"|2.71|10","P.J. Washington":"|3.52|11","Paul Reed":"|2.97|10","Nolan Traore":"D|2.75|10","Kyle Kuzma":"|2.83|11","Jared McCain":"|2.48|11","Aday Mara":"|2.41|11"},"4":{"Chet Holmgren":"IO|4.73|3","Devin Booker":"|4.4|10","Victor Wembanyama":"|8.5|11","Paolo Banchero":"IO|5.78|2","Josh Giddey":"|3.79|9","LaMelo Ball":"|3.84|11","Bam Adebayo":"|4.79|11","Jayson Tatum":"|5.83|10","Tyrese Haliburton":"IO|6.59|4","AJ Dybantsa":"|3.19|7","Alex Sarr":"|2.92|10","Darryn Peterson":"|3.5|11","Walker Kessler":"|4.88|12","Ja Morant":"O|3.3|4","Jarrett Allen":"|3.34|9","Dylan Harper":"|3.55|11","Paul George":"|4.72|10","OG Anunoby":"|3.71|10","Ryan Rollins":"|2.61|11","Scoot Henderson":"|1.27|10","Day'Ron Sharpe":"|3.57|10","Draymond Green":"|2.13|9","Ajay Mitchell":"|3.36|11","Precious Achiuwa":"O|2.75|11","Jeremiah Fears":"|3.32|11","Mikal Bridges":"|1.99|10"},"5":{"Amen Thompson":"|3.98|11","Luka Doncic":"|8.93|10","Kyrie Irving":"|4.52|9","Tyler Herro":"O|4.76|10","Kawhi Leonard":"O|4.9|2","Scottie Barnes":"O|5.15|8","Cooper Flagg":"|6.82|10","Jalen Green":"|2.21|10","CJ McCollum":"|3.09|12","Franz Wagner":"|5.48|10","Jalen Williams":"IO|2.83|3","VJ Edgecombe":"|3.43|11","Desmond Bane":"|3.26|9","Jaren Jackson Jr.":"IO|3.14|4","Isaiah Hartenstein":"|3.33|11","Onyeka Okongwu":"|4.18|12","Matas Buzelis":"|2.47|9","Aaron Gordon":"|2.68|9","Zach Edey":"|2.37|9","Jalen Suggs":"IO|2.67|3","Cedric Coward":"|3.92|9","Darius Acuff Jr.":"|5.38|11","Kris Dunn":"|3.01|10","Duncan Robinson":"|4|10","John Collins":"|2.77|10","Ace Bailey":"|3.08|11"},"6":{"Austin Reaves":"|4.46|11","Dejounte Murray":"|3.47|8","LeBron James":"|4.44|10","Domantas Sabonis":"|5.86|10","Jamal Murray":"|5.69|9","Shai Gilgeous-Alexander":"|5.52|11","Zion Williamson":"|4.3|10","Brandon Miller":"D|3.91|10","Cade Cunningham":"|5.12|10","Cameron Boozer":"|5.22|10","Caleb Wilson":"|4.21|9","Darius Garland":"|3.85|10","Ty Jerome":"|4.83|9","Immanuel Quickley":"ID|4.19|8","Miles Bridges":"|4.45|10","Kel'el Ware":"|2.54|11","Brandon Ingram":"IO|0|0","Keaton Wagler":"|2.81|10","Egor Demin":"IO|1.79|4","Mikel Brown Jr.":"|2.58|7","Santi Aldama":"|1.7|3","Kyshawn George":"|3.58|11","Alex Caruso":"|2.39|8","Zaccharie Risacher":"|2.24|11","Peyton Watson":"|2.64|9","Devin Vassell":"D|3.21|10"}}};
-const PROJLOG = {"2026-11-02":{"p":{"1":63.13,"2":68.43,"3":63.67,"4":61.08,"5":61.73,"6":68.41},"m":[[2,3],[5,6],[4,1]],"a":{"1":66.6,"2":62.75,"3":58.7,"4":56.35,"5":61.05,"6":69.5}},"2026-11-04":{"p":{"1":62.85,"2":66.78,"3":60.68,"4":58.66,"5":60.27,"6":69.03},"m":[[2,3],[5,6],[4,1]],"a":{"1":70.2,"2":71.45,"3":73.8,"4":62.1,"5":67,"6":57.35}},"2026-11-05":{"p":{"1":30.98,"2":6.86,"3":4.57,"4":10.66,"5":10.39,"6":5.74},"m":[[2,3],[5,6],[4,1]],"a":{"1":33.55,"2":5.15,"3":4.9,"4":15.2,"5":10.3,"6":7.9}},"2026-11-06":{"p":{"1":45.63,"2":47.8,"3":42.48,"4":51.86,"5":50.33,"6":52.84},"m":[[2,3],[5,6],[4,1]],"a":{"1":38.4,"2":51.55,"3":48,"4":58.95,"5":52.9,"6":46.2}},"2026-11-07":{"p":{"1":44.91,"2":54.53,"3":54.85,"4":37.8,"5":27.89,"6":30.23},"m":[[2,3],[5,6],[4,1]],"a":{"1":40.3,"2":43.2,"3":52.3,"4":44.85,"5":27.6,"6":32.05}},"2026-11-08":{"p":{"1":46.52,"2":31.39,"3":28.67,"4":41.97,"5":42.73,"6":46.76},"m":[[2,3],[5,6],[4,1]]},"2026-11-09":{"p":{"1":44.1,"2":47.05,"3":28.5,"4":20.84,"5":34.73,"6":27.78},"m":[[1,2],[5,4],[3,6]],"a":{"1":52.45,"2":43.55,"3":54.35,"4":37.6,"5":55.5,"6":26.3}},"2026-11-10":{"p":{"1":37.72,"2":27.37,"3":37.56,"4":38.72,"5":31.3,"6":29.9},"m":[[1,2],[5,4],[3,6]],"a":{"1":38.5,"2":24.5,"3":34.35,"4":38.55,"5":26.85,"6":17.15}},"2026-11-11":{"p":{"1":57.14,"2":56.76,"3":57.7,"4":58.93,"5":41.18,"6":51.76},"m":[[1,2],[5,4],[3,6]]}};
+const PREVSNAP = {"l":"Wed, Nov 11, 5:42 AM PT","w":"Week 3","ms":1794404543539,"c":{"1":90.95,"2":68.05,"3":88.7,"4":76.15,"5":82.35,"6":43.45},"rc":{"1":"2-0","2":"2-0","3":"0-2","4":"1-1","5":"1-1","6":"0-2"},"r":{"1":{"Joel Embiid":"|5.5|10","Julius Randle":"|4.04|10","Stephen Curry":"|6.24|9","James Harden":"|3.68|11","Kon Knueppel":"IO|0.15|1","Kevin Durant":"|4.44|11","Anthony Davis":"|6.06|9","Giannis Antetokounmpo":"|8.12|11","Damian Lillard":"|4.07|10","Rudy Gobert":"|2.91|10","Jabari Smith Jr.":"|4.36|11","Derik Queen":"|3.18|11","RJ Barrett":"|3.91|10","Zach LaVine":"|3.82|11","Davion Mitchell":"|5.14|11","Jimmy Butler III":"IO|0|0","Jonathan Kuminga":"|3.24|11","Jaime Jaquez Jr.":"|3.25|11","Wendell Carter Jr.":"|3.7|10","Ayo Dosunmu":"|4.15|11","Brandin Podziemski":"|4.01|9","Saddiq Bey":"|3.22|11","Jamal Cain":"|1.39|10","Jamal Shead":"|3.03|10","Jakob Poeltl":"|2.56|8"},"2":{"Tyrese Maxey":"|5.35|12","Trae Young":"|5.1|11","Evan Mobley":"|4.87|11","Trey Murphy III":"ID|3.45|9","Anthony Edwards":"IO|6.39|4","Donovan Mitchell":"|4.93|11","Nikola Jokic":"|9.69|9","Jalen Johnson":"|5.08|9","Donovan Clingan":"|3.86|10","Keyonte George":"IO|4.43|10","Michael Porter Jr.":"|4.54|10","Norman Powell":"D|3.54|8","Josh Hart":"O|3.39|7","Nickeil Alexander-Walker":"|4.36|12","Andrew Nembhard":"|4.23|9","Payton Pritchard":"|3.22|11","Moussa Diabate":"D|3.5|9","Jaden McDaniels":"|3.45|11","Anthony Black":"|4.62|7","Christian Braun":"|2.91|9","Klay Thompson":"|2.76|11","Coby White":"|1.07|4","Brayden Burries":"|2.44|11","Quenton Jackson":"|2.48|11","Bennett Stirtz":"|1.7|11","Leaky Black":"|1.95|7"},"3":{"Jalen Duren":"IO|3.3|2","Pascal Siakam":"|4.47|10","Jalen Brunson":"|4.89|10","Stephon Castle":"|3.64|11","Deni Avdija":"|5.1|10","Karl-Anthony Towns":"|6.65|10","Alperen Sengun":"|7.02|9","Jaylen Brown":"|4.67|11","De'Aaron Fox":"|3.48|11","Lauri Markkanen":"IO|4.28|8","Ivica Zubac":"|2.62|6","Dyson Daniels":"|4.19|12","Derrick White":"|3.14|11","Fred VanVleet":"|3.48|9","Yves Missi":"IO|4.45|2","Naz Reid":"|4.12|11","Ausar Thompson":"|3.12|9","Yaxel Lendeborg":"|4.73|11","Jrue Holiday":"|3.27|10","Brook Lopez":"|2.71|10","P.J. Washington":"|3.52|11","Paul Reed":"|2.97|10","Nolan Traore":"D|2.75|10","Kyle Kuzma":"|2.83|11","Jared McCain":"|2.48|11","Aday Mara":"|2.41|11"},"4":{"Chet Holmgren":"IO|4.73|3","Devin Booker":"|4.4|10","Victor Wembanyama":"|8.5|11","Paolo Banchero":"IO|5.78|2","Josh Giddey":"|3.79|9","LaMelo Ball":"|3.84|11","Bam Adebayo":"|4.79|11","Jayson Tatum":"|5.83|10","Tyrese Haliburton":"IO|6.59|4","AJ Dybantsa":"|3.19|7","Alex Sarr":"|2.92|10","Darryn Peterson":"|3.5|11","Walker Kessler":"|4.88|12","Ja Morant":"O|3.3|4","Jarrett Allen":"|3.34|9","Dylan Harper":"|3.55|11","Paul George":"|4.72|10","OG Anunoby":"|3.71|10","Ryan Rollins":"|2.61|11","Scoot Henderson":"|1.27|10","Day'Ron Sharpe":"|3.57|10","Draymond Green":"|2.13|9","Ajay Mitchell":"|3.36|11","Precious Achiuwa":"O|2.75|11","Jeremiah Fears":"|3.32|11","Mikal Bridges":"|1.99|10"},"5":{"Amen Thompson":"|3.98|11","Luka Doncic":"|8.93|10","Kyrie Irving":"|4.52|9","Tyler Herro":"O|4.76|10","Kawhi Leonard":"O|4.9|2","Scottie Barnes":"O|5.15|8","Cooper Flagg":"|6.82|10","Jalen Green":"|2.21|10","CJ McCollum":"|3.09|12","Franz Wagner":"|5.48|10","Jalen Williams":"IO|2.83|3","VJ Edgecombe":"|3.43|11","Desmond Bane":"|3.26|9","Jaren Jackson Jr.":"IO|3.14|4","Isaiah Hartenstein":"|3.33|11","Onyeka Okongwu":"|4.18|12","Matas Buzelis":"|2.47|9","Aaron Gordon":"|2.68|9","Zach Edey":"|2.37|9","Jalen Suggs":"IO|2.67|3","Cedric Coward":"|3.92|9","Darius Acuff Jr.":"|5.38|11","Kris Dunn":"|3.01|10","Duncan Robinson":"|4|10","John Collins":"|2.77|10","Ace Bailey":"|3.08|11"},"6":{"Austin Reaves":"|4.46|11","Dejounte Murray":"|3.47|8","LeBron James":"|4.44|10","Domantas Sabonis":"|5.86|10","Jamal Murray":"|5.69|9","Shai Gilgeous-Alexander":"|5.52|11","Zion Williamson":"|4.3|10","Brandon Miller":"D|3.91|10","Cade Cunningham":"|5.12|10","Cameron Boozer":"|5.22|10","Caleb Wilson":"|4.21|9","Darius Garland":"|3.85|10","Ty Jerome":"|4.83|9","Immanuel Quickley":"ID|4.19|8","Miles Bridges":"|4.45|10","Kel'el Ware":"|2.54|11","Brandon Ingram":"IO|0|0","Keaton Wagler":"|2.81|10","Egor Demin":"IO|1.79|4","Mikel Brown Jr.":"|2.58|7","Santi Aldama":"|1.7|3","Kyshawn George":"|3.58|11","Alex Caruso":"|2.39|8","Zaccharie Risacher":"|2.24|11","Peyton Watson":"|2.64|9","Devin Vassell":"D|3.21|10"}}};
+const MORNSNAP = {"l":"Thu, Nov 12, 5:44 AM PT","w":"Week 3","ms":1794491067774,"c":{"1":139.9,"2":119.5,"3":160,"4":133.85,"5":128.7,"6":93.25},"rc":{"1":"2-0","2":"2-0","3":"0-2","4":"1-1","5":"1-1","6":"0-2"},"r":{"1":{"Joel Embiid":"D|5.5|10","Julius Randle":"|3.92|11","Stephen Curry":"D|5.66|10","James Harden":"|3.92|12","Kon Knueppel":"IO|0.15|1","Kevin Durant":"|4.33|12","Anthony Davis":"|6.16|10","Giannis Antetokounmpo":"|8.12|11","Damian Lillard":"|4|11","Rudy Gobert":"|2.91|10","Jabari Smith Jr.":"|4.28|12","Derik Queen":"|3.07|12","RJ Barrett":"|3.93|11","Zach LaVine":"|3.82|11","Davion Mitchell":"|5.14|11","Jimmy Butler III":"IO|0|0","Jonathan Kuminga":"|3.24|11","Jaime Jaquez Jr.":"|3.44|12","Wendell Carter Jr.":"|3.52|11","Ayo Dosunmu":"|4.15|11","Brandin Podziemski":"|4.12|10","Saddiq Bey":"|3.17|12","Jamal Shead":"|2.9|11","Jakob Poeltl":"|2.38|9","Daniss Jenkins":"|3.16|10"},"2":{"Tyrese Maxey":"|5.35|12","Trae Young":"|4.98|12","Evan Mobley":"|4.66|12","Trey Murphy III":"IO|3.45|9","Anthony Edwards":"IO|6.39|4","Donovan Mitchell":"|4.95|12","Nikola Jokic":"|9.57|10","Jalen Johnson":"|5.08|9","Donovan Clingan":"|3.83|11","Keyonte George":"|4.32|11","Michael Porter Jr.":"|4.58|11","Norman Powell":"IO|3.54|8","Josh Hart":"|3.09|8","Nickeil Alexander-Walker":"|4.36|12","Andrew Nembhard":"|4.45|10","Payton Pritchard":"|3.04|12","Moussa Diabate":"D|3.5|9","Jaden McDaniels":"|3.45|11","Anthony Black":"|4.66|8","Christian Braun":"|2.98|10","Klay Thompson":"|2.76|11","Coby White":"|1.07|4","Quenton Jackson":"|2.39|12","Bennett Stirtz":"|1.77|12","Grayson Allen":"|3.3|11","Morez Johnson Jr.":"D|1.78|10"},"3":{"Jalen Duren":"IO|3.3|2","Pascal Siakam":"|4.64|11","Jalen Brunson":"|4.87|11","Stephon Castle":"|3.48|12","Deni Avdija":"|5.22|11","Karl-Anthony Towns":"|6.71|11","Alperen Sengun":"|7.07|10","Jaylen Brown":"|4.67|11","De'Aaron Fox":"|3.63|12","Lauri Markkanen":"IO|4.28|8","Ivica Zubac":"|3.13|7","Dyson Daniels":"|4.19|12","Derrick White":"|3.33|12","Fred VanVleet":"|3.68|10","Yves Missi":"IO|4.45|2","Naz Reid":"|4.12|11","Ausar Thompson":"|3.12|9","Yaxel Lendeborg":"|4.87|12","Jrue Holiday":"|3.4|11","Brook Lopez":"|2.71|10","P.J. Washington":"|3.52|11","Paul Reed":"|2.97|10","Nolan Traore":"O|2.75|10","Kyle Kuzma":"|2.72|12","Jared McCain":"|2.45|12","Aday Mara":"|2.43|12"},"4":{"Chet Holmgren":"IO|4.73|3","Devin Booker":"|4.4|10","Victor Wembanyama":"|8.37|12","Paolo Banchero":"IO|5.78|2","Josh Giddey":"|3.52|10","LaMelo Ball":"|3.84|11","Bam Adebayo":"|4.75|11","Jayson Tatum":"|5.82|11","Tyrese Haliburton":"IO|6.59|4","AJ Dybantsa":"|2.98|8","Alex Sarr":"|2.73|11","Darryn Peterson":"|3.61|12","Walker Kessler":"|4.91|13","Ja Morant":"O|3.3|4","Jarrett Allen":"|3.63|10","Dylan Harper":"|3.99|12","Paul George":"D|4.72|10","OG Anunoby":"|3.73|11","Ryan Rollins":"D|2.6|12","Scoot Henderson":"|1.22|11","Day'Ron Sharpe":"|3.69|11","Draymond Green":"|2.23|10","Ajay Mitchell":"O|3.38|11","Precious Achiuwa":"D|2.75|11","Jeremiah Fears":"|3.23|12","Mikal Bridges":"|1.84|11"},"5":{"Amen Thompson":"|3.98|12","Luka Doncic":"D|8.64|11","Kyrie Irving":"|4.52|9","Tyler Herro":"|4.75|11","Kawhi Leonard":"O|4.9|2","Scottie Barnes":"O|5.15|8","Cooper Flagg":"|6.82|10","Jalen Green":"|2.21|10","CJ McCollum":"|3.09|12","Franz Wagner":"|5.5|11","Jalen Williams":"IO|2.83|3","VJ Edgecombe":"|3.43|11","Desmond Bane":"|3.42|10","Jaren Jackson Jr.":"IO|3.14|4","Isaiah Hartenstein":"|3.52|12","Onyeka Okongwu":"|4.18|12","Matas Buzelis":"|2.36|10","Aaron Gordon":"|2.66|10","Zach Edey":"|2.19|10","Jalen Suggs":"IO|2.67|3","Cedric Coward":"|4.11|10","Darius Acuff Jr.":"|5.38|11","Kris Dunn":"|3.01|10","Duncan Robinson":"|4|10","John Collins":"|2.77|10","Ace Bailey":"|3.26|12"},"6":{"Austin Reaves":"D|4.5|12","Dejounte Murray":"|3.25|9","LeBron James":"D|4.44|10","Domantas Sabonis":"|5.86|10","Jamal Murray":"|5.76|10","Shai Gilgeous-Alexander":"|5.45|12","Zion Williamson":"|4.32|11","Brandon Miller":"O|3.91|10","Cade Cunningham":"|5.12|10","Cameron Boozer":"|5.28|11","Caleb Wilson":"D|4.09|10","Darius Garland":"|3.85|10","Ty Jerome":"|4.71|10","Immanuel Quickley":"I|3.99|9","Miles Bridges":"|4.45|10","Kel'el Ware":"|2.57|12","Brandon Ingram":"IO|0|0","Keaton Wagler":"|2.85|10","Egor Demin":"I|2.31|5","Mikel Brown Jr.":"O|2.58|7","Santi Aldama":"|1.7|3","Kyshawn George":"|3.64|12","Alex Caruso":"|2.62|9","Zaccharie Risacher":"|2.24|11","Peyton Watson":"|2.71|10","Devin Vassell":"O|3.21|10"}}};
+const PROJLOG = {"2026-11-02":{"p":{"1":63.13,"2":68.43,"3":63.67,"4":61.08,"5":61.73,"6":68.41},"m":[[2,3],[5,6],[4,1]],"a":{"1":66.6,"2":62.75,"3":58.7,"4":56.35,"5":61.05,"6":69.5}},"2026-11-04":{"p":{"1":62.85,"2":66.78,"3":60.68,"4":58.66,"5":60.27,"6":69.03},"m":[[2,3],[5,6],[4,1]],"a":{"1":70.2,"2":71.45,"3":73.8,"4":62.1,"5":67,"6":57.35}},"2026-11-05":{"p":{"1":30.98,"2":6.86,"3":4.57,"4":10.66,"5":10.39,"6":5.74},"m":[[2,3],[5,6],[4,1]],"a":{"1":33.55,"2":5.15,"3":4.9,"4":15.2,"5":10.3,"6":7.9}},"2026-11-06":{"p":{"1":45.63,"2":47.8,"3":42.48,"4":51.86,"5":50.33,"6":52.84},"m":[[2,3],[5,6],[4,1]],"a":{"1":38.4,"2":51.55,"3":48,"4":58.95,"5":52.9,"6":46.2}},"2026-11-07":{"p":{"1":44.91,"2":54.53,"3":54.85,"4":37.8,"5":27.89,"6":30.23},"m":[[2,3],[5,6],[4,1]],"a":{"1":40.3,"2":43.2,"3":52.3,"4":44.85,"5":27.6,"6":32.05}},"2026-11-08":{"p":{"1":46.52,"2":31.39,"3":28.67,"4":41.97,"5":42.73,"6":46.76},"m":[[2,3],[5,6],[4,1]]},"2026-11-09":{"p":{"1":44.1,"2":47.05,"3":28.5,"4":20.84,"5":34.73,"6":27.78},"m":[[1,2],[5,4],[3,6]],"a":{"1":52.45,"2":43.55,"3":54.35,"4":37.6,"5":55.5,"6":26.3}},"2026-11-10":{"p":{"1":37.72,"2":27.37,"3":37.56,"4":38.72,"5":31.3,"6":29.9},"m":[[1,2],[5,4],[3,6]],"a":{"1":38.5,"2":24.5,"3":34.35,"4":38.55,"5":26.85,"6":17.15}},"2026-11-11":{"p":{"1":57.14,"2":56.76,"3":57.7,"4":58.93,"5":41.18,"6":51.76},"m":[[1,2],[5,4],[3,6]],"a":{"1":48.95,"2":51.45,"3":71.6,"4":57.9,"5":46.35,"6":49.4}},"2026-11-12":{"p":{"1":31.52,"2":21.2,"3":17.76,"4":13.92,"5":26.04,"6":20.02},"m":[[1,2],[5,4],[3,6]]}};
 //REFRESH-DATA-END
