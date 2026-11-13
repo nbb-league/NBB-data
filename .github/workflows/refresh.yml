@@ -4,6 +4,7 @@ on:
     - cron: '30 12 * * *'            # morning pull, 5:30 AM Pacific in daylight time
     - cron: '30 13 * * *'            # morning pull, 5:30 AM Pacific in standard time
     - cron: '0,30 17-23 * * *'       # game-time slots; gated to Pacific windows below
+    - cron: '0,30 14-16 * * 1-5'     # weekday mornings (6-9 AM Pacific), so roster moves show up
     - cron: '0,30 0-8 * * *'
     - cron: '15,45 17-23 * * 6,0'    # extra weekend slots (Sat/Sun Pacific game days)
     - cron: '15,45 0-8 * * 0,1'      # weekend evening slots, after UTC midnight
@@ -36,10 +37,10 @@ jobs:
             if [ "$SC" = "30 12 * * *" ] || [ "$SC" = "30 13 * * *" ]; then
               [ "$H" = "5" ] && RUN=1
             else
-              # weekdays 4 PM-midnight, weekends 9 AM-midnight, plus the 12 AM slot
+              # weekdays 6 AM-midnight, weekends 9 AM-midnight, plus the 12 AM slot
               if [ "$H" -eq 0 ]; then RUN=1
               elif [ "$D" -ge 6 ] && [ "$H" -ge 9 ]; then RUN=1
-              elif [ "$D" -le 5 ] && [ "$H" -ge 16 ]; then RUN=1; fi
+              elif [ "$D" -le 5 ] && [ "$H" -ge 6 ]; then RUN=1; fi
             fi
           fi
           if [ "$RUN" = "0" ]; then echo "skip=1" >> $GITHUB_OUTPUT; echo "Outside window (Pacific hour $H, day $D); skipping"; fi
