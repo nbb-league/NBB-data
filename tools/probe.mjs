@@ -1,9 +1,5 @@
 const B='https://lm-api-reads.fantasy.espn.com/apis/v3/games/fba/seasons/2027', L=B+'/segments/0/leagues/948';
 const J=async(u,h)=>(await fetch(u,{headers:h||{}})).json();
-const fa=await J(L+'?view=kona_player_info',{'x-fantasy-filter':JSON.stringify({players:{filterStatus:{value:['FREEAGENT','WAIVERS']},limit:6,sortPercOwned:{sortPriority:1,sortAsc:false}}})});
-const ps=(fa.players||[]);console.log('FA count',ps.length,ps.map(x=>x.player&&x.player.fullName).join(', '));
-const ids=ps.slice(0,3).map(x=>x.id);
-const pc=await J(L+'?view=kona_playercard',{'x-fantasy-filter':JSON.stringify({players:{filterIds:{value:ids},filterStatsForTopScoringPeriodIds:{value:12,additionalValue:['002027','102027','002026']}}})});
-for(const x of (pc.players||[]).slice(0,2)){const p=x.player||x;console.log('PLAYER',p.fullName,'proTeamId',p.proTeamId,'statKeys',Object.keys(p));
- const st=p.stats||[];console.log('stats entries',st.length);
- st.slice(0,40).forEach(s=>console.log(JSON.stringify({id:s.id,split:s.statSplitTypeId,src:s.statSourceId,sp:s.scoringPeriodId,season:s.seasonId,applied:s.appliedTotal,avg:s.appliedAverage,keys:Object.keys(s),nstats:s.stats?Object.keys(s.stats).length:0,sample:s.stats?JSON.stringify(s.stats).slice(0,160):''})))}
+const pc=await J(L+'?view=kona_playercard',{'x-fantasy-filter':JSON.stringify({players:{filterIds:{value:[4278073]},filterStatsForTopScoringPeriodIds:{value:6,additionalValue:['002027']}}})});
+for(const x of (pc.players||[]).slice(0,1)){const p=x.player||x;console.log('PLAYER',p.fullName,p.id);(p.stats||[]).filter(s=>s.statSplitTypeId===5).slice(0,2).forEach(s=>console.log('GAME sp',s.scoringPeriodId,'pts',s.appliedTotal,'team',s.proTeamId,JSON.stringify(s.stats),JSON.stringify(s.appliedStats).slice(0,200)))}
+try{const sc=await J(B+'?view=proTeamSchedules_wl');const t=(sc.settings&&sc.settings.proTeams)||[];console.log('proTeams',t.length,Object.keys(t[0]||{}));const pg=t[0]&&t[0].proGamesByScoringPeriod;if(pg){const k=Object.keys(pg).slice(0,3);console.log('sps',Object.keys(pg).length,k.join(','));console.log(JSON.stringify(pg[k[0]]).slice(0,500))}console.log(t.slice(0,3).map(x=>x.id+':'+x.abbrev).join(' '))}catch(e){console.log('sched err',String(e))}
