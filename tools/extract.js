@@ -97,25 +97,24 @@ const DP={};jm.schedule.filter(m=>m.matchupPeriodId===wk+1&&!/CONSOL|LOSERS/.tes
 const prev=j0.schedule.filter(m=>m.matchupPeriodId===wk&&!/CONSOL|LOSERS/.test(m.playoffTierType||"")).map(m=>[m.home.teamId,m.away.teamId,+(m.home.totalPoints||0).toFixed(2),+(m.away.totalPoints||0).toFixed(2)]);
 const FIN={};j0.schedule.filter(m=>m.matchupPeriodId<=wk&&m.away&&m.home&&m.winner&&m.winner!=='UNDECIDED'&&!/CONSOL|LOSERS/.test(m.playoffTierType||"")).forEach(m=>{if(m.matchupPeriodId<2)return;const nw=m.matchupPeriodId-1;(FIN[nw]=FIN[nw]||[]).push([m.home.teamId,m.away.teamId,+(m.home.totalPoints||0).toFixed(2),+(m.away.totalPoints||0).toFixed(2)])});
 const label=ptf.month.replace(/^0/,'')+'/'+ptf.day.replace(/^0/,'');
-// GAME LOG: each player's fantasy points per scoring period for roughly the last 10 days (rostered players only), read from the same boxscore rosters used for live scores. Best effort: any failure leaves GLOG empty and nothing else changes.
+// GAME LOG: last 6 games played for every rostered player and the free-agent pool, from ESPN's per-game stats.
+// Row = [scoringPeriod, fantasyPts, PTS, REB, AST, STL, BLK, 3PM, TO, MIN, opponent ("vs CHI" / "@ CHI")]. Best effort: any failure leaves GLOG partial or empty and nothing else changes.
 const GLOG={};
 try{
- const spT2=spStart+today, spFrom=Math.max(7,spT2-9), sl=[];
- for(let q=spFrom;q<=spT2;q++)sl.push(q);
- for(let i=0;i<sl.length;i+=5){
-  await Promise.all(sl.slice(i,i+5).map(async sp=>{
-   try{
-    const jj=await J(L+'?view=mMatchup&view=mBoxscore&scoringPeriodId='+sp), mpid=Math.floor((sp-7)/7)+2;
-    (jj.schedule||[]).filter(m=>m.matchupPeriodId===mpid).forEach(m=>{[m.home,m.away].forEach(x=>{
-     if(!x)return;
-     const ent=(x.rosterForCurrentScoringPeriod&&x.rosterForCurrentScoringPeriod.entries)||[];
-     ent.forEach(e=>{const pe=e.playerPoolEntry,v=pe&&pe.appliedStatTotal,nm=pe&&pe.player&&pe.player.fullName;
-      if(nm&&v!=null&&v!==0&&isFinite(v))(GLOG[nm]=GLOG[nm]||[]).push([sp,+(+v).toFixed(2)])})
-    })});
-   }catch(e){}
-  }));
+ const sch=await J(B+'?view=proTeamSchedules_wl'), OPP={};
+ ((sch.settings&&sch.settings.proTeams)||[]).forEach(t=>{const g=t.proGamesByScoringPeriod||{};Object.keys(g).forEach(sp=>(g[sp]||[]).forEach(x=>{(OPP[t.id]=OPP[t.id]||{})[sp]=x.homeProTeamId===t.id?'vs '+(T[x.awayProTeamId]||'?'):'@ '+(T[x.homeProTeamId]||'?')}))});
+ const idset=new Set(); j0.teams.forEach(t=>t.roster.entries.forEach(e=>idset.add(e.playerId))); ((fa&&fa.players)||[]).forEach(x=>idset.add(x.id));
+ const ida=[...idset], chunks=[]; for(let i=0;i<ida.length;i+=50)chunks.push(ida.slice(i,i+50));
+ const rr=v=>Math.round((+v||0)*100)/100;
+ for(let i=0;i<chunks.length;i+=4){
+  await Promise.all(chunks.slice(i,i+4).map(async ch=>{try{
+   const pc=await J(L+'?view=kona_playercard',{'x-fantasy-filter':JSON.stringify({players:{filterIds:{value:ch},filterStatsForTopScoringPeriodIds:{value:14,additionalValue:['002027']}}})});
+   (pc.players||[]).forEach(x=>{const p=x.player||x; if(!p||!p.fullName)return;
+    const g=(p.stats||[]).filter(q=>q.statSplitTypeId===5&&q.seasonId===2027&&q.stats&&(q.stats['40']||0)>0).sort((a,b)=>b.scoringPeriodId-a.scoringPeriodId).slice(0,6);
+    if(g.length)GLOG[p.fullName]=g.map(q=>{const st=q.stats,sp=q.scoringPeriodId;return [sp,rr(q.appliedTotal),st['0']||0,st['6']||0,st['3']||0,st['2']||0,st['1']||0,st['17']||0,st['11']||0,Math.round(st['40']||0),(OPP[q.proTeamId]||{})[sp]||'']}).reverse();
+   });
+  }catch(e){}}));
  }
- Object.keys(GLOG).forEach(k=>GLOG[k].sort((x,y)=>x[0]-y[0]));
 }catch(e){}
 const nowLabel=new Date().toLocaleString('en-US',{timeZone:'America/Los_Angeles',weekday:'short',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})+' PT';
 const out=`//REFRESH-DATA-START
@@ -139,7 +138,7 @@ const DAYPTS = ${JSON.stringify(DP)};
 const PREVWK = ${JSON.stringify(prev)};
 const RESLIVE = ${JSON.stringify(FIN)};
 const INJ = ${JSON.stringify(IJ)};
-// Fantasy points per scoring period by player (sp 7 = Mon Oct 26 2026), rostered players, last ~10 days
+// Last 6 games per player: [scoringPeriod (7 = Mon Oct 26 2026), fantasy pts, PTS, REB, AST, STL, BLK, 3PM, TO, MIN, opponent]
 const GLOG = ${JSON.stringify(GLOG)};
 //REFRESH-DATA-END`;
 window.__blob=out;
