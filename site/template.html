@@ -3077,6 +3077,7 @@ paintNews(); newsTick();
 applyHash();
 window.addEventListener('hashchange', applyHash);
 
+/*LOBOS_PORT_START*/
 /* ---- Player card: recent games ---- */
 function hqSnapFind(S0, name) { if (!S0 || !S0.r) return null; for (const t of Object.keys(S0.r)) { const v = S0.r[t][name]; if (v != null) { const f = v.split('|'); return { avg: +f[1] || 0, gp: +f[2] || 0 }; } } return null; }
 function hqLastGames(p) {
@@ -3163,6 +3164,7 @@ setTimeout(() => { try { const r = JSON.parse(sessionStorage.getItem('hq-y') || 
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && Date.now() - t0 > maxAge()) go(); });
   window.addEventListener('pageshow', e => { if (e.persisted && Date.now() - t0 > maxAge()) go(); });
 })();
+/*LOBOS_PORT_END*/
 })();
 </script>
 
