@@ -1,5 +1,5 @@
 {
- "at": "2026-11-15T06:18:38.665Z",
+ "at": "2026-11-15T06:20:07.022Z",
  "cur": 26,
  "sp26": [
   [
@@ -280,6 +280,195 @@
      0
     ]
    ]
+  ]
+ ],
+ "t1": [
+  [
+   3059318,
+   "Joel Embiid",
+   12,
+   "NORMAL"
+  ],
+  [
+   3064514,
+   "Julius Randle",
+   8,
+   "NORMAL"
+  ],
+  [
+   3975,
+   "Stephen Curry",
+   13,
+   "NORMAL"
+  ],
+  [
+   3992,
+   "James Harden",
+   1,
+   "NORMAL"
+  ],
+  [
+   5061575,
+   "Kon Knueppel",
+   13,
+   "NORMAL"
+  ],
+  [
+   3202,
+   "Kevin Durant",
+   12,
+   "NORMAL"
+  ],
+  [
+   6583,
+   "Anthony Davis",
+   12,
+   "NORMAL"
+  ],
+  [
+   3032977,
+   "Giannis Antetokounmpo",
+   4,
+   "NORMAL"
+  ],
+  [
+   6606,
+   "Damian Lillard",
+   11,
+   "NORMAL"
+  ],
+  [
+   3032976,
+   "Rudy Gobert",
+   10,
+   "NORMAL"
+  ],
+  [
+   4432639,
+   "Jabari Smith Jr.",
+   12,
+   "NORMAL"
+  ],
+  [
+   4869780,
+   "Derik Queen",
+   10,
+   "NORMAL"
+  ],
+  [
+   4395625,
+   "RJ Barrett",
+   12,
+   "NORMAL"
+  ],
+  [
+   3064440,
+   "Zach LaVine",
+   12,
+   "NORMAL"
+  ],
+  [
+   4278053,
+   "Davion Mitchell",
+   0,
+   "FUTURE_DROP"
+  ],
+  [
+   6430,
+   "Jimmy Butler III",
+   13,
+   "NORMAL"
+  ],
+  [
+   4433247,
+   "Jonathan Kuminga",
+   2,
+   "NORMAL"
+  ],
+  [
+   4432848,
+   "Jaime Jaquez Jr.",
+   12,
+   "NORMAL"
+  ],
+  [
+   4277847,
+   "Wendell Carter Jr.",
+   12,
+   "NORMAL"
+  ],
+  [
+   4397002,
+   "Ayo Dosunmu",
+   5,
+   "NORMAL"
+  ],
+  [
+   4709138,
+   "Brandin Podziemski",
+   12,
+   "NORMAL"
+  ],
+  [
+   4397136,
+   "Saddiq Bey",
+   3,
+   "NORMAL"
+  ],
+  [
+   5107173,
+   "Danny Wolf",
+   8,
+   "FUTURE_DROP"
+  ],
+  [
+   4066372,
+   "Kevin Huerter",
+   6,
+   "FUTURE_DROP"
+  ],
+  [
+   4592492,
+   "Bones Hyland",
+   11,
+   "FUTURE_DROP"
+  ],
+  [
+   5112087,
+   "Jaylen Wells",
+   11,
+   "FUTURE_DROP"
+  ]
+ ],
+ "dropped": [
+  [
+   1,
+   "Danny Wolf"
+  ],
+  [
+   1,
+   "Bones Hyland"
+  ],
+  null
+ ],
+ "gw": [
+  [
+   4066648,
+   "Rui Hachimura",
+   1,
+   "ONTEAM"
+  ],
+  [
+   4592492,
+   "Bones Hyland",
+   0,
+   "FREEAGENT"
+  ],
+  [
+   5107173,
+   "Danny Wolf",
+   0,
+   "WAIVERS"
   ]
  ]
 }
