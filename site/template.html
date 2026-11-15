@@ -2305,6 +2305,8 @@ function openHelp() {
 $('hbtn').addEventListener('click', openHelp);
 
 // ---- Team alerts: bell button explains the free phone alerts and links to the NBB Alert Signup page (a separate artifact).
+// Alerts are switched off for now. Set ALERTS_ON = true to bring the bell button back.
+const ALERTS_ON = false;
 const ALERT_URL = 'https://claude.ai/artifact/4VmZs7M2nSTTqRKa88f2tu';
 function alertSeen() { try { return !!localStorage.getItem('nbbAlertSeen'); } catch (e) { return true; } }
 function paintAlertDot() { $('adot').hidden = alertSeen(); }
@@ -2324,8 +2326,7 @@ function openAlerts() {
     '<button type="button" class="hx" data-pcx="1">Close</button></div>';
   $('pcov').hidden = false; $('pcc').scrollTop = 0;
 }
-$('abtn').addEventListener('click', openAlerts);
-paintAlertDot();
+if (ALERTS_ON) { $('abtn').addEventListener('click', openAlerts); paintAlertDot(); } else $('abtn').style.display = 'none';
 paintHelpDot();
 function newsTick() { clearInterval(newsT); if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return; newsT = setInterval(() => { newsI = (newsI + 1) % Math.max(1, newsItems.length); paintNews(); }, 6500); }
 $('news').addEventListener('click', e => { const d = e.target.closest('[data-ni]'); if (d) { newsI = +d.dataset.ni; paintNews(); newsTick(); return; } const n = newsItems[newsI]; if (n && n.go) goSQ({ go: n.go }); });
