@@ -3073,6 +3073,35 @@ applyHash();
 window.addEventListener('hashchange', applyHash);
 })();
 
+/* ---- Player card: recent games ---- */
+function hqSnapFind(S0, name) { if (!S0 || !S0.r) return null; for (const t of Object.keys(S0.r)) { const v = S0.r[t][name]; if (v != null) { const f = v.split('|'); return { avg: +f[1] || 0, gp: +f[2] || 0 }; } } return null; }
+function hqLastGames(p) {
+  const out = [], cur = { avg: p.season || 0, gp: p.gp || 0 }, M = typeof MORNSNAP !== 'undefined' ? MORNSNAP : null, V = typeof PREVSNAP !== 'undefined' ? PREVSNAP : null;
+  const m = hqSnapFind(M, p.name), v = hqSnapFind(V, p.name), day = x => x && x.l ? x.l.split(',').slice(0, 2).join(',') : '';
+  const seg = (a, b, lab) => { if (!a || !b || !(b.gp > a.gp)) return; const d = b.avg * b.gp - a.avg * a.gp; if (isFinite(d)) out.push({ lab, n: b.gp - a.gp, d: Math.round(d * 20) / 20 }); };
+  if (m) seg(m, cur, day(M) + ' (today so far)'); else if (v) seg(v, cur, 'Since ' + day(V));
+  if (m && v) seg(v, m, day(V));
+  return { out, tracked: !!(m || v), days: [day(V), day(M)].filter(Boolean) };
+}
+function hqPlayerRecent(name) {
+  try {
+    const key = jnorm(name), p = P.find(q => jnorm(q.name) === key), box = $('pcc'); if (!p || !p.team || !box || box.querySelector('#hq-pw')) return;
+    const WKN = +(/\d+/.exec(WEEK_LABEL) || [2])[0];
+    const GL = (typeof GLOG !== 'undefined' && GLOG && GLOG[p.name]) ? GLOG[p.name] : null, spToday = 7 + (WKN - 1) * 7 + TODAY;
+    const glHtml = GL && GL.length ? (() => {
+      const rows = GL.slice().reverse().slice(0, 6), WD = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], avg = rows.reduce((t, r) => t + r[1], 0) / rows.length, rich = rows[0].length > 4;
+      return '<p style="margin:8px 0 2px;font-size:13px"><b>Recent games</b> (last ' + rows.length + ', avg <b>' + avg.toFixed(1) + '</b> fantasy pts)</p>' + rows.map(r => {
+        const d = new Date(Date.UTC(2026, 9, 26 + r[0] - 7)), inL7 = r[0] > spToday - 7;
+        const line = rich ? r[2] + ' pts · ' + r[3] + ' reb · ' + r[4] + ' ast' + (r[5] ? ' · ' + r[5] + ' stl' : '') + (r[6] ? ' · ' + r[6] + ' blk' : '') + (r[7] ? ' · ' + r[7] + ' 3pm' : '') + ' · ' + r[9] + ' min' : '';
+        return '<div style="display:grid;grid-template-columns:62px 1fr 44px;gap:6px;align-items:center;padding:5px 0 5px 6px;border-top:1px solid var(--line);border-left:3px solid ' + (inL7 ? 'var(--gold)' : 'transparent') + '"><span style="font-size:12px"><b>' + WD[d.getUTCDay()] + ' ' + (d.getUTCMonth() + 1) + '/' + d.getUTCDate() + '</b>' + (rich && r[10] ? '<br><small style="color:var(--muted)">' + esc(r[10]) + '</small>' : '') + (r[0] === spToday ? '*' : '') + '</span><span style="font-size:12px;color:var(--muted)">' + line + '</span><b style="text-align:right;font-size:15px">' + r[1].toFixed(1) + '</b></div>';
+      }).join('') + '<p class="hint" style="margin:4px 0 0">Gold bar = inside the last-7-days window.' + (rows.some(r => r[0] === spToday) ? ' * = today, may still be in progress.' : '') + '</p>';
+    })() : '';
+    const LG = hqLastGames(p), lgHtml = p.tid === 0 ? '<p class="hint" style="margin:8px 0 0">No recent game log for this player yet.</p>' : '<p style="margin:8px 0 0;font-size:13px"><b>Recent games</b>' + (LG.out.length ? LG.out.slice().reverse().map(g => '<br>' + esc(g.lab) + ': <b>' + g.d.toFixed(1) + '</b> fantasy points' + (g.n > 1 ? ' in ' + g.n + ' games' : '')).join('') : '<br>No game played in the days we track' + (LG.days.length ? ' (' + esc(LG.days.join(' and ')) + ')' : '') + '.') + '</p>';
+    const html = '<div id="hq-pw" style="margin:10px 0;padding:10px;border:1px solid var(--line);border-radius:12px;background:var(--surface)">' + (glHtml || lgHtml) + '</div>';
+    const h = box.querySelector('h4'); if (h) h.insertAdjacentHTML('beforebegin', html); else box.insertAdjacentHTML('beforeend', html);
+  } catch (e) {}
+}
+{ const _op = openPlayer; openPlayer = function (name) { _op(name); hqPlayerRecent(name); }; }
 /* ---- Box score: actual vs projected, per day or for the week, for the selected matchup ---- */
 let hqBoxDay = null;
 function hqBoxProj(name, d) {
