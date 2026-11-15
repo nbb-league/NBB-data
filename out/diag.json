@@ -1,5 +1,5 @@
 {
- "at": "2026-11-15T06:35:02.553Z",
+ "at": "2026-11-15T06:49:21.528Z",
  "cur": 26,
  "sp26": [
   [
@@ -98,5 +98,39 @@
     "n": 0
    }
   ]
- ]
+ ],
+ "future": {
+  "sp26": [
+   "Davion Mitchell|0|FUTURE_DROP",
+   "Danny Wolf|8|FUTURE_DROP",
+   "Kevin Huerter|6|FUTURE_DROP",
+   "Bones Hyland|11|FUTURE_DROP",
+   "Jaylen Wells|11|FUTURE_DROP"
+  ],
+  "n26": 26,
+  "elks26": [
+   "De'Aaron Fox|12|FUTURE_DROP",
+   "Lauri Markkanen|13|FUTURE_DROP"
+  ],
+  "sp27": [
+   "Jordan Goodwin|11|NORMAL",
+   "Rui Hachimura|8|NORMAL",
+   "De'Aaron Fox|0|NORMAL",
+   "Lauri Markkanen|13|NORMAL"
+  ],
+  "n27": 26,
+  "elks27": [
+   "Davion Mitchell|8|NORMAL"
+  ],
+  "sp28": [
+   "Jordan Goodwin|11|NORMAL",
+   "Rui Hachimura|8|NORMAL",
+   "De'Aaron Fox|0|NORMAL",
+   "Lauri Markkanen|13|NORMAL"
+  ],
+  "n28": 26,
+  "elks28": [
+   "Davion Mitchell|8|NORMAL"
+  ]
+ }
 }
