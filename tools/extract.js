@@ -116,6 +116,20 @@ try{
   }catch(e){}}));
  }
 }catch(e){}
+// BOX: this week's daily lineups with actual fantasy points, per team (for the box-score view). BOX[dayIndex][teamId] = [[lineupSlotId, name, points], ...]. Best effort.
+const BOX={};
+try{
+ const spT3=spStart+today, sl3=[]; for(let q=spStart;q<=spT3;q++)sl3.push(q);
+ await Promise.all(sl3.map(async sp=>{try{
+  const jj=await J(L+'?view=mMatchup&view=mBoxscore&scoringPeriodId='+sp), d=sp-spStart, o={};
+  (jj.schedule||[]).filter(m=>m.matchupPeriodId===wk+1).forEach(m=>{[m.home,m.away].forEach(x=>{
+   if(!x||x.teamId==null)return;
+   const ent=(x.rosterForCurrentScoringPeriod&&x.rosterForCurrentScoringPeriod.entries)||[];
+   if(ent.length)o[x.teamId]=ent.map(e=>{const pe=e.playerPoolEntry||{};return [e.lineupSlotId,(pe.player&&pe.player.fullName)||'?',Math.round((+pe.appliedStatTotal||0)*100)/100]});
+  })});
+  if(Object.keys(o).length)BOX[d]=o;
+ }catch(e){}}));
+}catch(e){}
 const nowLabel=new Date().toLocaleString('en-US',{timeZone:'America/Los_Angeles',weekday:'short',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})+' PT';
 const out=`//REFRESH-DATA-START
 const WEEK_LABEL = 'Week ${wk}';
@@ -140,6 +154,8 @@ const RESLIVE = ${JSON.stringify(FIN)};
 const INJ = ${JSON.stringify(IJ)};
 // Last 6 games per player: [scoringPeriod (7 = Mon Oct 26 2026), fantasy pts, PTS, REB, AST, STL, BLK, 3PM, TO, MIN, opponent]
 const GLOG = ${JSON.stringify(GLOG)};
+// This week's daily lineups with actual points: BOX[dayIndex][teamId] = [[slotId, name, points], ...]
+const BOX = ${JSON.stringify(BOX)};
 //REFRESH-DATA-END`;
 window.__blob=out;
 let h=5381;for(const c of out)h=((h<<5)+h+c.charCodeAt(0))>>>0;window.__sum=h;return JSON.stringify({len:out.length,sum:h,wk,today,spStart,matchups:mu.length,nowLabel})
