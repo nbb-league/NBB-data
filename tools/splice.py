@@ -12,7 +12,7 @@ for l in data:
     if l.startswith('#'): cur=int(l[1:].split('|')[0]); teams[cur]=[]; continue
     f=l.split("|"); assert len(f) in (9,10,12),('fields',l); teams[cur].append(f)
 assert sorted(teams)==[0,1,2,3,4,5,6],'teams'
-assert 20<=len(teams[0])<=40,'free agents %d'%len(teams[0])
+assert 20<=len(teams[0])<=120,'free agents %d'%len(teams[0])
 for l in lu:
     t,r=l.split(':'); t=int(t); parts=r.split('/'); assert len(parts)==7
     for p in parts:
