@@ -14,3 +14,13 @@ for (const sp of [cur]) {
   }));
 }
 fs.mkdirSync('out',{recursive:true});fs.writeFileSync('out/diag.json',JSON.stringify(out,null,1));console.log(JSON.stringify(out).slice(0,1500));
+// Goodwin / trade lookup
+try{
+ const r=await J(L+'?view=mRoster&view=mTeam');
+ out.goodwin_roster=[]; (r.teams||[]).forEach(t=>(t.roster.entries||[]).forEach(e=>{const p=e.playerPoolEntry.player; if(/goodwin|markkanen|fox|davion/i.test(p.fullName))out.goodwin_roster.push([t.id,p.fullName,e.lineupSlotId,e.status])}));
+ const k=await J(L+'?view=kona_player_info&scoringPeriodId='+cur);
+ const f=await fetch(L+'?view=kona_player_info',{headers:{'x-fantasy-filter':JSON.stringify({players:{filterName:{value:'Goodwin'},limit:10}})}}); const fj=await f.json();
+ out.goodwin_search=(fj.players||[]).map(x=>[x.player.fullName,x.status,x.onTeamId,x.player.proTeamId,x.player.injuryStatus,x.player.defaultPositionId]);
+ const tr=await J(L+'?view=mTransactions2'); out.tx=(tr.transactions||[]).slice(-8).map(t=>[t.type,t.status,t.teamId,new Date(t.proposedDate).toISOString(),(t.items||[]).map(i=>[i.type,i.playerId,i.fromTeamId,i.toTeamId])]);
+ fs.writeFileSync('out/diag.json',JSON.stringify(out,null,1));
+}catch(e){out.err=String(e);fs.writeFileSync('out/diag.json',JSON.stringify(out,null,1));}
