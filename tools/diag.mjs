@@ -14,9 +14,3 @@ for (const sp of [cur]) {
   }));
 }
 fs.mkdirSync('out',{recursive:true});fs.writeFileSync('out/diag.json',JSON.stringify(out,null,1));console.log(JSON.stringify(out).slice(0,1500));
-try{
- const res={};
- for(const off of [0,1,2]){ const r=await J(L+'?view=mRoster&scoringPeriodId='+(cur+off)); const t=r.teams.find(t=>t.id===1); res['sp'+(cur+off)]=t.roster.entries.map(e=>e.playerPoolEntry.player.fullName+'|'+e.lineupSlotId+'|'+e.status).filter(x=>/Hachimura|Goodwin|Wolf|Hyland|Huerter|Wells|Mitchell|Fox|Markkanen/.test(x)); res['n'+(cur+off)]=t.roster.entries.length;
-  const e=r.teams.find(t=>t.id===3); res['elks'+(cur+off)]=e.roster.entries.map(e=>e.playerPoolEntry.player.fullName+'|'+e.lineupSlotId+'|'+e.status).filter(x=>/Fox|Markkanen|Mitchell/.test(x)); }
- out.future=res; fs.writeFileSync('out/diag.json',JSON.stringify(out,null,1));
-}catch(e){out.err4=String(e);fs.writeFileSync('out/diag.json',JSON.stringify(out,null,1));}

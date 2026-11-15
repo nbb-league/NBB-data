@@ -8,6 +8,17 @@ const wk=Math.floor(days/7)+1, spStart=7+(wk-1)*7, today=days-(wk-1)*7;
 const WD=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
 const DAYS=WD.map((w,i)=>{const d=new Date(d0+((wk-1)*7+i)*864e5);return [w,(d.getUTCMonth()+1)+'/'+d.getUTCDate()]});
 const j0=await J(L+'?view=mRoster&view=mTeam&view=mMatchup&view=mSettings');
+// Moves made after today's lineups lock are queued by ESPN and only show up in tomorrow's roster. Once a game has started today, use tomorrow's roster so queued adds, drops and trades are reflected (best effort).
+let NEXTR=0;
+try{
+ const locked=j0.teams.some(t=>t.roster.entries.some(e=>e.playerPoolEntry&&e.playerPoolEntry.lineupLocked===true));
+ if(locked){
+  const j1=await J(L+'?view=mRoster&view=mTeam&scoringPeriodId='+(spStart+today+1));
+  const sig=t=>t.roster.entries.map(e=>e.playerId).sort().join(',');
+  let diff=0; j0.teams.forEach(t=>{const u=(j1.teams||[]).find(x=>x.id===t.id); if(u&&u.roster&&u.roster.entries.length&&sig(u)!==sig(t)){diff++}});
+  if(diff&&(j1.teams||[]).length===j0.teams.length){ j0.teams.forEach(t=>{const u=j1.teams.find(x=>x.id===t.id); if(u&&u.roster&&u.roster.entries.length)t.roster.entries=u.roster.entries}); NEXTR=diff; }
+ }
+}catch(e){}
 const mem={};(j0.members||[]).forEach(m=>mem[m.id]=((m.firstName||'')+' '+(m.lastName||'')).trim());
 const IJ={};try{const ids=[];j0.teams.forEach(t=>t.roster.entries.forEach(e=>{const s=e.playerPoolEntry.player.injuryStatus;if(s&&s!=='ACTIVE')ids.push(e.playerId)}));
  if(ids.length){const jj=await J(L+'?view=kona_playercard',{'x-fantasy-filter':JSON.stringify({players:{filterIds:{value:ids}}})});
@@ -156,6 +167,7 @@ const INJ = ${JSON.stringify(IJ)};
 // Last 6 games per player: [scoringPeriod (7 = Mon Oct 26 2026), fantasy pts, PTS, REB, AST, STL, BLK, 3PM, TO, MIN, opponent]
 const GLOG = ${JSON.stringify(GLOG)};
 const WAIV = ${JSON.stringify(WAIV)};
+const NEXTR = ${NEXTR};
 // This week's daily lineups with actual points: BOX[dayIndex][teamId] = [[slotId, name, points], ...]
 const BOX = ${JSON.stringify(BOX)};
 //REFRESH-DATA-END`;
