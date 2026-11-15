@@ -22,5 +22,6 @@ try{
  const f=await fetch(L+'?view=kona_player_info',{headers:{'x-fantasy-filter':JSON.stringify({players:{filterName:{value:'Goodwin'},limit:10}})}}); const fj=await f.json();
  out.goodwin_search=(fj.players||[]).map(x=>[x.player.fullName,x.status,x.onTeamId,x.player.proTeamId,x.player.injuryStatus,x.player.defaultPositionId]);
  const tr=await J(L+'?view=mTransactions2'); out.tx=(tr.transactions||[]).slice(-8).map(t=>[t.type,t.status,t.teamId,new Date(t.proposedDate).toISOString(),(t.items||[]).map(i=>[i.type,i.playerId,i.fromTeamId,i.toTeamId])]);
+ out.t1=(r.teams.find(t=>t.id===1).roster.entries||[]).map(e=>[e.playerId,e.playerPoolEntry.player.fullName,e.lineupSlotId,e.status]); out.dropped=[5107173,4592492,4397183].map(id=>{for(const t of r.teams)for(const e of t.roster.entries)if(e.playerId===id)return [t.id,e.playerPoolEntry.player.fullName];return null}); out.gw=(await (await fetch(L+'?view=kona_playercard',{headers:{'x-fantasy-filter':JSON.stringify({players:{filterIds:{value:[4066648,5107173,4592492]}}})}})).json()).players.map(x=>[x.id,x.player.fullName,x.onTeamId,x.status]);
  fs.writeFileSync('out/diag.json',JSON.stringify(out,null,1));
 }catch(e){out.err=String(e);fs.writeFileSync('out/diag.json',JSON.stringify(out,null,1));}
