@@ -14,14 +14,11 @@ for (const sp of [cur]) {
   }));
 }
 fs.mkdirSync('out',{recursive:true});fs.writeFileSync('out/diag.json',JSON.stringify(out,null,1));console.log(JSON.stringify(out).slice(0,1500));
-// Goodwin / trade lookup
 try{
- const r=await J(L+'?view=mRoster&view=mTeam');
- out.goodwin_roster=[]; (r.teams||[]).forEach(t=>(t.roster.entries||[]).forEach(e=>{const p=e.playerPoolEntry.player; if(/goodwin|markkanen|fox|davion/i.test(p.fullName))out.goodwin_roster.push([t.id,p.fullName,e.lineupSlotId,e.status])}));
- const k=await J(L+'?view=kona_player_info&scoringPeriodId='+cur);
- const f=await fetch(L+'?view=kona_player_info',{headers:{'x-fantasy-filter':JSON.stringify({players:{filterName:{value:'Goodwin'},limit:10}})}}); const fj=await f.json();
- out.goodwin_search=(fj.players||[]).map(x=>[x.player.fullName,x.status,x.onTeamId,x.player.proTeamId,x.player.injuryStatus,x.player.defaultPositionId]);
- const tr=await J(L+'?view=mTransactions2'); out.tx=(tr.transactions||[]).slice(-8).map(t=>[t.type,t.status,t.teamId,new Date(t.proposedDate).toISOString(),(t.items||[]).map(i=>[i.type,i.playerId,i.fromTeamId,i.toTeamId])]);
- out.t1=(r.teams.find(t=>t.id===1).roster.entries||[]).map(e=>[e.playerId,e.playerPoolEntry.player.fullName,e.lineupSlotId,e.status]); out.dropped=[5107173,4592492,4397183].map(id=>{for(const t of r.teams)for(const e of t.roster.entries)if(e.playerId===id)return [t.id,e.playerPoolEntry.player.fullName];return null}); out.gw=(await (await fetch(L+'?view=kona_playercard',{headers:{'x-fantasy-filter':JSON.stringify({players:{filterIds:{value:[4066648,5107173,4592492]}}})}})).json()).players.map(x=>[x.id,x.player.fullName,x.onTeamId,x.status]);
+ const s=await J(L+'?view=mSettings'); const ss=s.settings.scheduleSettings||{};
+ out.sched={matchupPeriodCount:ss.matchupPeriodCount,matchupPeriods:ss.matchupPeriods,playoffTeamCount:ss.playoffTeamCount,playoffMatchupPeriodLength:ss.playoffMatchupPeriodLength,playoffSeedingRule:ss.playoffSeedingRule,seedTie:ss.playoffSeedingRuleBy,regularSeasonMatchupPeriodCount:s.settings.scheduleSettings&&ss.regularSeasonMatchupPeriodCount, finalScoringPeriod:s.status&&s.status.finalScoringPeriod, firstScoringPeriod:s.status&&s.status.firstScoringPeriod};
+ const B='https://lm-api-reads.fantasy.espn.com/apis/v3/games/fba/seasons/2027';
+ const pts=(await J(B+'?view=proTeamSchedules_wl')).settings.proTeams; const ab=t=>t.abbrev;
+ out.fullsch=pts.filter(t=>t.abbrev&&t.id>0).map(t=>{const g=t.proGamesByScoringPeriod||{};const wk=[];for(let w=1;w<=30;w++){let x='';for(let i=0;i<7;i++){x+=((g[7+7*(w-1)+i]||[]).length>0)?'1':'0'}wk.push(x)}return t.abbrev+':'+wk.join('.')}).join(' ');
  fs.writeFileSync('out/diag.json',JSON.stringify(out,null,1));
-}catch(e){out.err=String(e);fs.writeFileSync('out/diag.json',JSON.stringify(out,null,1));}
+}catch(e){out.err2=String(e);fs.writeFileSync('out/diag.json',JSON.stringify(out,null,1));}
