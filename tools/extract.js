@@ -23,10 +23,10 @@ let data='';const order=[];
 for(const t of j0.teams){data+='#'+t.id+'|'+t.name+'|'+(mem[t.primaryOwner]||'')+'\n';
  order.push(t.roster.entries.map(e=>e.playerId));
  t.roster.entries.forEach(e=>{const s=e.lineupSlotId;data+=line(e.playerPoolEntry.player,s===13?'IR':s===12?'BE':'ST')+'\n'})}
-const fa=await J(L+'?view=kona_player_info',{'x-fantasy-filter':JSON.stringify({players:{filterStatus:{value:['FREEAGENT','WAIVERS']},filterSlotIds:{value:[0,1,2,3,4,5,6,8,10,11]},limit:250,sortPercOwned:{sortPriority:1,sortAsc:false},sortDraftRanks:{sortPriority:100,sortAsc:true,value:'STANDARD'}}})});
+const fa=await J(L+'?view=kona_player_info',{'x-fantasy-filter':JSON.stringify({players:{filterStatus:{value:['FREEAGENT','WAIVERS']},filterSlotIds:{value:[0,1,2,3,4,5,6,8,10,11]},limit:400,sortPercOwned:{sortPriority:1,sortAsc:false},sortDraftRanks:{sortPriority:100,sortAsc:true,value:'STANDARD'}}})});
 data+='#0|Free agents|\n';
 const l7=p=>{const s=(p.stats||[]).find(q=>q.id==='012027');return {a:s&&s.appliedAverage>0?+s.appliedAverage.toFixed(2):0,g:s&&s.stats?(s.stats['42']||0):0}};
-fa.players.filter(x=>T[x.player.proTeamId]&&x.player.injuryStatus!=='OUT').map(x=>({p:x.player,r:l7(x.player)})).filter(o=>o.r.g>=2).sort((a,b)=>b.r.a-a.r.a).slice(0,40).forEach(o=>{data+=line(o.p,'FA')+'\n'});
+fa.players.filter(x=>T[x.player.proTeamId]&&x.player.injuryStatus!=='OUT').map(x=>{const c=(x.player.stats||[]).find(q=>q.id==='002027');return {p:x.player,r:l7(x.player),k:(l7(x.player).a||(c&&c.appliedAverage)||0)}}).filter(o=>o.r.g>=1||o.k>0).sort((a,b)=>b.k-a.k).slice(0,100).forEach(o=>{data+=line(o.p,'FA')+'\n'});
 const LUr=[];
 const per=[];
 for(let i=0;i<7;i++){const j=await J(L+'?view=mRoster&scoringPeriodId='+(spStart+i));
