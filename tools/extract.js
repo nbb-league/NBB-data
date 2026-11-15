@@ -24,6 +24,7 @@ for(const t of j0.teams){data+='#'+t.id+'|'+t.name+'|'+(mem[t.primaryOwner]||'')
  order.push(t.roster.entries.map(e=>e.playerId));
  t.roster.entries.forEach(e=>{const s=e.lineupSlotId;data+=line(e.playerPoolEntry.player,s===13?'IR':s===12?'BE':'ST')+'\n'})}
 const fa=await J(L+'?view=kona_player_info',{'x-fantasy-filter':JSON.stringify({players:{filterStatus:{value:['FREEAGENT','WAIVERS']},filterSlotIds:{value:[0,1,2,3,4,5,6,8,10,11]},limit:400,sortPercOwned:{sortPriority:1,sortAsc:false},sortDraftRanks:{sortPriority:100,sortAsc:true,value:'STANDARD'}}})});
+const WAIV={};try{(fa.players||[]).forEach(x=>{if(x.status==='WAIVERS')WAIV[x.player.fullName]=+x.waiverProcessDate||0})}catch(e){}
 data+='#0|Free agents|\n';
 const l7=p=>{const s=(p.stats||[]).find(q=>q.id==='012027');return {a:s&&s.appliedAverage>0?+s.appliedAverage.toFixed(2):0,g:s&&s.stats?(s.stats['42']||0):0}};
 fa.players.filter(x=>T[x.player.proTeamId]&&x.player.injuryStatus!=='OUT').map(x=>{const c=(x.player.stats||[]).find(q=>q.id==='002027');return {p:x.player,r:l7(x.player),k:(l7(x.player).a||(c&&c.appliedAverage)||0)}}).filter(o=>o.r.g>=1||o.k>0).sort((a,b)=>b.k-a.k).slice(0,100).forEach(o=>{data+=line(o.p,'FA')+'\n'});
@@ -154,6 +155,7 @@ const RESLIVE = ${JSON.stringify(FIN)};
 const INJ = ${JSON.stringify(IJ)};
 // Last 6 games per player: [scoringPeriod (7 = Mon Oct 26 2026), fantasy pts, PTS, REB, AST, STL, BLK, 3PM, TO, MIN, opponent]
 const GLOG = ${JSON.stringify(GLOG)};
+const WAIV = ${JSON.stringify(WAIV)};
 // This week's daily lineups with actual points: BOX[dayIndex][teamId] = [[slotId, name, points], ...]
 const BOX = ${JSON.stringify(BOX)};
 //REFRESH-DATA-END`;

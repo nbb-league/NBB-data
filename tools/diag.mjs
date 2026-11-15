@@ -14,9 +14,3 @@ for (const sp of [cur]) {
   }));
 }
 fs.mkdirSync('out',{recursive:true});fs.writeFileSync('out/diag.json',JSON.stringify(out,null,1));console.log(JSON.stringify(out).slice(0,1500));
-try{
- const f=await fetch(L+'?view=kona_player_info',{headers:{'x-fantasy-filter':JSON.stringify({players:{filterIds:{value:[5107173,4592492]}}})}}); const fj=await f.json();
- out.w=(fj.players||[]).map(x=>({keys:Object.keys(x),status:x.status,wpd:x.waiverProcessDate,pk:Object.keys(x.player).filter(k=>/waiv|lock|process|date/i.test(k)),onTeamId:x.onTeamId}));
- const s=await J(L+'?view=mSettings'); out.waiverSettings=s.settings.acquisitionSettings; out.tradeSettings={deadline:s.settings.tradeSettings};
- fs.writeFileSync('out/diag.json',JSON.stringify(out,null,1));
-}catch(e){out.err3=String(e);fs.writeFileSync('out/diag.json',JSON.stringify(out,null,1));}
