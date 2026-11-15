@@ -1,5 +1,5 @@
 {
- "at": "2026-11-15T06:33:29.202Z",
+ "at": "2026-11-15T06:35:02.553Z",
  "cur": 26,
  "sp26": [
   [
@@ -98,77 +98,5 @@
     "n": 0
    }
   ]
- ],
- "w": [
-  {
-   "keys": [
-    "draftAuctionValue",
-    "droppedByEliminatedTeam",
-    "id",
-    "keeperValue",
-    "keeperValueFuture",
-    "lineupLocked",
-    "onTeamId",
-    "player",
-    "ratings",
-    "rosterLocked",
-    "status",
-    "tradeLocked"
-   ],
-   "status": "FREEAGENT",
-   "pk": [
-    "lastNewsDate"
-   ],
-   "onTeamId": 0
-  },
-  {
-   "keys": [
-    "draftAuctionValue",
-    "droppedByEliminatedTeam",
-    "id",
-    "keeperValue",
-    "keeperValueFuture",
-    "lineupLocked",
-    "onTeamId",
-    "player",
-    "ratings",
-    "rosterLocked",
-    "status",
-    "tradeLocked",
-    "waiverProcessDate"
-   ],
-   "status": "WAIVERS",
-   "wpd": 1794816000000,
-   "pk": [
-    "lastNewsDate"
-   ],
-   "onTeamId": 0
-  }
- ],
- "waiverSettings": {
-  "acquisitionBudget": 100,
-  "acquisitionLimit": -1,
-  "acquisitionType": "WAIVERS_TRADITIONAL",
-  "finalPlaceTransactionEligible": 1,
-  "isUsingAcquisitionBudget": false,
-  "matchupAcquisitionLimit": -1,
-  "matchupLimitPerScoringPeriod": false,
-  "minimumBid": 1,
-  "transactionLockingEnabled": true,
-  "waiverHours": 24,
-  "waiverOrderReset": false,
-  "waiverProcessDays": [
-   "SUNDAY"
-  ],
-  "waiverProcessHour": 11
- },
- "tradeSettings": {
-  "deadline": {
-   "allowOutOfUniverse": false,
-   "deadlineDate": 1802116800000,
-   "max": -1,
-   "revisionHours": 0,
-   "vetoVotesRequired": 0
-  }
- }
+ ]
 }
