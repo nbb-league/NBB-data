@@ -15,10 +15,8 @@ for (const sp of [cur]) {
 }
 fs.mkdirSync('out',{recursive:true});fs.writeFileSync('out/diag.json',JSON.stringify(out,null,1));console.log(JSON.stringify(out).slice(0,1500));
 try{
- const s=await J(L+'?view=mSettings'); const ss=s.settings.scheduleSettings||{};
- out.sched={matchupPeriodCount:ss.matchupPeriodCount,matchupPeriods:ss.matchupPeriods,playoffTeamCount:ss.playoffTeamCount,playoffMatchupPeriodLength:ss.playoffMatchupPeriodLength,playoffSeedingRule:ss.playoffSeedingRule,seedTie:ss.playoffSeedingRuleBy,regularSeasonMatchupPeriodCount:s.settings.scheduleSettings&&ss.regularSeasonMatchupPeriodCount, finalScoringPeriod:s.status&&s.status.finalScoringPeriod, firstScoringPeriod:s.status&&s.status.firstScoringPeriod};
- const B='https://lm-api-reads.fantasy.espn.com/apis/v3/games/fba/seasons/2027';
- const pts=(await J(B+'?view=proTeamSchedules_wl')).settings.proTeams; const ab=t=>t.abbrev;
- out.fullsch=pts.filter(t=>t.abbrev&&t.id>0).map(t=>{const g=t.proGamesByScoringPeriod||{};const wk=[];for(let w=1;w<=30;w++){let x='';for(let i=0;i<7;i++){x+=((g[7+7*(w-1)+i]||[]).length>0)?'1':'0'}wk.push(x)}return t.abbrev+':'+wk.join('.')}).join(' ');
+ const f=await fetch(L+'?view=kona_player_info',{headers:{'x-fantasy-filter':JSON.stringify({players:{filterIds:{value:[5107173,4592492]}}})}}); const fj=await f.json();
+ out.w=(fj.players||[]).map(x=>({keys:Object.keys(x),status:x.status,wpd:x.waiverProcessDate,pk:Object.keys(x.player).filter(k=>/waiv|lock|process|date/i.test(k)),onTeamId:x.onTeamId}));
+ const s=await J(L+'?view=mSettings'); out.waiverSettings=s.settings.acquisitionSettings; out.tradeSettings={deadline:s.settings.tradeSettings};
  fs.writeFileSync('out/diag.json',JSON.stringify(out,null,1));
-}catch(e){out.err2=String(e);fs.writeFileSync('out/diag.json',JSON.stringify(out,null,1));}
+}catch(e){out.err3=String(e);fs.writeFileSync('out/diag.json',JSON.stringify(out,null,1));}
