@@ -3072,17 +3072,66 @@ paintNews(); newsTick();
 applyHash();
 window.addEventListener('hashchange', applyHash);
 })();
-</script>
 
+/* ---- Box score: actual vs projected, per day or for the week, for the selected matchup ---- */
+let hqBoxDay = null;
+function hqBoxProj(name, d) {
+  const p = P.find(q => jnorm(q.name) === jnorm(name)); if (!p || !p.team) return null;
+  if (!sched(p)[d]) return 0;
+  return p.status === 'OUT' ? 0 : muOf(p);
+}
+function hqBoxTeam(tid, d) {
+  const e = (typeof BOX !== 'undefined' && BOX[d] && BOX[d][tid]) || [], st = e.filter(x => x[0] < 12).sort((a, b) => a[0] - b[0]);
+  const rows = st.map(x => ({ slot: SLOT_BY_ID[x[0]] || '', name: x[1], act: x[2], proj: hqBoxProj(x[1], d) }));
+  return { rows, bench: e.filter(x => x[0] >= 12).map(x => ({ name: x[1], act: x[2], ir: x[0] === 13 })), act: rows.reduce((t, r) => t + r.act, 0), proj: rows.reduce((t, r) => t + (r.proj || 0), 0) };
+}
+function hqFullMarks() {
+  const m = MATCHUPS[S.m], row = $('dayrow'); if (!m || !row) return;
+  const cnt = (tid, d) => { try { return lineupBest(tid, d).count; } catch (e) { return 0; } }, full = (tid, d) => cnt(tid, d) >= 14, near = {};
+  const info = [[m[0], 'h'], [m[1], 'a']], days = {};
+  info.forEach(([tid, c]) => { days[tid] = []; near[tid] = []; for (let d = Math.max(0, S.first); d <= S.last; d++) { const f = full(tid, d), k = cnt(tid, d); if (f) days[tid].push(d); else if (k >= 12) near[tid].push(d); const b = row.querySelector('[data-day="' + d + '"] .n.' + c); if (b && f) b.insertAdjacentHTML('beforeend', '<i class="hq-fl" title="Enough healthy players with games to fill all 14 slots" style="font-style:normal;font-size:10px;margin-left:1px">✓</i>'); } });
+  const WD3 = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], nm = id => esc(TEAMS[id].short), lst = id => { const a = days[id].map(d => WD3[d] + ' ✓').concat(near[id].map(d => WD3[d] + ' ' + cnt(id, d) + '/14')); return a.length ? a.join(', ') : 'none'; };
+  let el = $('hq-full'); if (!el) { el = document.createElement('p'); el.id = 'hq-full'; el.className = 'hint'; el.style.margin = '6px 0'; row.insertAdjacentElement('afterend', el); }
+  el.innerHTML = '<b>✓ = full 14-slot lineup possible</b> (day-to-day players counted as playing, out players not). Days with 12 or 13 slots filled are listed too. ' + nm(m[0]) + ': ' + lst(m[0]) + '. ' + nm(m[1]) + ': ' + lst(m[1]) + '.';
+}
+function hqPaintBox() {
+  const old = $('hq-box'); if (old) old.remove();
+  const el = $('lineups'); if (!el) return;
+  const d = S.day, m = MATCHUPS[S.m];
+  if (typeof BOX === 'undefined' || !BOX || !BOX[d] || !m) return;
+  const a = m[0], b = m[1], f1 = x => x.toFixed(1), nm = id => TEAMS[id].short;
+  const tot = (x, p) => '<b style="font-size:20px">' + f1(x) + '</b><div style="font-size:12px;color:var(--muted)">proj ' + f1(p) + '</div>';
+  let body = '';
+  {
+    const X = hqBoxTeam(a, d), Y = hqBoxTeam(b, d), n = Math.max(X.rows.length, Y.rows.length);
+    const cell = (r, right) => { if (!r) return '<div></div>'; const diff = r.proj == null ? 0 : r.act - r.proj, col = r.proj == null ? '' : (diff > 0.5 ? 'color:#1a8f4a;' : (diff < -0.5 && r.proj > 0 ? 'color:#c0392b;' : '')); return '<div style="min-width:0;text-align:' + (right ? 'right' : 'left') + '"><div style="font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + pl(r.name) + '</div><div><b style="font-size:17px;' + col + '">' + f1(r.act) + '</b> <small style="color:var(--muted)">' + (r.proj == null ? '' : f1(r.proj)) + '</small></div></div>'; };
+    let rows = ''; for (let i = 0; i < n; i++) rows += '<div style="display:grid;grid-template-columns:1fr 40px 1fr;gap:6px;padding:6px 0;border-top:1px solid var(--line);align-items:center">' + cell(X.rows[i], false) + '<div style="text-align:center;font-size:11px;font-weight:700;color:var(--muted)">' + esc((X.rows[i] || Y.rows[i] || {}).slot || '') + '</div>' + cell(Y.rows[i], true) + '</div>';
+    const bn = (T, right) => T.bench.length ? '<div style="text-align:' + (right ? 'right' : 'left') + ';font-size:12px;color:var(--muted)">' + T.bench.map(x => esc(x.name.replace(/ (Jr\.?|Sr\.?|II|III|IV)$/i,'').split(' ').slice(-1)[0]) + ' ' + f1(x.act)).join(' · ') + '</div>' : '<div></div>';
+    body = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px"><div><div style="font-size:13px;font-weight:600">' + esc(nm(a)) + '</div>' + tot(X.act, X.proj) + '</div><div style="text-align:right"><div style="font-size:13px;font-weight:600">' + esc(nm(b)) + '</div>' + tot(Y.act, Y.proj) + '</div></div>' + rows + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;padding-top:6px;border-top:1px solid var(--line)">' + bn(X, false) + bn(Y, true) + '</div><p class="hint" style="margin:6px 0 0">Big number = actual points, small = projected for that day. Green = beat the projection, red = fell short. Bench points do not count. Projections are this site\'s model, not ESPN\'s.</p>';
+  }
+  let WA = 0, WAp = 0, WB = 0, WBp = 0; Object.keys(BOX).map(Number).forEach(k => { const x = hqBoxTeam(a, k), y = hqBoxTeam(b, k); WA += x.act; WAp += x.proj; WB += y.act; WBp += y.proj; });
+  el.innerHTML = '<div style="grid-column:1/-1;font-size:12px;color:var(--muted);margin-bottom:6px">Actual vs projected for this day. Week so far: ' + esc(nm(a)) + ' ' + f1(WA) + ' (proj ' + f1(WAp) + ') · ' + esc(nm(b)) + ' ' + f1(WB) + ' (proj ' + f1(WBp) + ')</div><div style="grid-column:1/-1">' + body + '</div>';
+}
+document.addEventListener('click', e => { if (e.target.closest('[data-day]')) setTimeout(() => { try { hqPaintBox(); } catch (er) {} }, 0); });
+{ const _pd = paintDays; paintDays = function () { _pd(); try { hqFullMarks(); } catch (e) {} try { hqPaintBox(); } catch (e) { window.__be = String(e.stack || e); } }; }
+setTimeout(() => { try { paintDays(); } catch (e) {} }, 1500);
 
-<script>
-/* Auto-refresh: when the page comes back to the foreground (or sits open) and is older than 5 minutes, reload to pick up the newest data. */
-(function(){var t0=Date.now(),MAX=5*60*1000;
-function stale(){return Date.now()-t0>MAX;}
-function go(){try{var u=location.pathname+'?t='+Date.now()+location.hash;location.replace(u);}catch(e){try{location.reload();}catch(_){}}}
-document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible'&&stale())go();});
-window.addEventListener('pageshow',function(e){if(e.persisted&&stale())go();});
-setInterval(function(){if(document.visibilityState==='visible'&&stale())go();},60*1000);
+window.__hqAct = Date.now(); ['pointerdown', 'keydown', 'touchstart', 'scroll'].forEach(ev => window.addEventListener(ev, () => { window.__hqAct = Date.now(); }, { passive: true }));
+window.addEventListener('pagehide', () => { try { sessionStorage.setItem('hq-y', JSON.stringify({ y: window.scrollY, t: Date.now() })); } catch (e) {} });
+setTimeout(() => { try { const r = JSON.parse(sessionStorage.getItem('hq-y') || 'null'); if (r && Date.now() - r.t < 30000 && r.y > 0) window.scrollTo(0, r.y); sessionStorage.removeItem('hq-y'); } catch (e) {} }, 1800);
+
+/* ---- Auto-refresh: reload when idle and the page is older than 10 min (weekday mornings PT) or 30 min (other times) ---- */
+(function hqAuto() {
+  const t0 = Date.now();
+  const maxAge = () => { try { const f = new Intl.DateTimeFormat('en-US', { timeZone: 'America/Los_Angeles', weekday: 'short', hour: 'numeric', hour12: false }).formatToParts(new Date()), g = k => (f.find(x => x.type === k) || {}).value, h = +g('hour') % 24, wd = g('weekday'); return (wd !== 'Sat' && wd !== 'Sun' && h >= 5 && h < 13) ? 10 * 6e4 : 30 * 6e4; } catch (e) { return 30 * 6e4; } };
+  const go = () => { try { location.replace(location.pathname + '?t=' + Date.now() + location.hash); } catch (e) { try { location.reload(); } catch (x) {} } };
+  const due = () => document.visibilityState === 'visible' && Date.now() - t0 > maxAge() && Date.now() - (window.__hqAct || 0) > 45000;
+  setInterval(() => { if (due()) go(); }, 60000);
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && Date.now() - t0 > maxAge()) go(); });
+  window.addEventListener('pageshow', e => { if (e.persisted && Date.now() - t0 > maxAge()) go(); });
 })();
 </script>
+
+
+
 </body></html>
