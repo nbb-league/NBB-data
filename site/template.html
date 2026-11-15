@@ -182,6 +182,7 @@ select, input[type="number"] {
 .chip { font: 700 10px var(--body); padding: 1px 5px; border-radius: 3px; letter-spacing: .05em; }
 .chip.out { background: var(--out-bg); color: var(--out-fg); }
 .chip.dtd { background: var(--dtd-bg); color: var(--dtd); }
+.chip.ng { background: color-mix(in srgb, #C8332B 20%, var(--surface)); color: #C8332B; }
 .edit { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 4px 0 16px; }
 .edit .full { grid-column: 1 / -1; }
 .note { margin: 0; font-size: 12.5px; color: var(--muted); }
@@ -1361,7 +1362,7 @@ function lineupSet(tid, d) {
     const lbl = SLOT_BY_ID[x.slot];
     if (x.plays && x.p.status !== 'OUT') rows.push({ slot: lbl, p: x.p, mu: muOf(x.p) });
     else if (x.plays) { const b = take(x.slot, false); rows.push(b ? { slot: lbl, p: b.p, mu: b.mu } : { slot: lbl, p: null, idle: x.p.name + ' (out)', mu: 0 }); }
-    else { const b = take(x.slot, true); rows.push(b ? { slot: lbl, p: b.p, mu: b.mu, added: true } : { slot: lbl, p: null, idle: (x.p.tid === tid && x.p.role === 'A') ? (isOutDay(x.p, d) ? x.p.name + ' (out until ' + fmtISO(RET[x.p.name]) + ')' : x.p.name + ' (no game)') : '', mu: 0 }); }
+    else { const b = take(x.slot, true); rows.push(b ? { slot: lbl, p: b.p, mu: b.mu, added: true, ng: (x.p.tid === tid && x.p.role === 'A' && !isOutDay(x.p, d)) ? x.p.name : '' } : { slot: lbl, p: null, idle: (x.p.tid === tid && x.p.role === 'A') ? (isOutDay(x.p, d) ? x.p.name + ' (out until ' + fmtISO(RET[x.p.name]) + ')' : x.p.name + ' (no game)') : '', mu: 0 }); }
   });
   return { rows, sit: sd.bench.filter(b => !usedB.has(b.p)).map(b => b.p), count: rows.filter(r => r.p).length, set: true };
 }
@@ -1635,8 +1636,8 @@ function paintDays() {
   const side = (tid, cls, exp) => {
     const L = lineupFor(tid, S.day);
     const rows = L.rows.map(x => x.p
-      ? '<div class="lr"><span class="sl">' + x.slot + '</span><span class="nn">' + pl(x.p.name) + (x.added ? ' <span class="chip dtd">ADDED</span>' : '') + (x.p.status === 'DTD' ? ' <span class="chip dtd">DTD</span>' : '') + '</span><span class="vv">' + (S.day === S.first && remP(x.p) < 1 ? (remP(x.p) <= 0 ? '<small style="opacity:.55;font-weight:500">done</small>' : (x.mu * remP(x.p)).toFixed(1) + '<small style="opacity:.55;font-weight:500"> left</small>') : x.mu.toFixed(1)) + '</span></div>'
-      : '<div class="lr empty"><span class="sl">' + x.slot + '</span><span class="nn">' + (x.idle ? esc(x.idle) : 'empty') + '</span><span class="vv">0</span></div>').join('');
+      ? '<div class="lr"><span class="sl">' + x.slot + '</span><span class="nn">' + pl(x.p.name) + (x.added ? ' <span class="chip dtd">ADDED</span>' : '') + (x.ng ? '<small style="display:block;font-weight:500;opacity:.7">in for ' + esc(x.ng) + ' <span class="chip ng">NO GAME</span></small>' : '') + (x.p.status === 'DTD' ? ' <span class="chip dtd">DTD</span>' : '') + '</span><span class="vv">' + (S.day === S.first && remP(x.p) < 1 ? (remP(x.p) <= 0 ? '<small style="opacity:.55;font-weight:500">done</small>' : (x.mu * remP(x.p)).toFixed(1) + '<small style="opacity:.55;font-weight:500"> left</small>') : x.mu.toFixed(1)) + '</span></div>'
+      : '<div class="lr empty"><span class="sl">' + x.slot + '</span><span class="nn">' + (x.idle ? (/ \(no game\)$/.test(x.idle) ? esc(x.idle.replace(/ \(no game\)$/, '')) + ' <span class="chip ng">NO GAME</span>' : /^(.*) \(out( until [^)]*)?\)$/.test(x.idle) ? esc(x.idle.replace(/ \(out( until [^)]*)?\)$/, '')) + ' <span class="chip out">OUT' + esc((x.idle.match(/\(out( until [^)]*)?\)$/) || [])[1] || '') + '</span>' : esc(x.idle)) : 'empty') + '</span><span class="vv">0</span></div>').join('');
     const bn = L.sit.map(p => ({ p, mu: muOf(p) })).sort((x, z) => z.mu - x.mu);
     const sit = bn.length ? '<div class="bnh">Bench · playing this day</div>' + bn.map(o => '<div class="lr bn"><span class="sl">BN</span><span class="nn">' + pl(o.p.name) + (o.p.status === 'DTD' ? ' <span class="chip dtd">DTD</span>' : '') + '</span><span class="vv">' + o.mu.toFixed(1) + '</span></div>').join('') : '<p class="sit">No bench players have a game this day.</p>';
     const gone = S.day < S.first || S.day > S.last;
@@ -3114,9 +3115,21 @@ function hqBoxProj(name, d) {
   if (!sched(p)[d]) return 0;
   return p.status === 'OUT' ? 0 : muOf(p);
 }
+function hqBoxStat(name, d) {
+  if (d !== TODAY) return '';
+  const p = P.find(q => jnorm(q.name) === jnorm(name)); if (!p) return '';
+  const until = RET[p.name] ? ' until ' + fmtISO(RET[p.name]) : '';
+  if (p.role === 'IR') return '<span class="chip out">IR</span>';
+  if (p.status === 'OUT') return '<span class="chip out">OUT' + until + '</span>';
+  if (p.status === 'DTD') return '<span class="chip dtd">DTD</span>';
+  return '';
+}
+function hqBoxNoGame(name, d) {
+  const p = P.find(q => jnorm(q.name) === jnorm(name)); return !!(p && p.team && p.status !== 'OUT' && !sched(p)[d]);
+}
 function hqBoxTeam(tid, d) {
   const e = (typeof BOX !== 'undefined' && BOX[d] && BOX[d][tid]) || [], st = e.filter(x => x[0] < 12).sort((a, b) => a[0] - b[0]);
-  const rows = st.map(x => ({ slot: SLOT_BY_ID[x[0]] || '', name: x[1], act: x[2], proj: hqBoxProj(x[1], d) }));
+  const rows = st.map(x => ({ slot: SLOT_BY_ID[x[0]] || '', name: x[1], act: x[2], proj: hqBoxProj(x[1], d), ng: hqBoxNoGame(x[1], d), st: hqBoxStat(x[1], d) }));
   return { rows, bench: e.filter(x => x[0] >= 12).map(x => ({ name: x[1], act: x[2], ir: x[0] === 13 })), act: rows.reduce((t, r) => t + r.act, 0), proj: rows.reduce((t, r) => t + (r.proj || 0), 0) };
 }
 function hqFullMarks() {
@@ -3138,7 +3151,7 @@ function hqPaintBox() {
   let body = '';
   {
     const X = hqBoxTeam(a, d), Y = hqBoxTeam(b, d), n = Math.max(X.rows.length, Y.rows.length);
-    const cell = (r, right) => { if (!r) return '<div></div>'; const diff = r.proj == null ? 0 : r.act - r.proj, col = r.proj == null ? '' : (diff > 0.5 ? 'color:#1a8f4a;' : (diff < -0.5 && r.proj > 0 ? 'color:#c0392b;' : '')); return '<div style="min-width:0;text-align:' + (right ? 'right' : 'left') + '"><div style="font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + pl(r.name) + '</div><div><b style="font-size:17px;' + col + '">' + f1(r.act) + '</b> <small style="color:var(--muted)">' + (r.proj == null ? '' : f1(r.proj)) + '</small></div></div>'; };
+    const cell = (r, right) => { if (!r) return '<div></div>'; const diff = r.proj == null ? 0 : r.act - r.proj, col = r.proj == null ? '' : (diff > 0.5 ? 'color:#1a8f4a;' : (diff < -0.5 && r.proj > 0 ? 'color:#c0392b;' : '')); return '<div style="min-width:0;text-align:' + (right ? 'right' : 'left') + '"><div style="font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + pl(r.name) + '</div><div><b style="font-size:17px;' + col + '">' + f1(r.act) + '</b> <small style="color:var(--muted)">' + (r.proj == null ? '' : f1(r.proj)) + '</small>' + (r.st ? ' ' + r.st : '') + (r.ng ? ' <span class="chip ng">NO GAME</span>' : '') + '</div></div>'; };
     let rows = ''; for (let i = 0; i < n; i++) rows += '<div style="display:grid;grid-template-columns:1fr 40px 1fr;gap:6px;padding:6px 0;border-top:1px solid var(--line);align-items:center">' + cell(X.rows[i], false) + '<div style="text-align:center;font-size:11px;font-weight:700;color:var(--muted)">' + esc((X.rows[i] || Y.rows[i] || {}).slot || '') + '</div>' + cell(Y.rows[i], true) + '</div>';
     const bn = (T, right) => T.bench.length ? '<div style="text-align:' + (right ? 'right' : 'left') + ';font-size:12px;color:var(--muted)">' + T.bench.map(x => esc(x.name.replace(/ (Jr\.?|Sr\.?|II|III|IV)$/i,'').split(' ').slice(-1)[0]) + ' ' + f1(x.act)).join(' · ') + '</div>' : '<div></div>';
     body = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px"><div><div style="font-size:13px;font-weight:600">' + esc(nm(a)) + '</div>' + tot(X.act, X.proj) + '</div><div style="text-align:right"><div style="font-size:13px;font-weight:600">' + esc(nm(b)) + '</div>' + tot(Y.act, Y.proj) + '</div></div>' + rows + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;padding-top:6px;border-top:1px solid var(--line)">' + bn(X, false) + bn(Y, true) + '</div><p class="hint" style="margin:6px 0 0">Big number = actual points, small = projected for that day. Green = beat the projection, red = fell short. Bench points do not count. Projections are this site\'s model, not ESPN\'s.</p>';
