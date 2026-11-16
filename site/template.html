@@ -1427,7 +1427,16 @@ function oneWeek(T, dayAcc) {
   }
   return tot;
 }
+// Once the last day of the week (Sunday) has no game left to play, the matchup is decided: the odds are 100% for the team ahead (50% each on an exact tie).
+function weekOver(ta, tb) {
+  if (S.last !== TODAY || typeof LIVEFRAC === 'undefined' || !LIVEFRAC) return false;
+  return [ta, tb].every(tid => teamPlayers(tid).every(p => !(sched(p)[TODAY] > 0) || (LIVEFRAC[p.team] != null && LIVEFRAC[p.team] >= 1)));
+}
 function runSim(ta, tb, N) {
+  if (weekOver(ta, tb)) {
+    const x = S.cur[ta], y = S.cur[tb], z = [0, 0, 0, 0, 0, 0, 0];
+    return { ph: x > y ? 1 : x < y ? 0 : 0.5, mh: x, ma: y, h10: x, h90: x, a10: y, a90: y, dayA: z, dayB: z, over: true };
+  }
   N = N || 10000; _rs = (ta * 1009 + tb * 7919 + 12345) | 0; // fixed seed per matchup: same inputs always give the same odds
 
   const A = prep(ta), B = prep(tb);
@@ -1478,8 +1487,8 @@ const opt = (v, l, cur) => '<option value="' + v + '"' + (v === cur ? ' selected
 const num = v => (v == null ? '' : v);
 const f1 = v => (v == null ? '-' : (Math.round(v * 100) / 100).toFixed(2).replace(/0$/, ''));
 const pctW = v => Math.round(v * 100) + '%';
-function pctPair(ph) { const v = ph * 100; if (v < 1) return ['<1%', '>99%']; if (v > 99) return ['>99%', '<1%']; const l = Math.round(v); return [l + '%', (100 - l) + '%']; }
-function pctText(x) { const v = x * 100; return v < 1 ? '<1%' : v > 99 ? '>99%' : Math.round(v) + '%'; }
+function pctPair(ph) { const v = ph * 100; if (ph === 1) return ['100%', '0%']; if (ph === 0) return ['0%', '100%']; if (v < 1) return ['<1%', '>99%']; if (v > 99) return ['>99%', '<1%']; const l = Math.round(v); return [l + '%', (100 - l) + '%']; }
+function pctText(x) { const v = x * 100; if (x === 1) return '100%'; if (x === 0) return '0%'; return v < 1 ? '<1%' : v > 99 ? '>99%' : Math.round(v) + '%'; }
 
 function weightText(p) {
   const w = weightsOf(p);
