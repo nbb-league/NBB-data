@@ -2374,18 +2374,30 @@ const RECAPS = [
 const recapKey = r => r ? r.kind + '|' + r.wk + '|' + (r.date || '') + '|' + r.title : '';
 function newsSeen() { try { return localStorage.getItem('nbbSeenNews') || ''; } catch (e) { return ''; } }
 function markNewsSeen() { try { if (RECAPS.length) localStorage.setItem('nbbSeenNews', recapKey(RECAPS[0])); } catch (e) {} paintTeaser(); }
+// Keep the list newest-first (date, then week) no matter what order articles are added in.
+(function () {
+  const dk = r => { const m = /(\d+)\/(\d+)\/(\d+)/.exec(r.date || ''); return m ? +m[3] * 10000 + +m[1] * 100 + +m[2] : 0; };
+  const wk = r => +((/\d+/.exec(r.wk || '') || [0])[0]);
+  const s = RECAPS.map((r, i) => [r, i]).sort((a, b) => dk(b[0]) - dk(a[0]) || wk(b[0]) - wk(a[0]) || a[1] - b[1]).map(x => x[0]);
+  RECAPS.splice(0, RECAPS.length, ...s);
+})();
+let nsub = 'all';
+const NSUBS = [['all', 'All'], ['recap', 'Recaps'], ['preview', 'Previews'], ['trade', 'Trades'], ['other', 'More']];
+const nkind = r => /^recap$/i.test(r.kind) ? 'recap' : /^preview$/i.test(r.kind) ? 'preview' : /breaking|trade/i.test(r.kind) ? 'trade' : 'other';
 function paintTeaser() {
   const el = $('newsteaser'), r = RECAPS[0]; if (!r) { el.hidden = true; $('nt-n').innerHTML = 'News'; return; }
   const fresh = newsSeen() !== recapKey(r);
   $('nt-n').innerHTML = 'News' + (fresh ? ' <span class="ndot" aria-label="New article"></span>' : '');
   el.innerHTML = '<button type="button" class="hsb" data-tgo="news" style="width:100%;text-align:left;min-height:48px;display:flex;align-items:center;gap:8px"><span style="flex:1">' + (fresh ? '<span class="tbt tb-b" style="margin-right:6px">New</span>' : '') + esc(r.kind + ' · ' + r.wk) + ': ' + esc(r.title) + '</span><span aria-hidden="true">›</span></button>'; el.hidden = false;
 }
-// ---- Weekly recap / preview, on the News tab. Add new ones to the FRONT of the list; the newest shows open, the rest collapsed.
+// ---- Weekly recap / preview, on the News tab. Add new ones anywhere in the list; they are sorted newest-first, the newest shows open and the rest are collapsed. Sub-tabs filter by kind (Recap, Preview, Breaking/Trade).
 // Shape: { kind: 'Recap' or 'Preview', wk: 'Week 1', date: '10/28/2026', title: '...', body: ['paragraph', ...] }
 function paintRecap() {
   const el = $('recap');
   if (!RECAPS.length) { el.innerHTML = '<article class="hc"><div class="lab">Beat writer</div><p class="hl" style="margin:0">Weekly previews and recaps will appear here.</p></article>'; paintTeaser(); return; }
-  const lr = RECAPS.find(r => r.kind === 'Recap'), lp = RECAPS.find(r => r.kind === 'Preview'), lb = RECAPS.find(r => r.kind === 'Breaking'), top = [lb, lr, lp].filter(Boolean), rest = RECAPS.filter(r => top.indexOf(r) < 0);
+  if (nsub !== 'all' && !RECAPS.some(r => nkind(r) === nsub)) nsub = 'all';
+  const feed = nsub === 'all' ? RECAPS : RECAPS.filter(r => nkind(r) === nsub), top = feed.slice(0, 1), rest = feed.slice(1);
+  const tabs = '<div class="pyrs" id="nsubs" style="margin:0 0 12px;flex-wrap:wrap">' + NSUBS.filter(x => x[0] === 'all' || RECAPS.some(r => nkind(r) === x[0])).map(x => '<button type="button" class="pyr" style="font-size:14px;padding:0 6px;min-width:64px" data-ns="' + x[0] + '" aria-pressed="' + (x[0] === nsub) + '">' + x[1] + '</button>').join('') + '</div>';
   const TM = Object.keys(TEAMS).map(id => ({ id: +id, city: (TEAMS[id].name || '').replace(/\s+\S+$/, '') })).filter(x => x.city);
   const sents = p => p.split(/(?<=[a-z0-9\)\]]\.)\s+(?=[A-Z])/).reduce((a, s) => { const l = a[a.length - 1]; if (l && /(?:\bJr|\bSt|\bvs|\bNo)\.$/.test(l)) a[a.length - 1] = l + ' ' + s; else a.push(s); return a; }, []);
   const chunk = txt => { const ss = sents(txt), out = []; let cur = '', n = 0; ss.forEach(s => { if (cur && (n >= 2 || cur.length + s.length > 330)) { out.push(cur); cur = ''; n = 0; } cur += (cur ? ' ' : '') + s; n++; }); if (cur) out.push(cur); return out; };
@@ -2405,10 +2417,11 @@ function paintRecap() {
     });
     close(); return h;
   };
-  el.innerHTML = '<div class="lab" style="margin:2px 2px 8px;font:700 11px var(--display);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)">From the beat writer</div>' + top.map(r => '<article class="art">' + body(r) + '</article>').join('<hr style="border:0;border-top:1px solid var(--line);margin:22px 0">') + (rest.length ? '<div class="lab" style="margin:26px 2px 6px;font:700 11px var(--display);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)">Archive</div>' : '') + rest.map(r => {
+  el.innerHTML = tabs + '<div class="lab" style="margin:2px 2px 8px;font:700 11px var(--display);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)">Latest from the beat writer</div>' + top.map(r => '<article class="art">' + body(r) + '</article>').join('<hr style="border:0;border-top:1px solid var(--line);margin:22px 0">') + (rest.length ? '<div class="lab" style="margin:26px 2px 6px;font:700 11px var(--display);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)">Earlier</div>' : '') + rest.map(r => {
     const keys = r.body.slice(1).map(p => { const m = p.match(/^(.{3,70}?\.)\s+(?=[A-Z])([\s\S]*)$/); if (!m) return ''; const lab = m[1].replace(/\.$/, ''); if (/^(Watch|Source notes?)$/i.test(lab)) return ''; const fs = sents(m[2])[0] || ''; return '<li><b>' + linkNames(lab) + '.</b> ' + linkNames(fs.length > 170 ? fs.slice(0, 167).replace(/\s+\S*$/, '') + '...' : fs) + '</li>'; }).filter(Boolean).join('');
-    return '<details class="art-old"><summary><span class="kind" style="font:700 11px var(--display);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)">' + esc(r.kind + ' · ' + r.wk) + '</span> ' + esc(r.title) + '</summary><ul class="keyl">' + keys + '</ul><details class="art-full"><summary>Read the full ' + esc(r.kind.toLowerCase()) + '</summary><article class="art">' + body(r) + '</article></details></details>'; }).join(''); paintTeaser();
+    return '<details class="art-old"><summary><span class="kind" style="font:700 11px var(--display);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)">' + esc(r.kind + ' · ' + r.wk + (r.date ? ' · ' + r.date : '')) + '</span> ' + esc(r.title) + '</summary><ul class="keyl">' + keys + '</ul><details class="art-full"><summary>Read the full ' + esc(r.kind.toLowerCase()) + '</summary><article class="art">' + body(r) + '</article></details></details>'; }).join(''); paintTeaser();
 }
+$('recap').addEventListener('click', e => { const b = e.target.closest('[data-ns]'); if (b) { nsub = b.dataset.ns; paintRecap(); } });
 // ---- Deep links: #m, #s, #p, #t, #l, #a, #h and #h/<sub> (for example #h/r for League Records)
 let curView = 'm';
 function setHash() { try { history.replaceState(null, '', '#' + (curView === 'h' ? 'h/' + hsub : curView === 'e' ? 'e/' + eteam : curView)); } catch (e) {} }
