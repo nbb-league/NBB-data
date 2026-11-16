@@ -2512,6 +2512,16 @@ const TBLOCK = {
   5: { asof: '2026-10-29', u: ['Luka Doncic', 'Cooper Flagg', 'Amen Thompson'], k: ['Scottie Barnes', 'VJ Edgecombe', 'Tyler Herro', 'Ace Bailey', 'Franz Wagner'], t: ['Cedric Coward', 'Aaron Gordon', 'Isaiah Hartenstein', 'Jaren Jackson Jr.'], b: ['CJ McCollum', 'Onyeka Okongwu', 'Desmond Bane', 'Kyrie Irving', 'Matas Buzelis', 'Jalen Green', 'Kawhi Leonard', 'Jalen Suggs'] },
   6: { asof: '2026-10-29', u: ['LeBron James', 'Cameron Boozer'], k: ['Shai Gilgeous-Alexander', 'Cade Cunningham', 'Domantas Sabonis', 'Austin Reaves'], t: ['Jamal Murray', 'Dejounte Murray', 'Brandon Miller'], b: ['Zion Williamson'] },
 };
+// A trade resets a player's block status: tiers belong to the GM who filed them, so once a player moves to a new team,
+// he is dropped from every earlier survey (a survey dated on or after the trade is left alone). The new GM re-lists him if he wants.
+(function () {
+  const nm = s => String(s).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]/g, '');
+  const nameOf = e => { const s = typeof e === 'string' ? e : (e.n || ''), i = s.indexOf(' -- '); return nm(i < 0 ? s : s.slice(0, i)); };
+  TRADES.forEach(tr => (tr.s || []).forEach(side => (side[1] || []).forEach(it => {
+    if (typeof it !== 'string') return; const k = nm(it);
+    Object.keys(TBLOCK).forEach(s => { const tb = TBLOCK[s]; if (+s === side[0] || !(tr.d > tb.asof)) return; ['b', 't', 'k', 'u'].forEach(c => { if (tb[c]) tb[c] = tb[c].filter(e => nameOf(e) !== k); }); });
+  })));
+})();
 const BK = [['b', 'On the block', 'Wants to move him'], ['t', 'Tradeable', 'If the deal is right'], ['k', 'Prefer to keep', 'Would listen to a big offer'], ['u', 'Untouchable', "Don't even ask"]];
 const BKL = { b: 'On the block', t: 'Tradeable', k: 'Prefer to keep', u: 'Untouchable' };
 const tbItem = e => { const s = typeof e === 'string' ? e : (e.n + (e.note ? ' -- ' + e.note : '')), i = s.indexOf(' -- '); return i < 0 ? { n: s.trim(), note: '' } : { n: s.slice(0, i).trim(), note: s.slice(i + 4).trim() }; };
