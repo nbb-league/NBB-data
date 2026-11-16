@@ -3,6 +3,10 @@ on:
   schedule:
     - cron: '30 12 * * *'            # morning pull, 5:30 AM Pacific in daylight time
     - cron: '30 13 * * *'            # morning pull, 5:30 AM Pacific in standard time
+    - cron: '41 12 * * *'            # backups at off-peak minutes: GitHub drops/delays busy :00/:30 slots
+    - cron: '41 13 * * *'
+    - cron: '57 12 * * *'
+    - cron: '57 13 * * *'
     - cron: '0,30 17-23 * * *'       # game-time slots; gated to Pacific windows below
     - cron: '0,30 14-16 * * 1-5'     # weekday mornings (6-9 AM Pacific), so roster moves show up
     - cron: '0,30 0-8 * * *'
@@ -34,7 +38,8 @@ jobs:
           RUN=1
           if [ "$EV" = "schedule" ]; then
             RUN=0
-            if [ "$SC" = "30 12 * * *" ] || [ "$SC" = "30 13 * * *" ]; then
+            case "$SC" in *" 12 * * *"|*" 13 * * *") MORN=1;; *) MORN=0;; esac
+            if [ "$MORN" = "1" ]; then
               [ "$H" = "5" ] && RUN=1
             else
               # weekdays 6 AM-midnight, weekends 9 AM-midnight, plus the 12 AM slot

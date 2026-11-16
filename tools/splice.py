@@ -60,7 +60,10 @@ blk=re.sub(r'const (PREVSNAP|MORNSNAP) = .*?;\n','',blk+'\n',flags=re.S).rstrip(
 import datetime
 def _key(s):
     m=re.search(r"const ASOF = '(\d{4}-\d{2}-\d{2}T\d{2}:\d{2})",s or '')
-    return (datetime.datetime.fromisoformat(m.group(1))-datetime.timedelta(hours=5)).date().isoformat() if m else None
+    if not m: return None
+    t=m.group(1).replace('T24:','T00:')   # some runtimes print midnight as hour 24
+    try: return (datetime.datetime.fromisoformat(t)-datetime.timedelta(hours=5)).date().isoformat()
+    except ValueError: return None
 def _grab(s,n):
     m=re.search(r'const '+n+r' = (.*?);\n',(s or '')+'\n')
     try: return json.loads(m.group(1)) if m else None
