@@ -3147,7 +3147,7 @@ function hmHero() {
   const T = TEAMS[hmTeam], m = hmMyM(hmTeam), opp = m ? (m[0] === hmTeam ? m[1] : m[0]) : 0;
   let mid = '<p class="hm-hw" style="margin:0">No matchup this week.</p>';
   if (opp) {
-    const ph = hmWin(hmTeam, opp), mine = ph == null ? null : (m[0] === hmTeam ? ph : 1 - ph), over = weekOver(m[0], m[1]);
+    const ph = hmWin(hmTeam, opp), mine = ph, over = weekOver(m[0], m[1]);
     const pct = mine == null ? '' : (over ? (mine === 1 ? '🏆 Won' : mine === 0 ? 'Lost' : 'Tied') : pctText(mine));
     const bar = (mine != null && !over) ? '<div class="hm-bar"><i style="width:' + Math.round(mine * 100) + '%"></i></div>' : '';
     mid = '<button type="button" class="hm-hm" data-hmm="' + MATCHUPS.indexOf(m) + '"><span><small>You</small><b>' + (CUR0[hmTeam] != null ? CUR0[hmTeam].toFixed(1) : '-') + '</b></span><span class="vs"><em>' + pct + '</em><small>' + (over ? 'final' : 'win chance') + '</small></span><span><small>' + esc(TEAMS[opp].short) + '</small><b>' + (CUR0[opp] != null ? CUR0[opp].toFixed(1) : '-') + '</b></span></button>' + bar;
