@@ -1,4 +1,23 @@
-<!doctype html><html><head><meta charset=utf8><meta http-equiv="Cache-Control" content="no-cache, must-revalidate"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html><html><head><meta charset=utf8><meta http-equiv="Cache-Control" content="no-cache, must-revalidate"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}
+/*NBBPICK:CSS*/
+.pln.mine{background:color-mix(in srgb,var(--mytc,#888) 24%,transparent);border-radius:5px;padding:0 3px;margin:0 -3px;text-decoration:none;font-weight:700}
+.mc.mymc{border-color:var(--mytc,var(--gold))!important;box-shadow:0 0 0 1px var(--mytc,var(--gold)) inset}
+.mc.mymc::before{content:'YOUR GAME';display:block;font:700 10px var(--body);letter-spacing:.1em;color:var(--mytc,var(--ink));margin-bottom:2px}
+.tm.me img.logo{outline:2px solid var(--mytc,var(--gold));outline-offset:1px}
+#tbtn{display:flex;align-items:center;justify-content:center;padding:0}#tbtn img{width:30px;height:30px;border-radius:50%;object-fit:contain;background:#fff}#tbtn span{font:700 11px var(--body);line-height:1.1;text-align:center}
+.pkov{position:fixed;inset:0;z-index:200;background:var(--bg,#0b1020);display:flex;flex-direction:column;align-items:center;overflow:auto;padding:max(28px,env(safe-area-inset-top)) 16px 28px}
+.pkov[hidden]{display:none}.pkin{width:100%;max-width:440px}
+.pkov h1{font:800 34px var(--display);letter-spacing:.01em;text-transform:uppercase;margin:18px 0 6px;color:var(--ink)}
+.pkov p{color:var(--muted,var(--ink));opacity:.8;margin:0 0 18px;font:500 16px var(--body)}
+.pkg{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pkc{display:flex;flex-direction:column;align-items:center;gap:6px;padding:16px 8px;border:2px solid var(--line);border-radius:16px;background:var(--surface);color:var(--ink);font:700 16px var(--body);cursor:pointer;min-height:132px}
+.pkc img{width:56px;height:56px;border-radius:50%;object-fit:contain;background:#fff}.pkc small{font:500 12px var(--body);opacity:.7}
+.pkc[aria-pressed="true"]{border-color:var(--ink)}
+.pkc:active{transform:scale(.98)}
+.pks{display:block;width:100%;margin-top:14px;min-height:46px;border:1px solid var(--line);border-radius:12px;background:transparent;color:var(--ink);font:700 15px var(--body);cursor:pointer}
+.pkx{align-self:flex-end;border:0;background:transparent;color:var(--ink);font:700 15px var(--body);padding:8px;cursor:pointer}
+/*/NBBPICK:CSS*/
+</style></head><body>
 <title>Nice Boys Basketball</title>
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
@@ -593,6 +612,7 @@ img.logo, img.nlogo { cursor: pointer; }
   <section class="news" id="news" aria-label="League news" hidden></section>
   <div class="sbrow">
     <button type="button" class="sbar" id="sbtn" aria-label="Search the whole league site"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg><span>Search players, trades, seasons</span></button>
+    <button type="button" class="hbtn" id="tbtn" aria-label="Choose your team"></button>
     <button type="button" class="hbtn" id="abtn" aria-label="Get your team's injury alerts"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9a6 6 0 0 1 12 0c0 6 2.5 7.5 2.5 7.5h-17S6 15 6 9z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg><i class="hdot" id="adot" hidden></i></button>
     <button type="button" class="hbtn" id="hbtn" aria-label="How to use this site"><span aria-hidden="true">?</span><i class="hdot" id="hdot" hidden></i></button>
   </div>
@@ -763,6 +783,7 @@ img.logo, img.nlogo { cursor: pointer; }
 <script>
 (function () {
 'use strict';
+var HASH0 = location.hash; var MYT = 0; try { MYT = +localStorage.getItem('nbbHomeTeam') || 0; } catch (e) {}
 const KEY = 'nbb-odds-v1';
 /*__REFRESH__*/
 /*__LOGOS__*/
@@ -1577,11 +1598,12 @@ function updNums() {
 }
 
 function paintStrip() {
-  $('strip').innerHTML = MATCHUPS.map((m, i) => {
+  const mine = id => MYT && (MATCHUPS[id][0] === MYT || MATCHUPS[id][1] === MYT) ? 0 : 1;
+  $('strip').innerHTML = MATCHUPS.map((m, i) => [m, i]).sort((x, y) => mine(x[1]) - mine(y[1]) || x[1] - y[1]).map(([m, i]) => {
     const ph = R[i]; const have = ph != null;
     const cc = colorsFor(m[0], m[1]);
     const gt = isG(m) ? '<span class="gtag">' + STAR + '<span>Game of the week</span></span>' : '';
-    return '<button type="button" class="mc' + (isG(m) ? ' gotw' : '') + '" style="--home:' + cc[0] + ';--away:' + cc[1] + '" data-m="' + i + '" aria-pressed="' + (i === S.m) + '">' + gt +
+    return '<button type="button" class="mc' + (isG(m) ? ' gotw' : '') + (MYT && (m[0] === MYT || m[1] === MYT) ? ' mymc' : '') + '" style=""--home:' + cc[0] + ';--away:' + cc[1] + '" data-m="' + i + '" aria-pressed="' + (i === S.m) + '">' + gt +
       '<span class="t l"><b><img class="logo m" alt="" src="' + LOGO[m[0]] + '">' + TEAMS[m[0]].short + crown(m[0]) + '</b><small class="pts">' + S.cur[m[0]].toFixed(1) + ' pts</small><span>' + (have ? pctPair(ph)[0] : '...') + '</span></span>' +
       '<span class="mid">at<span class="mini"><i style="width:' + (have ? (ph * 100).toFixed(1) : 50) + '%"></i></span></span>' +
       '<span class="t r"><b><img class="logo m" alt="" src="' + LOGO[m[1]] + '">' + TEAMS[m[1]].short + crown(m[1]) + '</b><small class="pts">' + S.cur[m[1]].toFixed(1) + ' pts</small><span>' + (have ? pctPair(ph)[1] : '...') + '</span></span></button>';
@@ -1796,7 +1818,7 @@ function paintSchedule() {
       } else note = 'In progress';
     } else if (sw < CURW) note = 'Final score to be added';
     else note = 'Projections open on Monday ' + wkShort(sw);
-    const tm = (id, r) => '<span class="tm' + (r ? ' r' : '') + '"><img class="logo m" alt="" src="' + LOGO[id] + '"><span>' + esc(TEAMS[id].short) + crown(id) + '<small>' + esc(TEAMS[id].mgr) + (typeof RECS !== 'undefined' && RECS[id] ? ' · ' + RECS[id] : '') + '</small></span></span>';
+    const tm = (id, r) => '<span class="tm' + (r ? ' r' : '') + (id === MYT ? ' me' : '') + '"><img class="logo m" alt="" src="' + LOGO[id] + '"><span>' + esc(TEAMS[id].short) + crown(id) + '<small>' + esc(TEAMS[id].mgr) + (typeof RECS !== 'undefined' && RECS[id] ? ' · ' + RECS[id] : '') + '</small></span></span>';
     const head = g ? '<div class="gtag">' + STAR + '<span>' + (G.occ ? esc(G.occ) + ' · ' : '') + 'Game of the week</span></div>' : '';
     return '<div class="sm' + (g ? ' gotw' : '') + '" style="--home:' + cc[0] + ';--away:' + cc[1] + '">' + head + '<div class="at">' + esc(city(aw)) + ' at ' + esc(city(h)) + '</div>' +
       '<div class="row">' + tm(aw, false) + mid + tm(h, true) + '</div>' + bar + '<div class="note">' + note + '</div></div>';
@@ -1886,7 +1908,7 @@ function paintAwardRaces() {
 }
 
 let pyear = PICK_YEARS[0];
-let pmode = 'y', pteam = 1;
+let pmode = 'y', pteam = MYT || 1;
 function paintPicks() {
   $('pyrs').style.flexWrap = '';
   $('pmode').innerHTML = '<button type="button" class="pyr" style="font-size:15px" data-pm="y" aria-pressed="' + (pmode === 'y') + '">By year</button><button type="button" class="pyr" style="font-size:15px" data-pm="t" aria-pressed="' + (pmode === 't') + '">By team</button>';
@@ -2559,7 +2581,7 @@ function tbIndex() {
 }
 const tbStatus = name => (tbIndex()[jnorm(name)] || [])[0] || null;
 const tbTag = name => { const s = tbStatus(name); return s ? ' <span class="tbt tb-' + s.b + '">' + BKL[s.b] + '</span>' : ''; };
-let tview = 'log', tbTeam = 0, tbQ = '';
+let tview = 'log', tbTeam = MYT || 0, tbQ = '';
 function tbList() {
   const q = jnorm(tbQ || ''), slots = Object.keys(TBLOCK).map(Number).filter(s => !tbTeam || s === tbTeam);
   let h = '', any = false;
@@ -2634,7 +2656,10 @@ function keeperDB() {
 }
 
 // ---- Player cards
-const pl = n => '<a href="#" class="pln" data-pl="' + esc(n) + '">' + esc(n) + '</a>';
+let _mineK = -1, _mineS = null;
+function isMine(n) { try { return isMine0(n); } catch (e) { return false; } }
+function isMine0(n) { if (!MYT) return false; if (_mineK !== MYT) { _mineK = MYT; _mineS = {}; try { P.forEach(p => { if (p.tid === MYT) _mineS[jnorm(p.name)] = 1; }); } catch (e) {} } return !!_mineS[jnorm(n)]; }
+const pl = n => '<a href="#" class="pln' + (isMine(n) ? ' mine' : '') + '" data-pl="' + esc(n) + '">' + esc(n) + '</a>';
 let PN = null, ACC = null;
 const slab = y => (y - 1) + '-' + String(y).slice(2);
 // Era-aware franchise names: the Wasps became the Elks (2022-23), the Minotaurs became the Shoobies (Dec 2020).
@@ -2845,7 +2870,7 @@ function paintReport() {
 }
 
 // ---- Team pages
-let eteam = 1;
+let eteam = MYT || 1;
 const TNAMES = { 1: ['Golden State', 'Lobos'], 2: ['Atlanta', 'Firebirds'], 3: ['Washington', 'Wasps', 'Milwaukee', 'Elks'], 4: ['Portland', 'Pioneers'], 5: ['Minnesota', 'Minotaurs', 'Los Angeles', 'Shoobies'], 6: ['San Antonio', 'Salamanders'] };
 function acquired(name, slot) {
   const M = buildJourneys(), p = M[jnorm(name)]; if (!p) return 'Added in-season (origin not logged)';
@@ -3207,6 +3232,43 @@ $('hm-body').addEventListener('click', e => {
 });
 if (!/^#./.test(location.hash)) setView('z');
 /*/NBBHOME:JS*/
+
+/*NBBPICK:JS*/
+// ---- Pick your team: first-visit screen, header button, personalization (saved on this device only)
+function myColor(id) { try { return getComputedStyle(document.documentElement).getPropertyValue('--tc' + id).trim() || '#888'; } catch (e) { return '#888'; } }
+function applyMyTeam() {
+  document.documentElement.style.setProperty('--mytc', MYT ? myColor(MYT) : '#888');
+  const b = $('tbtn'); if (b) { b.innerHTML = MYT && LOGO[MYT] ? '<img alt="" src="' + LOGO[MYT] + '">' : '<span>Pick<br>team</span>'; b.setAttribute('aria-label', MYT ? 'Your team: ' + TEAMS[MYT].name + '. Tap to change.' : 'Choose your team'); }
+  if (MYT) { eteam = MYT; pteam = MYT; tbTeam = MYT; const k = MATCHUPS.findIndex(m => m[0] === MYT || m[1] === MYT); if (k >= 0) S.m = k; }
+}
+function pickCanSave() { try { localStorage.setItem('nbbPickTest', '1'); localStorage.removeItem('nbbPickTest'); return true; } catch (e) { return false; } }
+function showPick(closable) {
+  let el = $('pkov'); if (!el) { el = document.createElement('div'); el.id = 'pkov'; el.className = 'pkov'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-modal', 'true'); el.setAttribute('aria-label', 'Pick your team'); document.body.appendChild(el); }
+  const ids = Object.keys(TEAMS).map(Number).filter(id => id > 0).sort((a, b) => a - b);
+  el.innerHTML = '<div class="pkin">' + (closable ? '<div style="display:flex;justify-content:flex-end"><button type="button" class="pkx" data-pkx="1">Close</button></div>' : '') +
+    '<h1>' + (closable ? 'Change your team' : 'Welcome to NBB 🏀') + '</h1><p>Which team is yours? We\'ll put your game first and highlight your players. No login, and you can change it any time.</p>' +
+    '<div class="pkg">' + ids.map(id => '<button type="button" class="pkc" data-pk="' + id + '" aria-pressed="' + (id === MYT) + '" style="border-color:' + (id === MYT ? 'var(--tc' + id + ')' : '') + '"><img alt="" src="' + LOGO[id] + '"><span>' + esc(TEAMS[id].name) + '</span><small>' + esc(TEAMS[id].mgr) + '</small></button>').join('') + '</div>' +
+    '<button type="button" class="pks" data-pk="0">Just browsing</button></div>';
+  el.hidden = false; el.scrollTop = 0; document.body.style.overflow = 'hidden';
+}
+function hidePick() { const el = $('pkov'); if (el) el.hidden = true; document.body.style.overflow = ''; }
+function choosePick(id) {
+  MYT = id; hmTeam = id;
+  try { if (id) localStorage.setItem('nbbHomeTeam', String(id)); else localStorage.removeItem('nbbHomeTeam'); localStorage.setItem('nbbPickSeen', '1'); } catch (e) {}
+  applyMyTeam(); hidePick();
+  paintNames(); paintStrip(); renderRoster(); paintDays(); updBoard(); setView('z'); window.scrollTo(0, 0);
+}
+document.addEventListener('click', e => {
+  const c = e.target.closest && e.target.closest('[data-pk]'); if (c && $('pkov') && $('pkov').contains(c)) { choosePick(+c.dataset.pk); return; }
+  if (e.target.closest && e.target.closest('[data-pkx]')) { hidePick(); return; }
+  if (e.target.closest && e.target.closest('#tbtn')) showPick(true);
+});
+(function () { let seen = true; try { seen = !!localStorage.getItem('nbbPickSeen') || !!localStorage.getItem('nbbHomeTeam'); } catch (e) {}
+  applyMyTeam();
+  if (MYT) { paintStrip(); updBoard(); }
+  if (!seen && pickCanSave() && !/^#./.test(HASH0)) showPick(false); })();
+/*/NBBPICK:JS*/
+
 
 
 /*LOBOS_PORT_START*/
