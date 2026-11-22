@@ -2795,6 +2795,7 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') $('pcov').hi
   const rev = new Map(); [LOGO, typeof LOGO_OLD !== 'undefined' ? LOGO_OLD : {}].forEach(o => Object.keys(o).forEach(k => { if (TEAMS[+k]) rev.set(o[k], +k); }));
   document.addEventListener('click', e => {
     const im = e.target.closest && e.target.closest('img.logo, img.nlogo'); if (!im || im.closest('#view-e .hh') || im.closest('#sq')) return;
+    if (im.closest('.mc, #strip, button, [data-hmm], [data-hmt], [data-hqgo], .tabbar')) return;  // logos inside tappable matchup cards select the matchup, not open the team page
     const id = rev.get(im.getAttribute('src')); if (!id) return;
     e.preventDefault(); e.stopPropagation(); eteam = id; setView('e'); window.scrollTo(0, 0);
   }, true);
