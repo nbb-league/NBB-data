@@ -2766,6 +2766,7 @@ function openPlayer(name) {
     stats = '<div class="sg"><div><b>' + (useS ? f1x(p.season) : '-') + '</b><span>FP/G</span></div><div><b>' + (tot == null ? '-' : tot) + '</b><span>Total points</span></div><div><b>' + p.gp + '</b><span>Games</span></div><div><b>' + f1x(p.l7) + '</b><span>Last 7</span></div><div><b>' + f1x(p.l10) + '</b><span>Last 15</span></div><div><b>' + f1x(p.proj) + '</b><span>Projection</span></div><div class="ls"><span>' + slab(2026) + ' season average</span><b>' + (p.last == null ? '-' : p.last.toFixed(2)) + '</b></div></div>';
     ranks = ov ? '<p><b>#' + ov + '</b> overall and <b>#' + pr + '</b> among ' + esc(pos0) + 's, ranked by ' + (useS ? 'FP/G this season' : 'ESPN projection') + ' (players the league tracks: rostered plus free agents).</p>' : '';
     chips = '<span class="pchip">' + esc(p.team) + '</span><span class="pchip">' + esc(p.pos) + '</span>' + (p.status !== 'H' ? '<span class="pchip">' + (p.status === 'OUT' ? 'OUT' : 'DTD') + (rt ? ' until ' + esc(fmtISO(rt)) : '') + '</span>' : '') + (p.role === 'IR' ? '<span class="pchip">IR</span>' : '');
+    { const ag = ageOf(key); if (ag != null) chips += '<span class="pchip">Age ' + ag + '</span>'; }
     const kp = (HIST_KEEP[2027] || []).find(r => r[0] === tid && r[1].split(';').some(n => jnorm(n) === key));
     if (kp) {
       const ys = (keepYs[tid] || []).slice().sort((a, b) => a - b); let run = 0, y = 2027; while (ys.includes(y)) { run++; y--; }
@@ -2932,6 +2933,9 @@ function paintTeam() {
 
 // ---- Player journeys: how each player was acquired, tenure, trade counts
 const jnorm = s => String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/\s*\(from [^)]*\)\s*$/, '').toLowerCase().replace(/[.']/g, '').replace(/\s+/g, ' ').trim();
+const AGES = /*__AGES__*/{};
+// Age from a birth date (or a plain age number when ESPN only gave that). Returns null when unknown.
+function ageOf(key) { const v = AGES[key]; if (v == null) return null; if (typeof v === 'number') return v; const b = new Date(v + 'T12:00:00'), n = new Date(); if (isNaN(b)) return null; let a = n.getFullYear() - b.getFullYear(); if (n.getMonth() < b.getMonth() || (n.getMonth() === b.getMonth() && n.getDate() < b.getDate())) a--; return a > 15 && a < 55 ? a : null; }
 let JMAP = null;
 function buildJourneys() {
   if (JMAP) return JMAP;

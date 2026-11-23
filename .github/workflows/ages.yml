@@ -1,0 +1,22 @@
+name: NBB player ages
+on:
+  schedule:
+    - cron: '17 14 * * 1'
+  workflow_dispatch:
+  push:
+    paths: ['tools/ages.mjs', '.github/workflows/ages.yml']
+concurrency: { group: nbb-ages, cancel-in-progress: false }
+permissions: { contents: write }
+jobs:
+  ages:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: node tools/ages.mjs
+      - name: Save
+        run: |
+          git config user.name "nbb-bot"; git config user.email "nbb-bot@users.noreply.github.com"
+          git add data/ages.json
+          git diff --cached --quiet || (git commit -m "Player ages $(date -u +%F)" && git pull --rebase -q && git push)
