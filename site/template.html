@@ -708,7 +708,7 @@ img.logo, img.nlogo { cursor: pointer; }
     <ul>
       <li>Rosters, positions, injuries, stats and the NBA schedule come from your ESPN league, pulled at the time shown at the top. Each daily refresh brings in the scores so far and counts only the games left in the week.</li>
       <li>By default the model assumes every manager sets their best lineup all week. The toggle at the top of Matchups switches to "As set in ESPN", which uses lineups managers have already set. Either way, a lineup that is not set uses the best lineup the roster allows across PG, SG, SF, PF, C, G, F, two G/F, two F/C and three UTIL. A slate with fewer players than slots leaves empty slots.</li>
-      <li>Starting projection is 60% last season's average and 40% ESPN's projection (ESPN's runs low for big double-double players). The preseason number now counts for only about one game, so a player's projection is essentially his average this season (a one-game blip is still tempered), and it leans toward his last 15 games once he has played more than 5.</li>
+      <li>Starting projection is 60% last season's average and 40% ESPN's projection (ESPN's runs low for big double-double players), but the preseason number counts for only about one game, so it fades fast. Once a player has about 13 games, his projection is roughly 35% last 7 days, 30% last 15 games and 35% season average. Before that, recent form phases in gradually. The last-7 share shrinks if he played fewer than 3 games in that stretch, and that share moves to his last 15.</li>
       <li>Healthy players play 94% of their games, day-to-day players 60%. Injured reserve counts as out. Lineup protection is assumed, so a starter who sits is replaced by the best eligible bench player who plays that day.</li>
       <li>Each simulated week draws every player's true level (uncertain), then each game around it. Bigger projections swing more.</li>
     </ul>
@@ -1322,19 +1322,27 @@ const DEF = {}; P.forEach(p => { DEF[p.id] = { tid: p.tid, role: p.role, status:
 const S = { first: TODAY, last: 6, day: TODAY, m: 0, K: 1, mode: 'best', cur: Object.assign({}, CUR0) };
 const PA = { H: 0.94, DTD: 0.6, OUT: 0 }, TEAM_SD = 4;
 
+// Projection = a blend of: preseason (ESPN projection + last season, fades as games pile up), this season's average, last 15 games and last 7 days.
+// Recent form ramps up between 3 and 13 games played and then holds: last 7 days 35%, last 15 games 30%, season-to-date 35% (preseason only
+// keeps the tiny share K/(K+games) of that last slice). The last-7 share shrinks when he played fewer than 3 games in the window, and the
+// unused share moves to the last-15 number.
+const W7 = 0.35, W15 = 0.30;
 function weightsOf(p) {
   const K = S.K, g = p.gp;
   const hasS = g > 0 && p.season != null;
   const wSeasonAll = hasS ? g / (K + g) : 0;
-  const wRec = (p.l10 != null && g > 5) ? 0.4 * Math.min(1, (g - 5) / 20) : 0;
-  return { base: (1 - wSeasonAll) * (1 - wRec), season: wSeasonAll * (1 - wRec), recent: wRec };
+  const ramp = Math.min(1, Math.max(0, (g - 3) / 10));
+  let w7 = (p.l7 != null && p.l7g > 0 && g > 3) ? W7 * ramp * Math.min(1, p.l7g / 3) : 0;
+  let w15 = p.l10 != null && g > 3 ? (W15 + W7) * ramp - w7 : 0;
+  const wRec = w7 + w15;
+  return { base: (1 - wSeasonAll) * (1 - wRec), season: wSeasonAll * (1 - wRec), recent: w15, last7: w7 };
 }
 function muOf(p) {
   const K = S.K, g = p.gp, pr = p.prior == null ? 0 : p.prior;
   const hasS = g > 0 && p.season != null;
   const sb = hasS ? (pr * K + p.season * g) / (K + g) : pr;
-  const w = (p.l10 != null && g > 5) ? 0.4 * Math.min(1, (g - 5) / 20) : 0;
-  return (1 - w) * sb + w * p.l10;
+  const w = weightsOf(p);
+  return (1 - w.recent - w.last7) * sb + w.recent * (p.l10 == null ? 0 : p.l10) + w.last7 * (p.l7 == null ? 0 : p.l7);
 }
 const isOutDay = (p, d) => !!RET[p.name] && dayISO(d) < RET[p.name];
 const _schedMemo = {};
@@ -1532,7 +1540,7 @@ function pctText(x) { const v = x * 100; if (x === 1) return '100%'; if (x === 0
 
 function weightText(p) {
   const w = weightsOf(p);
-  return 'Preseason ' + pctW(w.base) + ' · This season ' + pctW(w.season) + ' · Last 15 ' + pctW(w.recent);
+  return 'Preseason ' + pctW(w.base) + ' · This season ' + pctW(w.season) + ' · Last 15 ' + pctW(w.recent) + ' · Last 7 ' + pctW(w.last7);
 }
 function rowHTML(p) {
   const mu = muOf(p), g = gamesIn(p);
