@@ -3335,16 +3335,28 @@ function hqBoxStat(name, d) {
 function hqBoxNoGame(name, d) {
   const p = P.find(q => jnorm(q.name) === jnorm(name)); return !!(p && p.team && p.status !== 'OUT' && !sched(p)[d]);
 }
-function hqBenchPts(x, d) {
-  // ESPN scores bench players 0, so show what they actually scored (game log) or, for games still to come, their projection.
+function hqBenchItem(x, d) {
+  // ESPN scores bench players 0, so show what he actually scored (game log) or, for a game still to come, his projection.
+  const p = P.find(q => jnorm(q.name) === jnorm(x.name)), it = { name: x.name, val: null, lab: '', ng: false, st: hqBoxStat(x.name, d), ir: !!x.ir };
   try {
-    const p = P.find(q => jnorm(q.name) === jnorm(x.name)), GL = p && typeof GLOG !== 'undefined' && GLOG && GLOG[p.name];
-    const WKN = +(/\d+/.exec(WEEK_LABEL) || [2])[0], sp = 7 + (WKN - 1) * 7 + d;
+    const GL = p && typeof GLOG !== 'undefined' && GLOG && GLOG[p.name], WKN = +(/\d+/.exec(WEEK_LABEL) || [2])[0], sp = 7 + (WKN - 1) * 7 + d;
     const g = GL && GL.find(r => r[0] === sp);
-    if (g) return g[1].toFixed(1) + (d === TODAY ? '*' : '');
-    if (d >= TODAY && p && p.team) { if (p.status === 'OUT') return 'OUT'; if (!sched(p)[d]) return 'no game'; const pr = hqBoxProj(x.name, d); if (pr != null) return 'proj ' + pr.toFixed(1); }
+    if (g) { it.val = g[1]; it.lab = d === TODAY ? 'so far' : 'scored'; return it; }
+    if (x.ir || (p && p.role === 'IR') || (p && p.status === 'OUT')) return it;
+    if (hqBoxNoGame(x.name, d)) { it.ng = true; return it; }
+    const pr = hqBoxProj(x.name, d); if (pr != null && p && p.team) { it.val = pr; it.lab = 'proj'; }
   } catch (e) {}
-  return '\u2013';
+  return it;
+}
+function hqBenchHTML(X, Y, d) {
+  const f1 = v => v.toFixed(1), nmf = n => (typeof hqPl === 'function' ? hqPl({ name: n }) : pl(n));
+  const prep = T => T.bench.map(x => hqBenchItem(x, d)).sort((a, b) => ((b.val != null) - (a.val != null)) || ((b.val || 0) - (a.val || 0)));
+  const A = prep(X), B = prep(Y), n = Math.max(A.length, B.length); if (!n) return '';
+  const cell = (it, right) => { if (!it) return '<div></div>'; const dim = it.val == null;
+    return '<div style="min-width:0;text-align:' + (right ? 'right' : 'left') + (dim ? ';opacity:.75' : '') + '"><div style="font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + nmf(it.name) + '</div><div>' + (dim ? '' : '<b style="font-size:17px">' + f1(it.val) + '</b> <small style="color:var(--muted)">' + it.lab + '</small>') + (it.st ? ' ' + it.st : '') + (it.ng ? ' <span class="chip ng">NO GAME</span>' : '') + '</div></div>'; };
+  let out = '<div style="margin-top:10px;padding:8px 10px 2px;border:1px solid var(--line);border-radius:12px;background:var(--surface)"><div style="font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--muted);margin-bottom:2px">BENCH · PROJECTED FOR THIS DAY (does not count toward the score)</div>';
+  for (let i = 0; i < n; i++) out += '<div style="display:grid;grid-template-columns:1fr 40px 1fr;gap:6px;padding:6px 0;border-top:1px solid var(--line);align-items:center">' + cell(A[i], false) + '<div style="text-align:center;font-size:11px;font-weight:700;color:var(--muted)">BN</div>' + cell(B[i], true) + '</div>';
+  return out + '</div>';
 }
 function hqBoxTeam(tid, d) {
   const e = (typeof BOX !== 'undefined' && BOX[d] && BOX[d][tid]) || [], st = e.filter(x => x[0] < 12).sort((a, b) => a[0] - b[0]);
@@ -3372,8 +3384,7 @@ function hqPaintBox() {
     const X = hqBoxTeam(a, d), Y = hqBoxTeam(b, d), n = Math.max(X.rows.length, Y.rows.length);
     const cell = (r, right) => { if (!r) return '<div></div>'; const diff = r.proj == null ? 0 : r.act - r.proj, col = r.proj == null ? '' : (diff > 0.5 ? 'color:#1a8f4a;' : (diff < -0.5 && r.proj > 0 ? 'color:#c0392b;' : '')); return '<div style="min-width:0;text-align:' + (right ? 'right' : 'left') + '"><div style="font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + pl(r.name) + '</div><div><b style="font-size:17px;' + col + '">' + f1(r.act) + '</b> <small style="color:var(--muted)">' + (r.proj == null ? '' : f1(r.proj)) + '</small>' + (r.st ? ' ' + r.st : '') + (r.ng ? ' <span class="chip ng">NO GAME</span>' : '') + '</div></div>'; };
     let rows = ''; for (let i = 0; i < n; i++) rows += '<div style="display:grid;grid-template-columns:1fr 40px 1fr;gap:6px;padding:6px 0;border-top:1px solid var(--line);align-items:center">' + cell(X.rows[i], false) + '<div style="text-align:center;font-size:11px;font-weight:700;color:var(--muted)">' + esc((X.rows[i] || Y.rows[i] || {}).slot || '') + '</div>' + cell(Y.rows[i], true) + '</div>';
-    const bn = (T, right) => T.bench.length ? '<div style="text-align:' + (right ? 'right' : 'left') + ';font-size:12px;color:var(--muted)">' + T.bench.map(x => esc(x.name.replace(/ (Jr\.?|Sr\.?|II|III|IV)$/i,'').split(' ').slice(-1)[0]) + ' ' + hqBenchPts(x, d)).join(' · ') + '</div>' : '<div></div>';
-    body = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px"><div><div style="font-size:13px;font-weight:600">' + esc(nm(a)) + '</div>' + tot(X.act, X.proj) + '</div><div style="text-align:right"><div style="font-size:13px;font-weight:600">' + esc(nm(b)) + '</div>' + tot(Y.act, Y.proj) + '</div></div>' + rows + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;padding-top:6px;border-top:1px solid var(--line)">' + bn(X, false) + bn(Y, true) + '</div><p class="hint" style="margin:6px 0 0">Big number = actual points, small = projected for that day. Green = beat the projection, red = fell short. Bench points do not count. Projections are this site\'s model, not ESPN\'s.</p>';
+    body = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px"><div><div style="font-size:13px;font-weight:600">' + esc(nm(a)) + '</div>' + tot(X.act, X.proj) + '</div><div style="text-align:right"><div style="font-size:13px;font-weight:600">' + esc(nm(b)) + '</div>' + tot(Y.act, Y.proj) + '</div></div>' + rows + hqBenchHTML(X, Y, d) + '<p class="hint" style="margin:6px 0 0">Big number = actual points, small = projected for that day. Green = beat the projection, red = fell short. Bench points do not count. Projections are this site\'s model, not ESPN\'s.</p>';
   }
   let WA = 0, WAp = 0, WB = 0, WBp = 0; Object.keys(BOX).map(Number).forEach(k => { const x = hqBoxTeam(a, k), y = hqBoxTeam(b, k); WA += x.act; WAp += x.proj; WB += y.act; WBp += y.proj; });
   el.innerHTML = '<div style="grid-column:1/-1;font-size:12px;color:var(--muted);margin-bottom:6px">Actual vs projected for this day. Week so far: ' + esc(nm(a)) + ' ' + f1(WA) + ' (proj ' + f1(WAp) + ') · ' + esc(nm(b)) + ' ' + f1(WB) + ' (proj ' + f1(WBp) + ')</div><div style="grid-column:1/-1">' + body + '</div>';
