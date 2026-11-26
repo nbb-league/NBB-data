@@ -3294,7 +3294,7 @@ document.addEventListener('click', e => {
 
 
 /*LOBOS_PORT_START*/
-/* ---- Player card: recent games ---- */
+/*LOBOS_PORT_PLAYER_START*//* ---- Player card: recent games ---- */
 function hqSnapFind(S0, name) { if (!S0 || !S0.r) return null; for (const t of Object.keys(S0.r)) { const v = S0.r[t][name]; if (v != null) { const f = v.split('|'); return { avg: +f[1] || 0, gp: +f[2] || 0 }; } } return null; }
 function hqLastGames(p) {
   const out = [], cur = { avg: p.season || 0, gp: p.gp || 0 }, M = typeof MORNSNAP !== 'undefined' ? MORNSNAP : null, V = typeof PREVSNAP !== 'undefined' ? PREVSNAP : null;
@@ -3323,6 +3323,8 @@ function hqPlayerRecent(name) {
   } catch (e) {}
 }
 { const _op = openPlayer; openPlayer = function (name) { _op(name); hqPlayerRecent(name); }; }
+/*LOBOS_PORT_PLAYER_END*/
+function hqNm(n) { return typeof hqPl === 'function' ? hqPl({ name: n }) : pl(n); }
 /* ---- Box score: actual vs projected, per day or for the week, for the selected matchup ---- */
 let hqBoxDay = null;
 function hqBoxProj(name, d) {
@@ -3356,7 +3358,7 @@ function hqBenchItem(x, d) {
   return it;
 }
 function hqBenchHTML(X, Y, d) {
-  const f1 = v => v.toFixed(1), nmf = n => (typeof hqPl === 'function' ? hqPl({ name: n }) : pl(n));
+  const f1 = v => v.toFixed(1), nmf = hqNm;
   const prep = T => T.bench.map(x => hqBenchItem(x, d)).sort((a, b) => ((b.val != null) - (a.val != null)) || ((b.val || 0) - (a.val || 0)));
   const A = prep(X), B = prep(Y), n = Math.max(A.length, B.length); if (!n) return '';
   const cell = (it, right) => { if (!it) return '<div></div>'; const dim = it.val == null;
@@ -3389,7 +3391,7 @@ function hqPaintBox() {
   let body = '';
   {
     const X = hqBoxTeam(a, d), Y = hqBoxTeam(b, d), n = Math.max(X.rows.length, Y.rows.length);
-    const cell = (r, right) => { if (!r) return '<div></div>'; const diff = r.proj == null ? 0 : r.act - r.proj, col = r.proj == null ? '' : (diff > 0.5 ? 'color:#1a8f4a;' : (diff < -0.5 && r.proj > 0 ? 'color:#c0392b;' : '')); return '<div style="min-width:0;text-align:' + (right ? 'right' : 'left') + '"><div style="font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + pl(r.name) + '</div><div><b style="font-size:17px;' + col + '">' + f1(r.act) + '</b> <small style="color:var(--muted)">' + (r.proj == null ? '' : f1(r.proj)) + '</small>' + (r.st ? ' ' + r.st : '') + (r.ng ? ' <span class="chip ng">NO GAME</span>' : '') + '</div></div>'; };
+    const cell = (r, right) => { if (!r) return '<div></div>'; const diff = r.proj == null ? 0 : r.act - r.proj, col = r.proj == null ? '' : (diff > 0.5 ? 'color:#1a8f4a;' : (diff < -0.5 && r.proj > 0 ? 'color:#c0392b;' : '')); return '<div style="min-width:0;text-align:' + (right ? 'right' : 'left') + '"><div style="font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + hqNm(r.name) + '</div><div><b style="font-size:17px;' + col + '">' + f1(r.act) + '</b> <small style="color:var(--muted)">' + (r.proj == null ? '' : f1(r.proj)) + '</small>' + (r.st ? ' ' + r.st : '') + (r.ng ? ' <span class="chip ng">NO GAME</span>' : '') + '</div></div>'; };
     let rows = ''; for (let i = 0; i < n; i++) rows += '<div style="display:grid;grid-template-columns:1fr 40px 1fr;gap:6px;padding:6px 0;border-top:1px solid var(--line);align-items:center">' + cell(X.rows[i], false) + '<div style="text-align:center;font-size:11px;font-weight:700;color:var(--muted)">' + esc((X.rows[i] || Y.rows[i] || {}).slot || '') + '</div>' + cell(Y.rows[i], true) + '</div>';
     body = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px"><div><div style="font-size:13px;font-weight:600">' + esc(nm(a)) + '</div>' + tot(X.act, X.proj) + '</div><div style="text-align:right"><div style="font-size:13px;font-weight:600">' + esc(nm(b)) + '</div>' + tot(Y.act, Y.proj) + '</div></div>' + rows + hqBenchHTML(X, Y, d) + '<p class="hint" style="margin:6px 0 0">Big number = actual points, small = projected for that day. Green = beat the projection, red = fell short. Bench points do not count. Projections are this site\'s model, not ESPN\'s.</p>';
   }
