@@ -3406,10 +3406,10 @@ window.__hqAct = Date.now(); ['pointerdown', 'keydown', 'touchstart', 'scroll'].
 window.addEventListener('pagehide', () => { try { sessionStorage.setItem('hq-y', JSON.stringify({ y: window.scrollY, t: Date.now() })); } catch (e) {} });
 setTimeout(() => { try { const r = JSON.parse(sessionStorage.getItem('hq-y') || 'null'); if (r && Date.now() - r.t < 30000 && r.y > 0) window.scrollTo(0, r.y); sessionStorage.removeItem('hq-y'); } catch (e) {} }, 1800);
 
-/* ---- Auto-refresh: reload when idle and the page is older than 10 min (weekday mornings PT) or 30 min (other times) ---- */
+/* ---- Auto-refresh: reload when idle and the page is older than 3 min (9 AM-midnight PT, game time), 10 min (weekday 5-9 AM PT) or 30 min (overnight) ---- */
 (function hqAuto() {
   const t0 = Date.now();
-  const maxAge = () => { try { const f = new Intl.DateTimeFormat('en-US', { timeZone: 'America/Los_Angeles', weekday: 'short', hour: 'numeric', hour12: false }).formatToParts(new Date()), g = k => (f.find(x => x.type === k) || {}).value, h = +g('hour') % 24, wd = g('weekday'); return (wd !== 'Sat' && wd !== 'Sun' && h >= 5 && h < 13) ? 10 * 6e4 : 30 * 6e4; } catch (e) { return 30 * 6e4; } };
+  const maxAge = () => { try { const f = new Intl.DateTimeFormat('en-US', { timeZone: 'America/Los_Angeles', weekday: 'short', hour: 'numeric', hour12: false }).formatToParts(new Date()), g = k => (f.find(x => x.type === k) || {}).value, h = +g('hour') % 24, wd = g('weekday'); return h >= 9 ? 3 * 6e4 : (wd !== 'Sat' && wd !== 'Sun' && h >= 5) ? 10 * 6e4 : 30 * 6e4; } catch (e) { return 30 * 6e4; } };
   const go = () => { try { location.replace(location.pathname + '?t=' + Date.now() + location.hash); } catch (e) { try { location.reload(); } catch (x) {} } };
   const due = () => document.visibilityState === 'visible' && Date.now() - t0 > maxAge() && Date.now() - (window.__hqAct || 0) > 45000;
   setInterval(() => { if (due()) go(); }, 60000);

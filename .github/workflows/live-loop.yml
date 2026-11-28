@@ -1,0 +1,55 @@
+name: NBB live loop
+# GitHub's own cron is too slow and unreliable to catch the end of NBA games. This job stays alive for hours, watches ESPN's
+# scoreboard every minute, and kicks off a normal "NBB refresh" run about every 5 minutes while games are live, right when any game
+# ends, and once more a few minutes after the last game ends (so final stats and corrections land). It re-launches itself near the 6-hour
+# limit and a few safety crons restart it if it ever stops. Quiet hours: midnight to 7 AM Pacific.
+on:
+  schedule:
+    - cron: '53 15 * * *'
+    - cron: '53 19 * * *'
+    - cron: '53 23 * * *'
+    - cron: '53 3 * * *'
+  workflow_dispatch:
+  push:
+    paths: ['tools/livewatch.mjs', '.github/workflows/live-loop.yml']
+permissions:
+  contents: read
+  actions: write
+jobs:
+  loop:
+    runs-on: ubuntu-latest
+    timeout-minutes: 355
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - name: Make sure only one loop is running
+        id: one
+        run: |
+          for i in 1 2 3 4 5 6; do
+            O=$(gh run list --workflow live-loop.yml --status in_progress --json databaseId -q "[.[]|select(.databaseId != ${{ github.run_id }})]|length")
+            [ "$O" = "0" ] && break; sleep 30
+          done
+          if [ "$O" != "0" ]; then echo "Another loop is running; exiting."; echo "skip=1" >> "$GITHUB_OUTPUT"; fi
+      - name: Watch games and trigger refreshes
+        if: steps.one.outputs.skip != '1'
+        run: |
+          quiet() { H=$(date -u +%H); H=$((10#$H)); [ "$H" -ge 8 ] && [ "$H" -lt 15 ]; }   # 8-15 UTC = midnight-7 AM Pacific (7-8 AM in summer)
+          END=$(( $(date +%s) + 20400 )); prev=0; last=0
+          while [ "$(date +%s)" -lt "$END" ]; do
+            if quiet; then echo "quiet hours, stopping"; exit 0; fi
+            read IN SOON < <(node tools/livewatch.mjs); now=$(date +%s)
+            if [ "$IN" -lt 0 ]; then
+              if [ $((now-last)) -ge 600 ]; then gh workflow run refresh.yml && last=$now; fi
+            elif [ "$IN" -gt 0 ] || [ "$SOON" -gt 0 ]; then
+              if [ "$IN" -lt "$prev" ] || [ $((now-last)) -ge 270 ]; then echo "$(date -u +%T) live=$IN prev=$prev -> refresh"; gh workflow run refresh.yml && last=$now; fi
+            elif [ "$prev" -gt 0 ]; then
+              echo "$(date -u +%T) last game ended -> refresh now and again in 4 min"; gh workflow run refresh.yml; sleep 240; gh workflow run refresh.yml; last=$(date +%s)
+            fi
+            [ "$IN" -ge 0 ] && prev=$IN
+            sleep 60
+          done
+          echo "time limit reached; relaunching"; gh workflow run live-loop.yml
